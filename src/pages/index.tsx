@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const { data: session } = useSession()
 
-  const signInHandler = (e: Event)  => {
+  const signInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)  => {
     console.log(e);
     signIn();
   }
@@ -16,7 +16,8 @@ export default function Home() {
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
     {session ? <p>{session.user?.name}</p> : <p>Session empty</p>}
-      <button onClick={(e) => signInHandler(e)}>sign in</button>
+      <button onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => 
+        signInHandler(e)}>sign in</button>
       <p>Hello world</p>
     </main>
   );
