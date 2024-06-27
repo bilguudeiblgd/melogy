@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { useSession, signIn, signOut } from "next-auth/react"
-
+import Navbar from "@/components/Navbar";
+import Skeleton from "@/components/Skeleton";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -13,12 +14,15 @@ export default function Home() {
   }
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-    {session ? <p>{session.user?.name}</p> : <p>Session empty</p>}
-      <button onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => 
-        signInHandler(e)}>sign in</button>
-      <p>Hello world</p>
+      <Skeleton>
+      <Navbar/>
+        {session ? <p>{session.user?.name}</p> : <p>Session empty</p>}
+          <button onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => 
+            signInHandler(e)}>sign in</button>
+          <p>Hello world</p>
+      </Skeleton>
+     
     </main>
   );
 }
