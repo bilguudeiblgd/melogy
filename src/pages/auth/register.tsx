@@ -3,7 +3,7 @@
 import { NextPage } from 'next';
 import RegisterForm from '../../components/RegisterForm';
 
-const Login: NextPage = () => {
+const Register: NextPage = () => {
   const handleRegister = (username: string, password: string) => {
     console.log('Username:', username);
     console.log('Password:', password);
@@ -18,4 +18,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default Register;
