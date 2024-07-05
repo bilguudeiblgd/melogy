@@ -24,9 +24,6 @@ export default function Home() {
           <div>
             <Link href="/dashboard">Dashboard</Link>
           </div>
-          <div>
-            <Link href="/auth/register">Register</Link>
-          </div>
 
           <pre className="py-6 px-4 whitespace-pre-wrap break-all">
             {JSON.stringify(session, null, 2)}

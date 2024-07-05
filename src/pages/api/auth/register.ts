@@ -3,6 +3,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import connect from '@/lib/mongoose';
 import User from '@/models/User';
+import bcrypt from 'bcrypt';
+
 import {redirect} from "next/navigation";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -11,10 +13,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await connect();
     // mongoose.
     // await
-    const { username } = req.body;
-    // Validate the username
+    const { username, password } = req.body;
+
+    // Validate the username and password
+    if (!username || !password) {
+      return res.status(400).json({ success: false, message: 'Username and password are required' });
+    }
+
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+
     // Connect to your database
-    const newUser = new User({ username });
+    const newUser = new User({ username, password: hashedPassword });
     // await db.collection('users').insertOne({ username });
     try {
       await newUser.save();

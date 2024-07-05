@@ -3,28 +3,43 @@
 import { NextPage } from 'next';
 import RegisterForm from '../../components/RegisterForm';
 import { useRouter } from 'next/router';
+import {signIn} from "next-auth/react";
 
 
 const Register: NextPage = () => {
     const router = useRouter();
 
-    const handleRegister = async (username: string) => {
+    const handleRegister = async (username: string, password:string) => {
     console.log('Username:', username);
     // You can add your login logic here
-    console.log(JSON.stringify({username: username}))
+    console.log(JSON.stringify({username: username, password:password}))
 
     try {
-        const response = await fetch('/api/register', {
+        const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({username: username})
+            body: JSON.stringify({username, password})
         })
         if (response.ok) {
             const user = await response.json()
             console.log('User created:', user)
-            router.push(`/${username}`);
+            // router.push(`/${username}`);
+
+            const result = await signIn('credentials', {
+                callbackUrl: '/',
+                username,
+                password,
+            });
+            if(!result) return
+            if (!result.error) {
+                // Handle successful login, redirect, etc.
+                console.log('Logged in successfully!');
+            } else {
+                // Handle login errors
+                console.error('Login error:', result.error);
+            }
 
             // You can add additional logic here, such as redirecting the user or displaying a success message
 
