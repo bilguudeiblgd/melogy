@@ -18,10 +18,10 @@ const Login: NextPage = () => {
       <h1>Login</h1>
       <LoginForm onSubmit={handleLogin} />
       <div>
-        <a href="/auth/register">Register</a>
+        <Link href="/auth/register">Register</Link>
       </div>
       <div className="btn btn-ghost">
-       <a onClick={() => signIn('google', {callbackUrl: '/'})} >Login with Google</a>
+       <button onClick={() => signIn('google', {callbackUrl: '/'})} >Login with Google</button>
 
       </div>
     </div>
