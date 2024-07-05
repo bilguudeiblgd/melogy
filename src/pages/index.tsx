@@ -10,9 +10,9 @@ export default function Home() {
   const { data: session } = useSession()
 
   const signInHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>)  => {
-    console.log(e);
     signIn();
   }
+  
   const logOutHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     signOut();
   }

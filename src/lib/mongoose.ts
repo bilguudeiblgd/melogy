@@ -11,9 +11,11 @@ if (!uri) {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // };
+const connect = async () => {
+  mongoose.connect(uri).then(
+      () => console.log("Mongoose connected")
+  ).catch((err) => console.log(err));
+  console.log("MongoDB connection URI: " + uri);
+}
 
-mongoose.connect(uri);
-
-const connection: Connection = mongoose.connection;
-
-export default connection;
+export default connect;
