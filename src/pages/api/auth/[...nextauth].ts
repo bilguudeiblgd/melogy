@@ -1,14 +1,13 @@
 import NextAuth, {NextAuthOptions, User} from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-import { MongoDBAdapter } from "@auth/mongodb-adapter"
-// import clientPromise from "@/lib/mongodb"
-import type { Adapter } from "next-auth/adapters";
-import { Adamina } from "next/font/google";
+import clientPromise from "@/lib/mongodb"
 import { verify } from '@node-rs/bcrypt';
 import CredentialsProvider from "next-auth/providers/credentials";
 import connect from "@/lib/mongoose";
 import users from "@/models/User"
-import {JWT} from "next-auth/jwt";
+// import {JWT} from "next-auth/jwt";
+import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import type { Adapter } from 'next-auth/adapters';
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variable");
@@ -18,6 +17,9 @@ declare module 'next-auth' {
   interface User {
     password?: string;
   }
+  // interface Session {
+  //   accessToken?: string;
+  // }
 }
 
 
@@ -65,6 +67,7 @@ export const authOptions : NextAuthOptions = {
   // session: {
   //   jwt: true,
   // },
+  adapter: MongoDBAdapter(clientPromise) as Adapter,
   callbacks: {
     async jwt({ token, user, account }) {
       if (account) {
@@ -73,9 +76,10 @@ export const authOptions : NextAuthOptions = {
       }
       return token
     },
-    async session({ session, token }) {
-      console.log("Session:")
-      console.log(session, token)
+    async session({ session, token, user }) {
+      // session.accessToken = token.accessToken
+      // session.user.id = token.id
+      session.accessToken = token.accessToken
       return session
     },
 
