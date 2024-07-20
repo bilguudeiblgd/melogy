@@ -1,4 +1,4 @@
-import NextAuth, {NextAuthOptions, User} from "next-auth"
+import NextAuth, {NextAuthOptions, User, JWT, Session} from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import clientPromise from "@/lib/mongodb"
 import { verify } from '@node-rs/bcrypt';
@@ -16,6 +16,13 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 declare module 'next-auth' {
   interface User {
     password?: string;
+  }
+  interface Session {
+    accessToken?: string;
+  }
+
+  interface JWT {
+    accessToken: string;
   }
   // interface Session {
   //   accessToken?: string;
@@ -76,9 +83,11 @@ export const authOptions : NextAuthOptions = {
       }
       return token
     },
-    async session({ session, token, user }) {
+    async session({ session, token, user })  {
       // session.accessToken = token.accessToken
       // session.user.id = token.id
+      // #TODO: this is so bad, im not sure how to "typescripty" fix this
+      // @ts-ignore
       session.accessToken = token.accessToken
       return session
     },
