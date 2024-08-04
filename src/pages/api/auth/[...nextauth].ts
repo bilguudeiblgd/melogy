@@ -1,13 +1,13 @@
 import NextAuth, {NextAuthOptions, User, JWT, Session} from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
+import GoogleProvider, {GoogleProfile} from "next-auth/providers/google"
 import clientPromise from "@/lib/mongodb"
 import { verify } from '@node-rs/bcrypt';
 import CredentialsProvider from "next-auth/providers/credentials";
 import connect from "@/lib/mongoose";
-import users from "@/models/User"
 // import {JWT} from "next-auth/jwt";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import type { Adapter } from 'next-auth/adapters';
+import mongoose, {Schema} from "mongoose";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variable");
@@ -15,7 +15,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
 declare module 'next-auth' {
   interface User {
-    password?: string;
+    userhandle?: string;
   }
   interface Session {
     accessToken?: string;
@@ -36,6 +36,16 @@ export const authOptions : NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      // @ts-ignore
+      async profile(profile: GoogleProfile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          userhandle :null,
+        }
+      },
     }),
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
@@ -45,20 +55,21 @@ export const authOptions : NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" }
+        username: {label: "Username", type: "text", placeholder: "jsmith"},
+        password: {label: "Password", type: "password"}
       },
       async authorize(credentials) {
         console.log("Cred: ", credentials)
 
         if (!credentials) return null;
+        const users = mongoose.model("users")
         const user = await users.findOne({username: credentials.username})
         console.log("User: ", user)
         if (!user) return null;
 
         if (
-          typeof user.password === 'string' &&
-          !(await verify(credentials.password, user.password))
+            typeof user.password === 'string' &&
+            !(await verify(credentials.password, user.password))
         ) {
           return null;
         } else {
@@ -74,7 +85,7 @@ export const authOptions : NextAuthOptions = {
   // session: {
   //   jwt: true,
   // },
-  adapter: MongoDBAdapter(clientPromise) as Adapter,
+  adapter: MongoDBAdapter(clientPromise, ) as Adapter ,
   callbacks: {
     async jwt({ token, user, account }) {
       if (account) {
@@ -94,10 +105,10 @@ export const authOptions : NextAuthOptions = {
 
   },
   pages: {
-    signIn: '/auth/login',
+    // signIn: '/auth/login',
     // signOut: '/auth/signout',
-    error: '/auth/error', // Error code passed in query string as ?error=
-    verifyRequest: '/auth/verify-request', // (used for check email message)
+    // error: '/auth/error', // Error code passed in query string as ?error=
+    // verifyRequest: '/auth/verify-request', // (used for check email message)
     // newUser: null // If set, new users will be directed here on first sign in
   },
   session: {
@@ -107,6 +118,8 @@ export const authOptions : NextAuthOptions = {
 
   // adapter: MongoDBAdapter(clientPromise) as Adapter,
 }
+
+
 
 
 

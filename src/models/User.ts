@@ -1,16 +1,13 @@
 import mongoose from 'mongoose';
-
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  email: String,
-});
-
-export default mongoose.models.User || mongoose.model('User', userSchema);
+//
+// import {User as UserInterface} from "next-auth"
+//
+// interface ExtendedUserInterface extends UserInterface {
+//   userhandle?: string;
+// }
+//
+// const userSchema = new mongoose.Schema<ExtendedUserInterface> ({
+//   userhandle: String,
+// });
+//
+// export default mongoose.models.User || mongoose.model('users', userSchema);

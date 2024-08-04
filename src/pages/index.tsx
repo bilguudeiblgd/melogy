@@ -5,6 +5,9 @@ import Navbar from "@/components/Navbar";
 import Skeleton from "@/components/Skeleton";
 import { FaRegCopy } from "react-icons/fa6";
 import Link from "next/link";
+import CopyLink from "@/components/CopyLink";
+import connect from "@/lib/mongoose";
+import mongoose from "mongoose";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +18,11 @@ export default function Home() {
     signIn();
 
   }
-  
+
   const logOutHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     signOut();
   }
+  console.log("Session", session)
   return (
     <main
     >
@@ -31,27 +35,30 @@ export default function Home() {
             {/*  {JSON.stringify(session, null, 2)}*/}
             {/*</pre>*/}
             {/*<div className={"overscroll-y-none"}>*/}
+                {!session ?
+                    (<div>
+                        <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
 
-
-                <div className={"h-screen"}>
-                    <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
-
-                    <div className={"flex flex-col justify-center items-center h-full -m-32 gap-2"}>
-                        <button className={"btn border-2 rounded-full p-4 flex flex-row items-center"}>
-                            <div>
-                                <p>https://methology.me/bilguudei/dome</p>
-                            </div>
-                            <div className={"pl-6 pr-2"}>
-                                <FaRegCopy size={16}/>
-                            </div>
-                        </button>
-                        <button className="btn px-16 btn-primary"><h2>Share</h2></button>
-                    </div>
-                </div>
-
+                        <p>Welcome page</p>
+                    </div>)
+                    :
+                    (<div className={"h-screen"}>
+                        <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
+                        <CopyLink />
+                    </div>)
+                }
 
         </Skeleton>
 
     </main>
   );
 }
+
+//
+// export async function getStaticProps() {
+//   await connect()
+//   console.log("Hello from static props")
+//   // const users = mongoose.model('users')
+//   // console.log(users)
+//   return {}
+// }
