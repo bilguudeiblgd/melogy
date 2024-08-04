@@ -1,40 +1,45 @@
 import Image from "next/image";
-import { Inter } from "next/font/google";
-import { useSession, signIn, signOut } from "next-auth/react"
+import {Inter} from "next/font/google";
+import {useSession, signIn, signOut} from "next-auth/react"
 import Navbar from "@/components/Navbar";
 import Skeleton from "@/components/Skeleton";
-import { FaRegCopy } from "react-icons/fa6";
+import {FaRegCopy} from "react-icons/fa6";
 import Link from "next/link";
 import CopyLink from "@/components/CopyLink";
-import connect from "@/lib/mongoose";
+import mongooseConnect from "@/lib/mongooseConnect";
 import mongoose from "mongoose";
+import {useRouter} from "next/router";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({subsets: ["latin"]});
 
 export default function Home() {
-  const { data: session } = useSession()
+    const {data: session} = useSession()
+    const router = useRouter()
+    const signInHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        signIn();
+    }
 
-  const signInHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>)  => {
-    signIn();
+    const logOutHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        signOut();
+    }
 
-  }
+    // if(session && session.user && !session.user.userHandle) {
+    //     router.push('/gethandle')
+    // }
 
-  const logOutHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    signOut();
-  }
-  console.log("Session", session)
-  return (
-    <main
-    >
-        <Skeleton>
-            {/*<div>*/}
-            {/*    <Link href="/dashboard">Dashboard</Link>*/}
-            {/*</div>*/}
 
-            {/*<pre className="py-6 px-4 whitespace-pre-wrap break-all">*/}
-            {/*  {JSON.stringify(session, null, 2)}*/}
-            {/*</pre>*/}
-            {/*<div className={"overscroll-y-none"}>*/}
+    return (
+        <main
+        >
+            <Skeleton>
+                {/*<div>*/}
+                {/*    <Link href="/dashboard">Dashboard</Link>*/}
+                {/*</div>*/}
+
+                {/*<pre className="py-6 px-4 whitespace-pre-wrap break-all">*/}
+                {/*  {JSON.stringify(session, null, 2)}*/}
+                {/*</pre>*/}
+                {/*<div className={"overscroll-y-none"}>*/}
                 {!session ?
                     (<div>
                         <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
@@ -44,14 +49,14 @@ export default function Home() {
                     :
                     (<div className={"h-screen"}>
                         <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
-                        <CopyLink />
+                        <CopyLink/>
                     </div>)
                 }
 
-        </Skeleton>
+            </Skeleton>
 
-    </main>
-  );
+        </main>
+    );
 }
 
 //

@@ -1,7 +1,7 @@
 import {FaRegCopy} from "react-icons/fa6";
 import React, {useEffect} from "react";
 import {useSession} from "next-auth/react";
-import connect from "@/lib/mongoose";
+import mongooseConnect from "@/lib/mongooseConnect";
 import mongoose from 'mongoose'
 
 const CopyLink: React.FC = () => {

@@ -1,11 +1,11 @@
-// lib/mongoose.ts
+// lib/mongooseConnect.ts
 import mongoose, { ConnectOptions, Connection } from 'mongoose';
 
 // const options: ConnectOptions = {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // };
-const connect = async () => {
+const mongooseConnect = async () => {
   const uri: string | undefined = process.env.MONGODB_URI; // Replace with your MongoDB connection string and database name
   console.log(uri)
   if (!uri) {
@@ -17,4 +17,4 @@ const connect = async () => {
   console.log("MongoDB connection URI: " + uri);
 }
 
-export default connect;
+export default mongooseConnect;

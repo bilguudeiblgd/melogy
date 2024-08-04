@@ -1,7 +1,7 @@
 // pages/api/register.js
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import connect from '@/lib/mongoose';
+import mongooseConnect from '@/lib/mongooseConnect';
 import User from '@/models/User';
 import bcrypt from 'bcrypt';
 
@@ -10,7 +10,7 @@ import {redirect} from "next/navigation";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     // await mongoose
-    await connect();
+    await mongooseConnect();
     // mongoose.
     // await
     const { username, password } = req.body;

@@ -1,9 +1,10 @@
-import NextAuth, {NextAuthOptions, User, JWT, Session} from "next-auth"
+import NextAuth, {NextAuthOptions, User, Session} from "next-auth"
+import JWT from "next-auth/jwt"
 import GoogleProvider, {GoogleProfile} from "next-auth/providers/google"
 import clientPromise from "@/lib/mongodb"
 import { verify } from '@node-rs/bcrypt';
 import CredentialsProvider from "next-auth/providers/credentials";
-import connect from "@/lib/mongoose";
+import mongooseConnect from "@/lib/mongooseConnect";
 // import {JWT} from "next-auth/jwt";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import type { Adapter } from 'next-auth/adapters';
@@ -15,19 +16,27 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
 declare module 'next-auth' {
   interface User {
-    userhandle?: string;
+    userHandle?: string;
   }
   interface Session {
     accessToken?: string;
+    user: {
+      userHandle?: string;
+    }
   }
 
-  interface JWT {
-    accessToken: string;
-  }
+
   // interface Session {
   //   accessToken?: string;
   // }
 }
+declare module 'next-auth/jwt' {
+  interface JWT {
+    accessToken?: string;
+    userHandle?: string;
+  }
+}
+
 
 
 export const authOptions : NextAuthOptions = {
@@ -43,43 +52,10 @@ export const authOptions : NextAuthOptions = {
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          userhandle :null,
+          userHandle :null,
         }
       },
     }),
-    CredentialsProvider({
-      // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: 'Credentials',
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
-      credentials: {
-        username: {label: "Username", type: "text", placeholder: "jsmith"},
-        password: {label: "Password", type: "password"}
-      },
-      async authorize(credentials) {
-        console.log("Cred: ", credentials)
-
-        if (!credentials) return null;
-        const users = mongoose.model("users")
-        const user = await users.findOne({username: credentials.username})
-        console.log("User: ", user)
-        if (!user) return null;
-
-        if (
-            typeof user.password === 'string' &&
-            !(await verify(credentials.password, user.password))
-        ) {
-          return null;
-        } else {
-          delete user.password;
-        }
-        console.log("Auth user: ", user);
-        return user;
-      },
-    })
-
     // ...add more providers here
   ],
   // session: {
@@ -90,6 +66,8 @@ export const authOptions : NextAuthOptions = {
     async jwt({ token, user, account }) {
       if (account) {
         token.accessToken = account.access_token
+        // token.
+        token.userHandle = user.userHandle
         token.id = user.email
       }
       return token
@@ -100,6 +78,8 @@ export const authOptions : NextAuthOptions = {
       // #TODO: this is so bad, im not sure how to "typescripty" fix this
       // @ts-ignore
       session.accessToken = token.accessToken
+      session.user.userHandle = token.userHandle
+      console.log(user)
       return session
     },
 
