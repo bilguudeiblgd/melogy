@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({onSignIn, onLogOut}) => {
         <div className="w-full ">
           <div className="navbar w-full bg-transparent">
               <div className="flex-1">
-                  <a className="btn btn-ghost text-xl">Methology</a>
+                  <Link href="/" className="btn btn-ghost text-xl">Methology</Link>
               </div>
               <div className="flex-none">
                   {session ?

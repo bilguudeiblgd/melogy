@@ -13,11 +13,9 @@ export default async function handler(
     res: NextApiResponse<Data>,
 ) {
     await mongooseConnect()
-    const { handle } = JSON.parse(req.body)
-    if (!handle) {
-        return res.status(500).json({ status: "Handle exists" });
-    }
-    const user = await User.find({ userHandle: "bel" });
+    const query = JSON.parse(req.body)
+
+    const user = await User.find(query);
     if(user.length > 0)
         return res.status(500).json({ status: "Handle exists" });
 

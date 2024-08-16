@@ -1,31 +1,69 @@
 import {FaRegCopy} from "react-icons/fa6";
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {useSession} from "next-auth/react";
 import mongooseConnect from "@/lib/mongooseConnect";
 import mongoose from 'mongoose'
+import {GlobalContext} from "@/pages/_app";
 
-const CopyLink: React.FC = () => {
+type Props = {
+    userHandle: string
+}
+
+const CopyLink: React.FC<Props> = ({userHandle}) => {
     const { data: session } = useSession()
-
+    const [copied, setCopied] = React.useState<boolean>(false)
     useEffect(() => {
     }, [])
 
+    const buttonHandler = (url: string) => {
+        navigator.clipboard.writeText(url)
+            .then(r => {
+                setCopied(true)
+                setTimeout((() => {
+                    setCopied(false)
+                }), 1500)
+            })
+    }
+    const GLOBALS = useContext(GlobalContext)
+    const generatedURL = `${GLOBALS.baseURL}/${userHandle}/dome`
 
     return (
         <div className={"flex flex-col justify-center items-center h-full -m-32 gap-2"}>
-            <button className={"btn border-2 rounded-full p-4 flex flex-row items-center"}>
+            {copied && <NotifCopiedToClipboard />}
+            <button onClick={() => buttonHandler(generatedURL)}
+                    className={"btn border-2 rounded-full p-4 flex flex-row items-center"}>
                 <div>
-                    <p>https://methology.me/bilguudei/dome</p>
+                    <p>{generatedURL}</p>
                 </div>
                 <div className={"pl-6 pr-2"}>
                     <FaRegCopy size={16}/>
                 </div>
             </button>
-            <button className="btn px-16 btn-primary"><h2>Share</h2></button>
+            {/*<button className="btn px-16 btn-primary"><h2>Share</h2></button>*/}
         </div>
     )
 }
 
+const NotifCopiedToClipboard: React.FC = () => {
+    return (
+        <div className={"fixed top-4"}>
+            <div role="alert" className="alert alert-success">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="h-6 w-10 shrink-0 stroke-current">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Copied to cliboard</span>
+            </div>
+        </div>
+    )
+};
 
 
 export default CopyLink

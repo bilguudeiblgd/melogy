@@ -23,9 +23,9 @@ export default function Home() {
         signOut();
     }
 
-    // if(session && session.user && !session.user.userHandle) {
-    //     router.push('/gethandle')
-    // }
+    if(session && session.user && !session.user.userHandle) {
+        router.push('/gethandle')
+    }
 
 
     return (
@@ -49,7 +49,7 @@ export default function Home() {
                     :
                     (<div className={"h-screen"}>
                         <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
-                        <CopyLink/>
+                          <CopyLink userHandle={session.user.userHandle}/>
                     </div>)
                 }
 

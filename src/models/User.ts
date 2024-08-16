@@ -13,4 +13,4 @@ const userSchema = new Schema({
     emailVerified: String,
 })
 
-export default mongoose.models.User || mongoose.model('users', userSchema);
+export default mongoose.models.users || mongoose.model('users', userSchema);

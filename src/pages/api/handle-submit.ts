@@ -13,14 +13,18 @@ export default async function handler(
     res: NextApiResponse<Data>,
 ) {
     await mongooseConnect()
-    const { handle } = JSON.parse(req.body)
+    const { handle, email } = JSON.parse(req.body)
     if (!handle) {
         return res.status(500).json({ status: "Not successful" });
     }
-    const user = await User.findOne({ userHandle: "bel" });
-    if(user.length > 0)
+    let user = await User.findOne({ userHandle: handle }, 'userHandle');
+    if(user)
         return res.status(500).json({ status: "Handle exists" });
     console.log(user)
-
-    return res.status(200).json({ status: "Possible to register!" });
+    user = await User.findOneAndUpdate({email: email}, {userHandle: handle})
+    if(user) {
+        return res.status(200).json({ status: "Created handle!" });
+    }
+    console.log("user:", user)
+    return res.status(500).json({ status: "Something wrong" });
 }

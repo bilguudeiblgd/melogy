@@ -16,13 +16,15 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
 declare module 'next-auth' {
   interface User {
+    id: string
+    name: string;
+    email: string;
+    image: string;
     userHandle?: string;
   }
   interface Session {
     accessToken?: string;
-    user: {
-      userHandle?: string;
-    }
+    user: User
   }
 
 

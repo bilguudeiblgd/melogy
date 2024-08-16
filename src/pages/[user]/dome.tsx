@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import {FC, useEffect, useState} from 'react';
+import LoadingComponent from "@/components/LoadingComponent";
 
 interface formItemProps {
     question: number,
@@ -15,8 +16,13 @@ for(let i = 0; i < numberOfQuestions; i++) {
 
 const DomePage : FC = () => {
     const [formData, setFormData] = useState<formItemProps[]>(initialForm);
+    const [loading, setLoading] = useState<boolean>(true)
     const router = useRouter();
     const receiver = router.query.user;
+
+    // TODO: check if user exists
+    // TODO: let current user log in(direct current user to login?)
+    // TODO: do the test page and submission front-end and back-end
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -30,6 +36,12 @@ const DomePage : FC = () => {
         e.preventDefault();
         console.log("submitted: ", formData)
     };
+
+    if(loading ) {
+        // return
+        return <LoadingComponent/>
+    }
+
     return (
         <div>
             <p>Test for {receiver && receiver}</p>
@@ -48,7 +60,6 @@ const DomePage : FC = () => {
                 <button type="submit">Next</button>
             </form>
         </div>
-
     )
 }
 export default DomePage;
