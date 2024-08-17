@@ -12,6 +12,7 @@ export default function GetHandle() {
     const {data: session, update} = useSession()
     const [handle, setHandle] = useState<string>("")
     const [status, setStatus] = useState<string>("Write username, only letter allowed")
+    const [submitAllowed, setSubmitAllowed] = useState<boolean>(false)
     const GLOBALS = useContext(GlobalContext)
     // When rendering client side don't display anything until loading is complete
     // If no session exists, display access denied message
@@ -21,7 +22,6 @@ export default function GetHandle() {
     if(session.user.userHandle) {
         router.push("/")
     }
-    console.log("session:", session)
     const signInHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         signIn();
     }
@@ -31,6 +31,7 @@ export default function GetHandle() {
     }
 
     const checkHandleDebounced = debounce( async (handle: string) => {
+        console.log("debouncing")
         if(handle.length < 8) {
             setStatus("Too short, 8 letter necessary")
             return false
@@ -45,10 +46,12 @@ export default function GetHandle() {
 
                 console.log(data)
                 setStatus("Handle is available");
+                setSubmitAllowed(true)
                 return true
             }
             else {
                 setStatus("Handle not available")
+                setSubmitAllowed(false)
                 return false
             }
         } catch(e) {
@@ -56,7 +59,7 @@ export default function GetHandle() {
 
             return false
         }
-    }, 1000)
+    }, 800)
 
     const textHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -73,6 +76,7 @@ export default function GetHandle() {
             })
             if(response.ok) {
                 const data = await response.json()
+                console.log("Submitted!")
                 console.log(data)
                 setStatus(data.status)
                 // getSession
@@ -81,7 +85,9 @@ export default function GetHandle() {
                 document.dispatchEvent(event);
                 // const event = new Event("visibilitychange");
                 // document.dispatchEvent(event);
-                router.back()
+                alert("Please log in again")
+                signOut()
+                router.push('/api/auth/signin')
             } else {
                 const errorData = await response.json();
                 setStatus(`Error: ${errorData.message || 'Failed to register handle.'}`);
@@ -96,7 +102,7 @@ export default function GetHandle() {
 
     return (
         <Skeleton>
-            <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
+            <Navbar />
             <h1>Get Handle!</h1>
             <input className={"input input-bordered input-primary w-full max-w-xs"} id={"handle"} value={handle}
                    onChange={(e) => textHandler(e)}/>
@@ -104,7 +110,9 @@ export default function GetHandle() {
             <p className={"text-red-600"}>
                 {status}
             </p>
-            <button onClick={handleSubmit} className={"btn btn-primary"}>Submit</button>
+            {submitAllowed && (
+                <button onClick={handleSubmit} className={"btn btn-primary"}>Submit</button>
+            )}
         </Skeleton>
     );
 }
