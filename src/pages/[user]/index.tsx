@@ -7,6 +7,7 @@ export default function Page() {
   const userName : string[] | string | undefined = router.query.user
   const { data: session } = useSession()
   // Doesn't have to be middleware here?
+  console.log("through index page of [user]")
   if(session?.user != userName) {
     return <AccessDenied />
   }

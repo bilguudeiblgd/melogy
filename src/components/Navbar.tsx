@@ -1,14 +1,9 @@
 import React from 'react';
-import {useSession} from "next-auth/react"
+import {signIn, signOut, useSession} from "next-auth/react"
 
 import Link from 'next/link';
 
-interface NavbarProps {
-    onSignIn: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-    onLogOut: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-}
-
-const Navbar: React.FC<NavbarProps> = ({onSignIn, onLogOut}) => {
+const Navbar: React.FC = () => {
     const {data: session} = useSession()
     return (
         <div className="w-full ">
@@ -37,12 +32,12 @@ const Navbar: React.FC<NavbarProps> = ({onSignIn, onLogOut}) => {
                                       </a>
                                   </li>
                                   <li><a>Settings</a></li>
-                                  <li><a onClick={(e) => onLogOut(e)}>Logout</a></li>
+                                  <li><a onClick={(e) =>  signOut()}>Logout</a></li>
                               </ul>
                           </div>
                       )
                       // The signin link redirects to login page /pages/auth/login.tsx
-                      : <a onClick={onSignIn} className="btn btn-ghost">Login</a>
+                      : <a onClick={(e) => signIn()} className="btn btn-ghost">Login</a>
                   }
               </div>
           </div>

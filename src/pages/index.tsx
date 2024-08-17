@@ -15,18 +15,10 @@ const inter = Inter({subsets: ["latin"]});
 export default function Home() {
     const {data: session} = useSession()
     const router = useRouter()
-    const signInHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        signIn();
-    }
-
-    const logOutHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        signOut();
-    }
 
     if(session && session.user && !session.user.userHandle) {
         router.push('/gethandle')
     }
-
 
     return (
         <main
@@ -42,14 +34,14 @@ export default function Home() {
                 {/*<div className={"overscroll-y-none"}>*/}
                 {!session ?
                     (<div>
-                        <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
+                        <Navbar/>
 
                         <p>Welcome page</p>
                     </div>)
                     :
                     (<div className={"h-screen"}>
-                        <Navbar onSignIn={signInHandler} onLogOut={logOutHandler}/>
-                          <CopyLink userHandle={session.user.userHandle}/>
+                        <Navbar/>
+                        {session.user.userHandle && <CopyLink userHandle={session.user.userHandle}/>}
                     </div>)
                 }
 
