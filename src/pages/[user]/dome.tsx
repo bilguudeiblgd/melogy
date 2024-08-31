@@ -7,45 +7,45 @@ import {GlobalContext} from '@/pages/_app';
 import {getSession, useSession} from 'next-auth/react';
 import {number} from "prop-types";
 import Navbar from "@/components/Navbar";
+import Phase1 from "@/components/Phase1/Phase1Component"
+import Skeleton from "@/components/Skeleton";
+import IUser from "@/types/IUser";
+import Phase0Component from "@/components/Phase0/Phase0Component";
 
 
 interface DomePageProps {
-    userExists: boolean;
+    user: IUser;
     receiver: string | null;
 }
 
-const Page: React.FC<DomePageProps> = ({userExists, receiver}) => {
+const Page: React.FC<DomePageProps> = ({user, receiver}) => {
     const router = useRouter();
-    // const {data: session} = useSession();
+    const {data: session} = useSession();
 
     useEffect(() => {
-        console.log("userExists: ", userExists)
+        console.log("user: ", user)
         console.log("receiver: ", receiver)
-        if (!userExists || !receiver) {
+        if (!user || !receiver) {
             // If user doesn't exist or receiver is null, redirect to the home page
             // router.push('/');
+            alert("User logged in")
         }
-    }, [receiver, router, userExists]);
+
+    }, [receiver, router, user]);
 
 
     return (
-        <>
-        <Navbar/>
-        <form><h2>Phase 1 Questions</h2>
-            <div><label>They would furiously debate about the most random topic</label><input type="radio" name="0"
-                                                                                                  value="yes"
-                /> Yes
-                <input type="radio" name="0" value="no"/> No
+        <Skeleton>
+            <div className={"h-screen"}>
+
+                <Navbar/>
+                <Phase0Component/>
+
+                <div><p>Test for {receiver}</p>
+                </div>
+
             </div>
-            <div><label>They would drag you out to party</label><input type="radio" name="1" value="yes"
-                /> Yes
-                <input type="radio" name="1" value="no"/> No
-            </div>
-            <button type="submit">Next</button>
-        </form>
-    <div><p>Test for {receiver}</p>
-    </div>
-    </>
+        </Skeleton>
     );
 };
 
@@ -62,11 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 }
             }
         }
-
-        console.log("ss props, session: ", session)
         const receiver = context.query.user as string | undefined;
-        console.log("ss props, receiver: ", receiver)
-
         if (!receiver) {
             // If there is no receiver, redirect to home page
             return {
@@ -87,10 +83,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         ;
 
         const userExists = response.ok;
-
+        const data = await response.json()
         return {
             props: {
-                userExists,
+                user: data.user,
                 receiver: userExists ? receiver : null,
             },
         };

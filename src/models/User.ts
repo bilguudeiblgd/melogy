@@ -1,8 +1,7 @@
 import mongoose, {Schema} from 'mongoose';
-//
-// import {User as UserInterface} from "next-auth"
-//
-const userSchema = new Schema({
+import IUser from "@/types/IUser";
+
+const userSchema = new Schema<IUser>({
     name: String,
     email: String,
     image: String,
@@ -13,4 +12,4 @@ const userSchema = new Schema({
     emailVerified: String,
 })
 
-export default mongoose.models.users || mongoose.model('users', userSchema);
+export default mongoose.models.users || mongoose.model<IUser>('users', userSchema);

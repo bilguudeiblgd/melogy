@@ -2,9 +2,11 @@ import React from 'react';
 import {signIn, signOut, useSession} from "next-auth/react"
 
 import Link from 'next/link';
+import Image from "next/image";
 
 const Navbar: React.FC = () => {
     const {data: session} = useSession()
+    console.log(session?.user)
     return (
         <div className="w-full ">
           <div className="navbar w-full bg-transparent">
@@ -17,21 +19,23 @@ const Navbar: React.FC = () => {
                           <div className="dropdown dropdown-end">
                               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                   <div className="w-10 rounded-full">
-                                      <img
+                                      <Image
                                           alt="Tailwind CSS Navbar component"
-                                          src={`${session.user?.image}`}/>
+                                          src={`${session.user?.image}`}
+                                          width={96}
+                                          height={96}
+                                      />
                                   </div>
                               </div>
                               <ul
                                   tabIndex={0}
                                   className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                                   <li>
-                                      <a className="justify-between">
+                                      <Link href={`/${session.user?.userHandle}`} className="justify-between">
                                           Profile
                                           <span className="badge">New</span>
-                                      </a>
+                                      </Link>
                                   </li>
-                                  <li><a>Settings</a></li>
                                   <li><a onClick={(e) =>  signOut()}>Logout</a></li>
                               </ul>
                           </div>
