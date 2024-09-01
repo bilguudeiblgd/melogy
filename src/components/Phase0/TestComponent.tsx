@@ -21,7 +21,7 @@ const qualities = [
 ];
 
 
-const Phase0Component: React.FC = () => {
+const TestComponent: React.FC = () => {
     const [eliminatedQualities, setEliminatedQualities] = useState<boolean[]>([]);
     const [eliminatedCount, setEliminatedCount] = useState(0);
     const [nextStageEligible, setNextStageEligible] = useState(false);
@@ -82,4 +82,4 @@ const Phase0Component: React.FC = () => {
     );
 };
 
-export default Phase0Component;
+export default TestComponent;

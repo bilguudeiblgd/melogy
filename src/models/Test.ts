@@ -35,7 +35,12 @@ const testSchema = new Schema({
             ]
         },
         phase1: {
-            
+            type: [ {
+                type: String,
+                enum: [...PersonalityTypes],
+                required: true,
+            } ],
+            required: true
         }
     }
 });

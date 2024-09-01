@@ -4,20 +4,21 @@ interface Phase1ButtonProps {
     title: string;
     index: number;
     onClick: (index: number, selected: boolean) => void;
+    selected: boolean;
 }
 
-const Phase0Button: React.FC<Phase1ButtonProps> = ({ title, index, onClick}) => {
-    const [selected, setSelected] = useState(false);
+const Phase0Button: React.FC<Phase1ButtonProps> = ({ title, index, onClick, selected}) => {
     return (
         <div>
             <button
-                className={`btn ${selected ? 'btn-primary' : 'btn-outline'} m-2`}
+                className={`btn ${selected ? 'btn-neutral' : 'btn-primary'} m-2 w-40`}
                 onClick={() =>  {
-                    setSelected(!selected)
                     onClick(index, selected)
                 }}
             >
-                {title}
+                <p className={`${selected ? 'line-through' : ""}`}>
+                    {title}
+                </p>
             </button>
         </div>
     );
