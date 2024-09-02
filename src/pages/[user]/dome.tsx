@@ -10,7 +10,8 @@ import Navbar from "@/components/Navbar";
 import Phase1 from "@/components/Phase1/Phase1Component"
 import Skeleton from "@/components/Skeleton";
 import IUser from "@/types/IUser";
-import Phase0Component from "@/components/Phase0/Phase0Component";
+import Phase0Component from "@/components/Test/Phase0Component";
+import TestComponent from "@/components/Test/TestComponent";
 
 
 interface DomePageProps {
@@ -39,7 +40,7 @@ const Page: React.FC<DomePageProps> = ({user, receiver}) => {
             <div className={"h-screen"}>
 
                 <Navbar/>
-                <Phase0Component/>
+                <TestComponent/>
 
                 <div><p>Test for {receiver}</p>
                 </div>

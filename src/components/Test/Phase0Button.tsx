@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 
-interface Phase1ButtonProps {
+interface Phase0ButtonProps {
     title: string;
     index: number;
     onClick: (index: number, selected: boolean) => void;
     selected: boolean;
 }
 
-const Phase0Button: React.FC<Phase1ButtonProps> = ({ title, index, onClick, selected}) => {
+const Phase0Button: React.FC<Phase0ButtonProps> = ({ title, index, onClick, selected}) => {
     return (
         <div>
             <button

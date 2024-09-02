@@ -1,5 +1,5 @@
 import React from "react";
-import Phase0Component from "@/components/Phase0/Phase0Component";
+import Phase0Component from "@/components/Test/Phase0Component";
 
 const Remote: React.FC = ()  => {
     return <div>
