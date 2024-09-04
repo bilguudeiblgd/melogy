@@ -34,7 +34,6 @@ const Phase0Part0Component: React.FC<Props> = ({handleContinueButton, testInfo})
         if (eliminatedCount == 3)
             setNextPartEligible(true)
         else setNextPartEligible(false)
-        console.log(eliminatedQualities)
     }
 
     const updateTestInfo = () => {

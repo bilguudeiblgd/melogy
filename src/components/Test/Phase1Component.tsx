@@ -36,33 +36,38 @@ function splitInto4Group(array: object[]) {
     return res
 }
 
+let recordAnswers: string[] = []
+
 const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
-    console.log(testInfo)
     const router = useRouter()
     const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
     const questionsGrouped = splitInto4Group(shuffledQuestions) as Phase1QuestionType[][]
     const [groupIndex, setGroupIndex] = useState(0);
-    questionsGrouped[0].forEach((d) => console.log(d));
-    const updateInfo = () => {
-        testInfo.phase1.push(...recordAnswers)
+    // questionsGrouped[0].forEach((d) => console.log(d));
+    const updateInfo = (res: string[]) => {
+        testInfo.phase1.push(...res)
     }
-    let recordAnswers: string[] = []
     const handleClick = (group: number, index: number) => {
         //        do stuff
-        recordAnswers.push(questionsGrouped[groupIndex][index].text)
+        recordAnswers.push(questionsGrouped[group][index].text)
+        console.log(recordAnswers)
+        console.log('b: ', groupIndex)
         setGroupIndex(groupIndex + 1);
-        if (groupIndex == 4) {
+        console.log('a: ', groupIndex)
+        if (groupIndex == 3) {
+            console.log("recording answer")
             //     record the answer
-            updateInfo()
-            handleContinueButton(testInfo)
+            updateInfo(recordAnswers)
+            handleContinueButton(testInfo);
         }
+
 
     }
 
     return (
         <>
             <h2>Which one are they most likely to do?</h2>
-            {questionsGrouped[groupIndex].map((question, index) =>
+            {groupIndex < 4 && questionsGrouped[groupIndex].map((question, index) =>
                 <Phase1Button key={index} title={question.text} index={index} onClick={() => handleClick(groupIndex, index)}/>)
             }
         </>

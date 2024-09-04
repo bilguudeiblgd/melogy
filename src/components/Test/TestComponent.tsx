@@ -20,14 +20,15 @@ const TestComponent: React.FC = () => {
         setStage(PHASE.PHASE1)
     }
     const handleEndButton = (testInfo: TestInfoInterface) => {
-
+        console.log(testInfo)
     }
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
             {stage === PHASE.PHASE0 && <Phase0Component
                 handleContinueButton={handleContinueButton} testInfo={testInfo}
             />}
-            {stage === PHASE.PHASE1 && <Phase1Component handleContinueButton={handleEndButton} testInfo={testInfo} />}
+            {stage === PHASE.PHASE1 && <Phase1Component
+                handleContinueButton={handleEndButton} testInfo={testInfo}/>}
 
         </div>
     );
