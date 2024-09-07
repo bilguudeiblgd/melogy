@@ -7,6 +7,10 @@ import {debounce} from "lodash"
 import {useRouter} from "next/router"
 import {GlobalContext} from "@/pages/_app";
 
+// user name might exist
+// it might not exist and can create account
+// 1. auth was wrong or smth, email was not validated
+
 export default function GetHandle() {
     const router = useRouter()
     const {data: session, update} = useSession()
@@ -22,13 +26,6 @@ export default function GetHandle() {
     if(session.user.userHandle) {
         router.push("/")
     }
-    const signInHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        signIn();
-    }
-
-    const logOutHandler = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        signOut();
-    }
 
     const checkHandleDebounced = debounce( async (handle: string) => {
         console.log("debouncing")
@@ -41,22 +38,29 @@ export default function GetHandle() {
                 method: 'POST',
                 body: JSON.stringify({userHandle: handle})
         })
-            if(response.ok) {
-                const data = await response.json()
+            const data = await response.json()
 
+            if(response.ok) {
+                if(data.message === "Possible to register") {
+                    setStatus("Handle is available");
+                    setSubmitAllowed(true)
+                    return true
+                }
+
+                if(data.message === "Handle exists") {
+                    setStatus("Handle not available")
+                    setSubmitAllowed(false)
+                    return false
+                }
                 console.log(data)
-                setStatus("Handle is available");
-                setSubmitAllowed(true)
-                return true
+
             }
             else {
-                setStatus("Handle not available")
-                setSubmitAllowed(false)
+                console.log("error happening", data.message)
                 return false
             }
         } catch(e) {
             console.error(e)
-
             return false
         }
     }, 800)

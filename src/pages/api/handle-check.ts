@@ -4,8 +4,9 @@ import mongoose from "mongoose";
 import mongooseConnect from "../../lib/mongooseConnect";
 import User from "@/models/User"
 import mongodb from "@/lib/mongodb";
+import IUser from "@/types/IUser";
 type Data = {
-    status: string;
+    message: string;
 };
 
 export default async function handler(
@@ -14,10 +15,14 @@ export default async function handler(
 ) {
     await mongooseConnect()
     const query = JSON.parse(req.body)
+    try {
+        const user = await User.find(query);
+        if (user.length > 0)
+            return res.status(200).json({message: "Handle exists"});
+        return res.status(200).json({ message: "Possible to register" });
 
-    const user = await User.find(query);
-    if(user.length > 0)
-        return res.status(500).json({ status: "Handle exists" });
+    } catch(e) {
+        return res.status(500).json({ message: (e as Error).message });
+    }
 
-    return res.status(200).json({ status: "Possible to register!" });
 }

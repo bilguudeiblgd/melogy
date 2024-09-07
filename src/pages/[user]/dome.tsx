@@ -7,7 +7,6 @@ import {GlobalContext} from '@/pages/_app';
 import {getSession, useSession} from 'next-auth/react';
 import {number} from "prop-types";
 import Navbar from "@/components/Navbar";
-import Phase1 from "@/components/Phase1/Phase1Component"
 import Skeleton from "@/components/Skeleton";
 import IUser from "@/types/IUser";
 import Phase0Component from "@/components/Test/Phase0Component";
@@ -15,24 +14,24 @@ import TestComponent from "@/components/Test/TestComponent";
 
 
 interface DomePageProps {
-    user: IUser;
-    receiver: string | null;
+    testGiver: IUser;
+    testReceiver: string | null;
 }
 
-const Page: React.FC<DomePageProps> = ({user, receiver}) => {
+const Page: React.FC<DomePageProps> = ({testGiver, testReceiver}) => {
     const router = useRouter();
     const {data: session} = useSession();
 
     useEffect(() => {
-        console.log("user: ", user)
-        console.log("receiver: ", receiver)
-        if (!user || !receiver) {
+        console.log("user: ", testGiver)
+        console.log("receiver: ", testReceiver)
+        if (!testGiver || !testReceiver) {
             // If user doesn't exist or receiver is null, redirect to the home page
             // router.push('/');
             alert("User logged in")
         }
 
-    }, [receiver, router, user]);
+    }, [testReceiver, router, testGiver]);
 
 
     return (
@@ -40,9 +39,9 @@ const Page: React.FC<DomePageProps> = ({user, receiver}) => {
             <div className={"h-screen"}>
 
                 <Navbar/>
-                <TestComponent/>
+                {testReceiver && <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
 
-                <div><p>Test for {receiver}</p>
+                <div><p>Test for {testReceiver}</p>
                 </div>
 
             </div>
@@ -63,6 +62,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 }
             }
         }
+        if (!session.user.userHandle)
+            return {
+                redirect: {
+                    destination: '/gethandle',
+                    permanent: false,
+                }
+            }
         const receiver = context.query.user as string | undefined;
         if (!receiver) {
             // If there is no receiver, redirect to home page
@@ -72,11 +78,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     permanent:
                         false,
                 }
-                ,
             }
-                ;
         }
-        console.log("json: ", JSON.stringify({userHandle: receiver}))
+
+        if(session.user.userHandle === receiver) {
+            return {
+                redirect: {
+                    destination: '/',
+                    permanent:
+                        false,
+                }
+            }
+        }
+
         const response = await fetch(`${baseURL}/api/user-exists`, {
                 method: 'POST',
                 body: JSON.stringify({userHandle: receiver}),
@@ -87,8 +101,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         const data = await response.json()
         return {
             props: {
-                user: data.user,
-                receiver: userExists ? receiver : null,
+                testGiver: session.user,
+                testReceiver: userExists ? receiver : null,
             },
         };
     }

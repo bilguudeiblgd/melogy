@@ -14,6 +14,7 @@ export enum TYPES {
     MOOD = "MOOD",
     SAGE = "SAGE"
 }
+// #TODO: have types and interface in 1 folder
 
 
 export enum PHASE {
@@ -53,6 +54,17 @@ export interface TestInfoInterface {
 export interface Phase1QuestionType {
     text: string,
     type: TYPES
+}
+
+export type TypeScoreType = {
+    personality_type: string;
+    score: number
+}
+
+export type TestType = {
+    testReceiver: string | null;
+    testGiver: string | null;
+    info: TypeScoreType[]
 }
 
 export const Phase1Questions = [

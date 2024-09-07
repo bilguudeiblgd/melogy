@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import Phase0Button from "@/components/Test/Phase0Button";
 import Phase0Component from "@/components/Test/Phase0Component";
 import Phase1Component from "@/components/Test/Phase1Component";
-import {PHASE, TestInfoInterface, TYPES} from "@/components/Test/Properties";
+import {PHASE, TestInfoInterface, TestType, TYPES} from "@/components/Test/Properties";
+import {testInfoToMongo} from "@/util/TestUtils";
 
 const defaultInitTestInfo: TestInfoInterface = {
     phase0: {
@@ -12,14 +13,42 @@ const defaultInitTestInfo: TestInfoInterface = {
     phase1: []
 }
 
-const TestComponent: React.FC = () => {
+type Props = {
+    testReceiver: string;
+    testGiver: string
+};
+
+
+
+
+const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
     const [stage, setStage] = useState<PHASE>(PHASE.PHASE0)
     // initialize eliminatedQualities
     let testInfo: TestInfoInterface = defaultInitTestInfo
+    console.log("testReceiver: ", testReceiver);
+    console.log("testGiver: ", testGiver)
     const handleContinueButton = (testInfo: TestInfoInterface) => {
         setStage(PHASE.PHASE1)
     }
-    const handleEndButton = (testInfo: TestInfoInterface) => {
+    const handleEndButton = async (testInfo: TestInfoInterface) => {
+        let info = testInfoToMongo(testInfo)
+        let testObject: TestType = {
+            testReceiver: testReceiver,
+            testGiver: testGiver,
+            info: info
+        }
+        try {
+            const response = await fetch('/api/send-test', {
+                method: 'POST',
+                body: JSON.stringify(testObject),
+            });
+
+            const result = await response.json()
+            console.log("Response from server:", result);
+        } catch (error) {
+            console.error("Error while sending test info:", error);
+        }
+
         console.log(testInfo)
     }
     return (

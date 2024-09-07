@@ -50,12 +50,8 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
     const handleClick = (group: number, index: number) => {
         //        do stuff
         recordAnswers.push(questionsGrouped[group][index].text)
-        console.log(recordAnswers)
-        console.log('b: ', groupIndex)
         setGroupIndex(groupIndex + 1);
-        console.log('a: ', groupIndex)
         if (groupIndex == 3) {
-            console.log("recording answer")
             //     record the answer
             updateInfo(recordAnswers)
             handleContinueButton(testInfo);

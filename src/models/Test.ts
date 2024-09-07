@@ -4,16 +4,16 @@ import {TYPES} from "@/components/Test/Properties";
 
 
 const testSchema = new Schema({
-    subject: Schema.Types.ObjectId,
-    object: Schema.Types.ObjectId,
+    testReceiver: {type: Schema.Types.ObjectId, ref: "users", required: true},
+    testGiver: {type: Schema.Types.ObjectId, ref: "users", required:true},
     info: [{
-        personality_test: {
+        personality_type: {
             type: String,
             required: true,
             enum: [...Object.values(TYPES)]
         },
         score: Number,
-    }]
-});
+    }],
+}, {timestamps: true});
 
 export default mongoose.models.Test || mongoose.model('tests', testSchema);

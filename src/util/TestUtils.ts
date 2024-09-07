@@ -3,7 +3,7 @@ import {
     Phase0QualitiesPart1,
     Phase1Questions,
     TestInfoInterface,
-    TYPES
+    TYPES, TypeScoreType
 } from "@/components/Test/Properties";
 
 export const TYPES_INDEX_MAP: { [key in TYPES]: number } = {
@@ -37,38 +37,39 @@ export const Phase1Qualities_QUESTION2TYPES : { [key: string]: TYPES[] } = Phase
 }, {});
 
 
-const testInfoToMongo = (testInfo: TestInfoInterface) => {
+export const testInfoToMongo = (testInfo: TestInfoInterface): TypeScoreType[] => {
     let info: {[key: string]: number} = {}
     // initialize
     for (const type in TYPES) {
         info[type] = 0
     }
 
-    for(const quality in testInfo.phase0.group0) {
+    for(const quality of testInfo.phase0.group0) {
+        console.log(Phase0QualitiesPart0_TEXT2TYPES[quality])
         Phase0QualitiesPart0_TEXT2TYPES[quality].forEach((type, index) => {
             info[type] += 2
         })
     }
 
-    for(const quality in testInfo.phase0.group1) {
+    for(const quality of testInfo.phase0.group1) {
         Phase0QualitiesPart1_TEXT2TYPES[quality].forEach((type, index) => {
             info[type] += 2
         })
     }
 
-    for(const question in  testInfo.phase1) {
+    for(const question of  testInfo.phase1) {
         Phase1Qualities_QUESTION2TYPES[question].forEach((type, index) => {
             info[type] += 3
         });
     }
 
-    let infoSorted = []
+    let infoSorted: TypeScoreType[] = []
     for(const key in info) {
         if(info[key] > 0) {
-            infoSorted.push({personality_key: key, score: info[key]})
+            infoSorted.push({personality_type: key, score: info[key]})
         }
     }
-    infoSorted.sort((a,b) => a.score - b.score)
-
-    return info
+    infoSorted.sort((a,b) => b.score - a.score)
+    console.log("Info: ", infoSorted)
+    return infoSorted
 }

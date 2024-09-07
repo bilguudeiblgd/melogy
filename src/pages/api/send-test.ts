@@ -1,20 +1,62 @@
-import type {NextApiRequest, NextApiResponse} from "next";
-import {TestInfoInterface} from "@/components/Test/Properties";
+import type { NextApiRequest, NextApiResponse } from "next";
 import mongooseConnect from "@/lib/mongooseConnect";
+import Test from "@/models/Test";
+import User from "@/models/User";
+import IUser from "@/types/IUser";  // Assuming this is the file where TestSchema is defined
 
 type Data = {
-    name: string;
+    status: string;
+    message: string;
 };
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>,
 ) {
-    const query = JSON.parse(req.body)
+    // Connect to the database
+    await mongooseConnect();
 
+    // Only allow POST requests
+    if (req.method !== 'POST') {
+        return res.status(405).json({ status: "error", message: "Method Not Allowed" });
+    }
 
-    await mongooseConnect()
+    try {
+        console.log(req.body);
+        const { testReceiver, testGiver, info } = JSON.parse(req.body);
+        console.log(info, testReceiver, testGiver);
+        // Check if the necessary fields are present
+        if (!info || !testReceiver || !testGiver) {
+            return res.status(400).json({ status: "error", message: "Missing required fields" });
+        }
 
-    res.status(200).json({name: "Hello World!"});
+        // Find the testReceiver in the User collection by userHandle
+        const receiverUser = await User.findOne({ userHandle: testReceiver });
+        if (!receiverUser) {
+            return res.status(404).json({ status: "error", message: "Test receiver not found" });
+        }
+
+        // Find the testGiver in the User collection by userHandle
+        const giverUser = await User.findOne<IUser>({ userHandle: testGiver })
+
+        if (!giverUser) {
+            return res.status(404).json({ status: "error", message: "Test giver not found" });
+        }
+        console.log("receiver id:", receiverUser._id)
+        // Create the new test object based on the schema
+        const newTest = new Test({
+            testReceiver: receiverUser._id,
+            testGiver: giverUser._id,
+            info
+        });
+
+        // Save the test object to the database
+        await newTest.save();
+
+        // Respond with success
+        return res.status(200).json({ status: "success", message: "Test info saved successfully!" });
+    } catch (error) {
+        console.error("Error saving test info:", error);
+        return res.status(500).json({ status: "error", message: "Internal Server Error" });
+    }
 }
-
