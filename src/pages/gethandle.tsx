@@ -37,7 +37,7 @@ export default function GetHandle() {
             const response = await fetch(`${GLOBALS.baseURL}/api/handle-check`, {
                 method: 'POST',
                 body: JSON.stringify({userHandle: handle})
-        })
+            })
             const data = await response.json()
 
             if(response.ok) {

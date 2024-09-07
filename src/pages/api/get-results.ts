@@ -6,10 +6,10 @@ import mongodb from "@/lib/mongodb";
 import {User as UserType} from "next-auth"
 import User from "@/models/User";
 import IUser from "@/types/IUser";
+import {TypeScoreType} from "@/components/Test/Properties";
 
 type Data = {
-    status: string;
-    user: IUser | null
+    data: TypeScoreType[] | null;
 };
 
 export default async function handler(
@@ -18,9 +18,12 @@ export default async function handler(
 ) {
     await mongooseConnect()
     const query = JSON.parse(req.body)
-    const user = await User.findOne(query);
-    if(!user)
-        return res.status(500).json({ status: "User doesn't exist", user: null });
-
-    return res.status(200).json({ status: "User does exist!", user: user });
+    try {
+        const user = await User.findOne(query);
+        if(!user)
+            return res.status(500).json({ data: null });
+        return res.status(200).json({ data: user.results });
+    } catch(e) {
+        return res.status(500).json({ data: null });
+    }
 }

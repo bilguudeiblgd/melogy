@@ -23,10 +23,6 @@ const userSchema = new Schema<DbUser>({
     emailVerified: String,
     tests_for_me: [{type: mongoose.SchemaTypes.ObjectId, ref: "tests"}],
     tests_given: [{type: mongoose.SchemaTypes.ObjectId, ref: "tests"}],
-    // results: [{
-    //     personality_type: String,
-    //     score: Number,
-    // }]
     results: {
         type: [{
             personality_type: {

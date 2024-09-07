@@ -9,7 +9,6 @@ type Data = {
     status: string;
     message: string;
 };
-// #TODO: add test to user tests_for_me and tests_given field.
 
 export default async function handler(
     req: NextApiRequest,
