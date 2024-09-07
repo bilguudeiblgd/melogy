@@ -61,7 +61,7 @@ export type TypeScoreType = {
     score: number
 }
 
-export type TestType = {
+export type TestTypeDb = {
     testReceiver: string | null;
     testGiver: string | null;
     info: TypeScoreType[]

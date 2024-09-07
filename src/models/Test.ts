@@ -1,9 +1,9 @@
 import mongoose, {Schema} from 'mongoose';
 import IUser from "@/types/IUser";
-import {TYPES} from "@/components/Test/Properties";
+import {TestInfoInterface, TestTypeDb, TYPES} from "@/components/Test/Properties";
 
 
-const testSchema = new Schema({
+const testSchema = new Schema<TestTypeDb>({
     testReceiver: {type: Schema.Types.ObjectId, ref: "users", required: true},
     testGiver: {type: Schema.Types.ObjectId, ref: "users", required:true},
     info: [{
@@ -16,4 +16,4 @@ const testSchema = new Schema({
     }],
 }, {timestamps: true});
 
-export default mongoose.models.Test || mongoose.model('tests', testSchema);
+export default mongoose.models.Test || mongoose.model<TestTypeDb>('tests', testSchema);

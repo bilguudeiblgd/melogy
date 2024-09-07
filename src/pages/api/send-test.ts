@@ -1,13 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import mongooseConnect from "@/lib/mongooseConnect";
 import Test from "@/models/Test";
-import User from "@/models/User";
-import IUser from "@/types/IUser";  // Assuming this is the file where TestSchema is defined
+import User, {DbUser} from "@/models/User";
+import IUser from "@/types/IUser";
+import {TestTypeDb} from "@/components/Test/Properties";  // Assuming this is the file where TestSchema is defined
 
 type Data = {
     status: string;
     message: string;
 };
+// #TODO: add test to user tests_for_me and tests_given field.
 
 export default async function handler(
     req: NextApiRequest,
@@ -31,13 +33,13 @@ export default async function handler(
         }
 
         // Find the testReceiver in the User collection by userHandle
-        const receiverUser = await User.findOne({ userHandle: testReceiver });
+        const receiverUser = await User.findOne<DbUser>({ userHandle: testReceiver });
         if (!receiverUser) {
             return res.status(404).json({ status: "error", message: "Test receiver not found" });
         }
 
         // Find the testGiver in the User collection by userHandle
-        const giverUser = await User.findOne<IUser>({ userHandle: testGiver })
+        const giverUser = await User.findOne<DbUser>({ userHandle: testGiver })
 
         if (!giverUser) {
             return res.status(404).json({ status: "error", message: "Test giver not found" });
@@ -53,10 +55,34 @@ export default async function handler(
         // Save the test object to the database
         await newTest.save();
 
+        giverUser.tests_given.push(newTest)
+        receiverUser.tests_for_me.push(newTest)
+
+        updateResultScores(giverUser, newTest)
+        await giverUser.save();
+        await receiverUser.save();
+
+
         // Respond with success
         return res.status(200).json({ status: "success", message: "Test info saved successfully!" });
     } catch (error) {
         console.error("Error saving test info:", error);
         return res.status(500).json({ status: "error", message: "Internal Server Error" });
+    }
+}
+
+const updateResultScores = (user: DbUser, testInstance: TestTypeDb) => {
+    const currentScores = user.results
+    const typeToScore : Map<string, number> = new Map()
+    for(const obj of testInstance.info) {
+        typeToScore.set(obj.personality_type, obj.score)
+    }
+    if(!currentScores) return
+    for(const obj of currentScores) {
+        if(typeToScore.has(obj.personality_type)) {
+            const scoreToAdd = typeToScore.get(obj.personality_type)
+            if(scoreToAdd)
+                obj.score += scoreToAdd;
+        }
     }
 }

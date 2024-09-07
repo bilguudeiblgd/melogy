@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Phase0Button from "@/components/Test/Phase0Button";
 import Phase0Component from "@/components/Test/Phase0Component";
 import Phase1Component from "@/components/Test/Phase1Component";
-import {PHASE, TestInfoInterface, TestType, TYPES} from "@/components/Test/Properties";
+import {PHASE, TestInfoInterface, TestTypeDb, TYPES} from "@/components/Test/Properties";
 import {testInfoToMongo} from "@/util/TestUtils";
 
 const defaultInitTestInfo: TestInfoInterface = {
@@ -32,7 +32,7 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
     }
     const handleEndButton = async (testInfo: TestInfoInterface) => {
         let info = testInfoToMongo(testInfo)
-        let testObject: TestType = {
+        let testObject: TestTypeDb = {
             testReceiver: testReceiver,
             testGiver: testGiver,
             info: info

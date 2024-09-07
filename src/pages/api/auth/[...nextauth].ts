@@ -9,6 +9,7 @@ import mongooseConnect from "@/lib/mongooseConnect";
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import type { Adapter } from 'next-auth/adapters';
 import mongoose, {Schema} from "mongoose";
+import {TYPES} from "@/components/Test/Properties";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variable");
@@ -55,6 +56,11 @@ export const authOptions : NextAuthOptions = {
           email: profile.email,
           image: profile.picture,
           userHandle :null,
+          tests_for_me: [],
+          tests_given: [],
+          results: Object.values(TYPES).map((value) => {
+            return {personality_type: value, score: 0}
+          }),
         }
       },
     }),

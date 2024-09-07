@@ -1,11 +1,11 @@
 import mongoose, {Schema} from 'mongoose';
 import IUser from "@/types/IUser";
 import Test from "@/models/Test";
-import {TestType, TYPES} from "@/components/Test/Properties";
+import {TestTypeDb, TYPES} from "@/components/Test/Properties";
 
-interface DbUser extends IUser {
-    tests_for_me: [TestType],
-    tests_given: [TestType]
+export interface DbUser extends IUser {
+    tests_for_me: [TestTypeDb],
+    tests_given: [TestTypeDb]
     results?: [{
         personality_type: string,
         score: number,
