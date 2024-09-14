@@ -7,7 +7,7 @@ export default function Dashboard() {
 
   // When rendering client side don't display anything until loading is complete
   // If no session exists, display access denied message
-  if (!session) { return  <Skeleton><AccessDenied/></Skeleton> }
+  if (!session) { return  <Skeleton showNavbar={true} ><AccessDenied/></Skeleton> }
 
   return (
     <main

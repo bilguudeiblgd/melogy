@@ -21,7 +21,7 @@ export default function GetHandle() {
     // When rendering client side don't display anything until loading is complete
     // If no session exists, display access denied message
     if (!session) {
-        return <Skeleton><AccessDenied/></Skeleton>
+        return <Skeleton showNavbar={true}><AccessDenied/></Skeleton>
     }
     if(session.user.userHandle) {
         router.push("/")
@@ -105,8 +105,7 @@ export default function GetHandle() {
     }
 
     return (
-        <Skeleton>
-            <Navbar />
+        <Skeleton showNavbar={true}>
             <h1>Get Handle!</h1>
             <input className={"input input-bordered input-primary w-full max-w-xs"} id={"handle"} value={handle}
                    onChange={(e) => textHandler(e)}/>

@@ -3,15 +3,17 @@ import {signIn, signOut, useSession} from "next-auth/react"
 
 import Link from 'next/link';
 import Image from "next/image";
+import Logo from "@/components/Logo";
 
 const Navbar: React.FC = () => {
     const {data: session} = useSession()
-    console.log(session?.user)
     return (
-        <div className="w-full ">
+        <div className="w-full">
           <div className="navbar w-full bg-transparent">
               <div className="flex-1">
-                  <Link href="/" className="btn btn-ghost text-xl">Methology</Link>
+                  <Link href="/" className="btn btn-ghost text-xl">
+                      <Logo />
+                  </Link>
               </div>
               <div className="flex-none">
                   {session ?

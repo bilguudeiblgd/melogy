@@ -1,5 +1,4 @@
 import Image from "next/image";
-import {Inter} from "next/font/google";
 import {useSession, signIn, signOut} from "next-auth/react"
 import Navbar from "@/components/Navbar";
 import Skeleton from "@/components/Skeleton";
@@ -9,8 +8,9 @@ import CopyLink from "@/components/CopyLink";
 import mongooseConnect from "@/lib/mongooseConnect";
 import mongoose from "mongoose";
 import {useRouter} from "next/router";
+import Text from "@/components/Text";
+import TextEdgy from "@/components/TextEdgy";
 
-const inter = Inter({subsets: ["latin"]});
 
 export default function Home() {
     const {data: session} = useSession()
@@ -21,30 +21,50 @@ export default function Home() {
     }
 
     return (
-        <main
-        >
-            <Skeleton>
-                {/*<div>*/}
-                {/*    <Link href="/dashboard">Dashboard</Link>*/}
-                {/*</div>*/}
-
-                {/*<pre className="py-6 px-4 whitespace-pre-wrap break-all">*/}
-                {/*  {JSON.stringify(session, null, 2)}*/}
-                {/*</pre>*/}
-                {/*<div className={"overscroll-y-none"}>*/}
+        <main >
+            <Skeleton showNavbar={true}>
                 {!session ?
-                    (<div>
-                        <Navbar/>
-
-                        <p>Welcome page</p>
+                    (<div className={"flex flex-col items-center pb-10"}>
+                        {/* should have landing page */}
+                        <div className={"relative flex-1"}>
+                            <Image className={"h-full"}
+                                   src={"/home_illustration.jpg"} width={457} height={814}  alt={"illustration of the idea of the app"}/>
+                        </div>
+                        <div>
+                            <button onClick={() => {signIn()}} className={"btn btn-secondary"}>
+                                <TextEdgy className={"text-base-100"} >See who you are</TextEdgy>
+                            </button>
+                        </div>
                     </div>)
                     :
-                    (<div className={"h-screen"}>
-                        <Navbar/>
-                        {session.user.userHandle && <CopyLink userHandle={session.user.userHandle}/>}
+                    (<div className={"h-full w-full flex flex-col justify-center items-center -mt-24 "}>
+                        <div>
+                            <p className={"text-primary font-bold mb-2 text-sm"}>Send this link to your friends:</p>
+                        </div>
+                        <div>
+                            {session.user.userHandle && <CopyLink userHandle={session.user.userHandle}/>}
+                        </div>
+                        <div className={"py-2"}>
+                            <p className={"text-secondary font-semibold text-sm "}>x people have visited your link</p>
+                        </div>
+
+                        <div className={"flex flex-row"}>
+                            <button className={"btn btn-primary h-16 w-28 mx-2"}>
+                                <div className={"flex flex-col items-center justify-center"}>
+                                    <Image src={"/eyes_2.png"} alt={"Illustration of eyes"} width={40} height={40}/>
+                                    <TextEdgy className={"text-base-100"}>SEE ME!</TextEdgy>
+                                </div>
+                            </button>
+                            <button className={"btn btn-outline btn-primary h-16 w-28 mx-2"}>
+                                <div className={"flex flex-col items-center justify-center"}>
+                                    <TextEdgy className={"text-3xl font-custom"} >14</TextEdgy>
+                                    <TextEdgy className={"text-sm"} >ARCHETYPES!</TextEdgy>
+                                </div>
+                            </button>
+                        </div>
+
                     </div>)
                 }
-
             </Skeleton>
 
         </main>

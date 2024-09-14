@@ -58,8 +58,7 @@ export default function Page() {
 
 
 
-  return <Skeleton>
-    <Navbar/>
+  return <Skeleton showNavbar={true}>
     <div>
       {topThreeType && topThreeType.map((types, index) =>
           <div key={index}>

@@ -1,10 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import db from '../../lib/mongooseConnect'
-import mongoose from "mongoose";
+import type {NextApiRequest, NextApiResponse} from "next";
 import mongooseConnect from "../../lib/mongooseConnect";
 import User from "@/models/User"
-import mongodb from "@/lib/mongodb";
-import IUser from "@/types/IUser";
+
 type Data = {
     message: string;
 };
@@ -19,10 +16,10 @@ export default async function handler(
         const user = await User.find(query);
         if (user.length > 0)
             return res.status(200).json({message: "Handle exists"});
-        return res.status(200).json({ message: "Possible to register" });
+        return res.status(200).json({message: "Possible to register"});
 
-    } catch(e) {
-        return res.status(500).json({ message: (e as Error).message });
+    } catch (e) {
+        return res.status(500).json({message: (e as Error).message});
     }
 
 }

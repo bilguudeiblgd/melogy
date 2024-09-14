@@ -28,7 +28,7 @@ const CopyLink: React.FC<Props> = ({userHandle}) => {
     const generatedURL = `${GLOBALS.baseURL}/${userHandle}/dome`
 
     return (
-        <div className={"flex flex-col justify-center items-center h-full -m-32 gap-2"}>
+        <div >
             {copied && <NotifCopiedToClipboard />}
             <button onClick={() => buttonHandler(generatedURL)}
                     className={"btn border-2 rounded-full p-4 flex flex-row items-center"}>

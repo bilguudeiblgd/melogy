@@ -35,10 +35,8 @@ const Page: React.FC<DomePageProps> = ({testGiver, testReceiver}) => {
 
 
     return (
-        <Skeleton>
+        <Skeleton showNavbar={true}>
             <div className={"h-screen"}>
-
-                <Navbar/>
                 {testReceiver && <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
 
                 <div><p>Test for {testReceiver}</p>
