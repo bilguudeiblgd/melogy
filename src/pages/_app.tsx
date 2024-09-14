@@ -26,8 +26,8 @@ export default function App({
                                 pageProps: {session, ...pageProps}
                             }: AppProps) {
     var BASE_URL: string = "http://localhost:3000"
-    if (process.env.NODE_ENV === "production") {
-        BASE_URL = "https://inspect-me.vercel.app/"
+    if (process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_BASE_URL) {
+        BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
     }
     return (
         <GlobalContext.Provider value={{baseURL: BASE_URL}}>
