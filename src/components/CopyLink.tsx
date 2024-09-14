@@ -1,8 +1,6 @@
 import {FaRegCopy} from "react-icons/fa6";
 import React, {useContext, useEffect} from "react";
 import {useSession} from "next-auth/react";
-import mongooseConnect from "@/lib/mongooseConnect";
-import mongoose from 'mongoose'
 import {GlobalContext} from "@/pages/_app";
 
 type Props = {
@@ -59,7 +57,7 @@ const NotifCopiedToClipboard: React.FC = () => {
                         strokeWidth="2"
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span>Copied to cliboard</span>
+                <span>Copied to clipboard</span>
             </div>
         </div>
     )
