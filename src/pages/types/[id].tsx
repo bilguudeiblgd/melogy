@@ -15,7 +15,8 @@ export default function Page({id, markdown}: InferGetStaticPropsType<typeof getS
     return (
         <Skeleton showNavbar={true}>
             <div className={"pb-4"}>
-                <article className={`px-12 mt-4 mx-auto prose lg:prose-md prose-headings:text-primary prose-slate`}>
+                <article
+                    className={`px-2 md:px-12 mt-4 mx-auto prose lg:prose-md prose-headings:text-primary prose-slate`}>
                     <div dangerouslySetInnerHTML={{__html: markdown}}/>
                 </article>
                 <div className={"flex mt-12 mb-16"}>
@@ -46,6 +47,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 export const getStaticProps = (async (context) => {
+    // when URL is localhost, it doesn't work. Why?
     const serverURL = "https://melogy.vercel.app"
 
     if (!context.params) {

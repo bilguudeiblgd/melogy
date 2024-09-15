@@ -10,7 +10,7 @@ interface SkeletonProps {
 const Skeleton: React.FC<SkeletonProps> = ({showNavbar, children}) => {
     return (
         <>
-            <main className="container mx-auto px-10 h-screen">
+            <main className="container mx-auto px-2 md:px-10 h-screen">
                 {showNavbar && <Navbar/>}
                 {children}
             </main>
