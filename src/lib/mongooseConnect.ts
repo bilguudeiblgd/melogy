@@ -1,20 +1,33 @@
 // lib/mongooseConnect.ts
-import mongoose, { ConnectOptions, Connection } from 'mongoose';
+import mongoose from 'mongoose';
 
 // const options: ConnectOptions = {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // };
+/**
+ * Global is used here to maintain a cached connection across hot reloads
+ * in development. This prevents connections growing exponentially
+ * during API Route usage.
+ */
+const cached: { connection?: typeof mongoose; promise?: Promise<typeof mongoose> } = {};
+
 const mongooseConnect = async () => {
   const uri: string | undefined = process.env.MONGODB_URI; // Replace with your MongoDB connection string and database name
-  console.log(uri)
   if (!uri) {
     throw new Error('MongoDB connection URI is not defined in environment variables');
   }
-  mongoose.connect(uri).then(
-      () => console.log("Mongoose connected")
-  ).catch((err) => console.log(err));
-  console.log("MongoDB connection URI: " + uri);
+  if (cached.connection) return cached.connection
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(uri)
+  }
+  try {
+    cached.connection = await cached.promise
+  } catch (e) {
+    cached.promise = undefined;
+    throw e;
+  }
+  return cached.connection
 }
 
 export default mongooseConnect;

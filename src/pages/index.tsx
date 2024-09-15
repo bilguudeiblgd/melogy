@@ -5,6 +5,7 @@ import CopyLink from "@/components/CopyLink";
 import {useRouter} from "next/router";
 import TextEdgy from "@/components/TextEdgy";
 import Loading from "@/components/Loading";
+import Link from "next/link";
 
 
 export default function Home() {
@@ -49,10 +50,11 @@ export default function Home() {
 
                         <div className={"flex flex-row"}>
                             <button className={"btn btn-primary h-16 w-28 mx-2"}>
-                                <div className={"flex flex-col items-center justify-center"}>
+                                <Link href={`/${session?.user.userHandle}`}
+                                      className={"flex flex-col items-center justify-center"}>
                                     <Image src={"/eyes_2.png"} alt={"Illustration of eyes"} width={40} height={40}/>
                                     <TextEdgy className={"text-base-100"}>SEE ME!</TextEdgy>
-                                </div>
+                                </Link>
                             </button>
                             <button className={"btn btn-outline btn-primary h-16 w-28 mx-2"}>
                                 <div className={"flex flex-col items-center justify-center"}>
