@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import type {AppProps} from "next/app";
 import {SessionProvider} from "next-auth/react"
-import React, {createContext} from "react";
+import React, {createContext, useEffect, useState} from "react";
 import {Black_Han_Sans, Rubik} from 'next/font/google'
 import InApp from 'detect-inapp'
 
@@ -25,8 +25,10 @@ export default function App({
                                 Component,
                                 pageProps: {session, ...pageProps}
                             }: AppProps) {
-    const inapp = new InApp(navigator.userAgent || navigator.vendor)
-
+    const [inapp, setInapp] = useState<InApp | null>(null)
+    useEffect(() => {
+        setInapp(new InApp(navigator.userAgent || navigator.vendor))
+    }, []);
     var BASE_URL: string = "http://localhost:3000"
     if (process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_BASE_URL) {
         BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
@@ -37,7 +39,7 @@ export default function App({
         window.open(url, '_system'); // Opens the link in the device's default browser
     };
 
-    if (inapp.isInApp) return (
+    if (inapp && inapp.isInApp) return (
         <div style={{padding: '10px', backgroundColor: '#f0f0f0', textAlign: 'center'}}>
             <p>You{"'"}re viewing this in the in-app browser.</p>
             <button onClick={openInBrowser} style={{
