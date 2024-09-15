@@ -1,15 +1,14 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import db from '../../lib/mongooseConnect'
-import mongoose from "mongoose";
-import mongooseConnect from "../../lib/mongooseConnect";
-import mongodb from "@/lib/mongodb";
-import {User as UserType} from "next-auth"
+import type {NextApiRequest, NextApiResponse} from "next";
+import mongooseConnect from '../../lib/mongooseConnect'
 import User from "@/models/User";
-import IUser from "@/types/IUser";
 import {TypeScoreType} from "@/components/Test/Properties";
 
 type Data = {
-    data: TypeScoreType[] | null;
+    data: {
+        result: TypeScoreType[]
+        tests_for_me_size: number;
+        tests_given_size: number;
+    } | null;
 };
 
 export default async function handler(
@@ -22,7 +21,13 @@ export default async function handler(
         const user = await User.findOne(query);
         if(!user)
             return res.status(500).json({ data: null });
-        return res.status(200).json({ data: user.results });
+        return res.status(200).json({
+            data: {
+                result: user.results,
+                tests_for_me_size: user.tests_for_me.length,
+                tests_given_size: user.tests_given.length,
+            }
+        });
     } catch(e) {
         return res.status(500).json({ data: null });
     }
