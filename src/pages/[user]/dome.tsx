@@ -18,12 +18,9 @@ const Page: React.FC<DomePageProps> = ({testGiver, testReceiver}) => {
     const {data: session, status} = useSession();
 
     useEffect(() => {
-        console.log("user: ", testGiver)
-        console.log("receiver: ", testReceiver)
+
         if (!testGiver || !testReceiver) {
-            // If user doesn't exist or receiver is null, redirect to the home page
-            // router.push('/');
-            alert("User logged in")
+            alert("User isn't logged in")
         }
 
     }, [testReceiver, router, testGiver]);

@@ -8,26 +8,7 @@ const nextConfig = {
         hostname: '*.googleusercontent.com'
       }
     ]
-  },
-  async headers() {
-    return [
-      {
-        // Apply headers to all routes
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY', // Prevent site from being loaded in iframes
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'no-referrer', // Remove referrer information
-          },
-        ],
-      },
-    ];
-  },
-
+  }
 };
 
 export default nextConfig;
