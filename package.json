@@ -13,6 +13,7 @@
     "@node-rs/bcrypt": "^1.10.4",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
+    "detect-inapp": "^1.4.0",
     "lodash": "^4.17.21",
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.4",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
+    "@types/detect-inapp": "^1.4.3",
     "@types/lodash": "^4.17.7",
     "@types/mongodb": "^4.0.7",
     "@types/node": "^20.14.9",
