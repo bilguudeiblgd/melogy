@@ -21,7 +21,6 @@ export const GlobalContext = createContext({
     baseURL: ""
 })
 
-
 export default function App({
                                 Component,
                                 pageProps: {session, ...pageProps}
