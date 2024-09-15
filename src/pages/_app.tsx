@@ -49,7 +49,7 @@ export default function App({
 
     if (isInAppBrowser) return (
         <div style={{padding: '10px', backgroundColor: '#f0f0f0', textAlign: 'center'}}>
-            <p>You're viewing this in the in-app browser.</p>
+            <p>You{"'"}re viewing this in the in-app browser.</p>
             <button onClick={openInBrowser} style={{
                 padding: '10px',
                 backgroundColor: '#007bff',
