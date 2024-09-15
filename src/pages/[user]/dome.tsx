@@ -1,16 +1,11 @@
 import {GetServerSideProps} from 'next';
 import {useRouter} from 'next/router';
 import React, {useEffect} from "react";
-import {useContext, useState} from 'react';
-import LoadingComponent from '@/components/LoadingComponent';
-import {GlobalContext} from '@/pages/_app';
 import {getSession, useSession} from 'next-auth/react';
-import {number} from "prop-types";
-import Navbar from "@/components/Navbar";
 import Skeleton from "@/components/Skeleton";
 import IUser from "@/types/IUser";
-import Phase0Component from "@/components/Test/Phase0Component";
 import TestComponent from "@/components/Test/TestComponent";
+import Loading from "@/components/Loading";
 
 
 interface DomePageProps {
@@ -20,7 +15,7 @@ interface DomePageProps {
 
 const Page: React.FC<DomePageProps> = ({testGiver, testReceiver}) => {
     const router = useRouter();
-    const {data: session} = useSession();
+    const {data: session, status} = useSession();
 
     useEffect(() => {
         console.log("user: ", testGiver)
@@ -33,16 +28,13 @@ const Page: React.FC<DomePageProps> = ({testGiver, testReceiver}) => {
 
     }, [testReceiver, router, testGiver]);
 
+    if (status === "loading") {
+        return <Loading/>
+    }
 
     return (
         <Skeleton showNavbar={true}>
-            <div className={"h-screen"}>
-                {testReceiver && <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
-
-                <div><p>Test for {testReceiver}</p>
-                </div>
-
-            </div>
+            {testReceiver && <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
         </Skeleton>
     );
 };
@@ -50,7 +42,7 @@ const Page: React.FC<DomePageProps> = ({testGiver, testReceiver}) => {
 export default Page;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-        const baseURL: string = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000";
+    const baseURL: string = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
         const session = await getSession(context);
         if (!session) {
             return {

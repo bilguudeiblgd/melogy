@@ -1,6 +1,4 @@
-import type { Config } from "tailwindcss";
-
-import defaultTheme from 'tailwindcss/defaultTheme';
+import type {Config} from "tailwindcss";
 
 const config: Config = {
   content: [
@@ -11,13 +9,18 @@ const config: Config = {
 
   plugins: [
     require('daisyui'),
-    // require('@tailwindcss/typography'),
+    require('@tailwindcss/typography'),
   ],
   theme: {
     extend: {
       fontFamily: {
         "primary": ['var(--font-primary)'],
         "edgy": ['var(--font-edgy)']
+      },
+      backgroundColor: {
+        "my-red": "#de3e5b",
+        "my-yellow": "#f8d24c",
+        "my-green": "#53a548"
       }
     }
   },
@@ -28,9 +31,9 @@ const config: Config = {
           "primary": "#3d358b",
           "secondary": "#53a548",
           "base-100": "#ffffff",
-          "my_red": "#de3e5b",
-          "my_yellow": "#f8d24c",
-          "my_green": "#53a548"
+          "my-red": "#de3e5b",
+          "my-yellow": "#f8d24c",
+          "my-green": "#53a548"
         }
       }
     ],

@@ -1,27 +1,26 @@
 import Image from "next/image";
-import {useSession, signIn, signOut} from "next-auth/react"
-import Navbar from "@/components/Navbar";
+import {signIn, useSession} from "next-auth/react"
 import Skeleton from "@/components/Skeleton";
-import {FaRegCopy} from "react-icons/fa6";
-import Link from "next/link";
 import CopyLink from "@/components/CopyLink";
-import mongooseConnect from "@/lib/mongooseConnect";
-import mongoose from "mongoose";
 import {useRouter} from "next/router";
-import Text from "@/components/Text";
 import TextEdgy from "@/components/TextEdgy";
+import Loading from "@/components/Loading";
 
 
 export default function Home() {
-    const {data: session} = useSession()
+    const {data: session, status} = useSession()
     const router = useRouter()
 
     if(session && session.user && !session.user.userHandle) {
         router.push('/gethandle')
     }
 
+    if (status === "loading") {
+        return <Loading/>
+    }
+
     return (
-        <main >
+        <main>
             <Skeleton showNavbar={true}>
                 {!session ?
                     (<div className={"flex flex-col items-center pb-10"}>
