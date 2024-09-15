@@ -6,6 +6,7 @@ import {useRouter} from "next/router";
 import TextEdgy from "@/components/TextEdgy";
 import Loading from "@/components/Loading";
 import Link from "next/link";
+import GetHandle from "@/components/GetHandle";
 
 
 export default function Home() {
@@ -13,7 +14,7 @@ export default function Home() {
     const router = useRouter()
 
     if(session && session.user && !session.user.userHandle) {
-        router.push('/gethandle')
+        return <GetHandle callbackUrl={"/"}/>
     }
 
     if (status === "loading") {

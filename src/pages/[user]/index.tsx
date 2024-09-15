@@ -54,7 +54,9 @@ export default function Page() {
     }
 
     if (!session) {
-        signIn()
+        signIn(undefined, {
+            callbackUrl: `/${router.query.user}` || ""
+        })
     }
 
     if (session?.user.userHandle != userName) {

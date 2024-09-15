@@ -1,96 +1,83 @@
-import {GetServerSideProps} from 'next';
 import {useRouter} from 'next/router';
-import React, {useEffect} from "react";
-import {getSession, useSession} from 'next-auth/react';
+import React, {useContext, useEffect, useState} from "react";
+import {signIn, useSession} from 'next-auth/react';
 import Skeleton from "@/components/Skeleton";
-import IUser from "@/types/IUser";
 import TestComponent from "@/components/Test/TestComponent";
 import Loading from "@/components/Loading";
+import InApp from "detect-inapp";
+import GetHandle from "@/components/GetHandle";
+import {GlobalContext} from "@/pages/_app";
+import InAppBrowserWarning from "@/components/InAppBrowserWarning";
 
 
-interface DomePageProps {
-    testGiver: IUser;
-    testReceiver: string | null;
-}
+// interface DomePageProps {
+//     testGiver: IUser;
+//     testReceiver: string | null;
+// }
 
-const Page: React.FC<DomePageProps> = ({testGiver, testReceiver}) => {
+const Page: React.FC = () => {
     const router = useRouter();
+    const [inapp, setInapp] = useState<InApp | null>(null)
     const {data: session, status} = useSession();
+    const GLOBALS = useContext(GlobalContext)
 
+    const currentURL = `/${router.query.user}/dome`
+    // navigators can't be accessed in server side
     useEffect(() => {
+        setInapp(new InApp(navigator.userAgent || navigator.vendor))
+    }, []);
 
-        if (!testGiver || !testReceiver) {
-            alert("User isn't logged in")
-        }
+    if (inapp && inapp.isInApp) return (<InAppBrowserWarning/>)
 
-    }, [testReceiver, router, testGiver]);
+    // unauthenticated user
+    if (status === "unauthenticated") {
+        signIn(undefined, {
+            callbackUrl: `/${router.query.user}/dome` || '/'
+        })
+    }
 
     if (status === "loading") {
         return <Loading/>
     }
 
+    // if user doesn't have handle
+    if (session && !session.user.userHandle) {
+        return <GetHandle callbackUrl={currentURL}/>
+    }
+
+    const testGiver = session?.user
+
+    const testReceiver = router.query.user as string | undefined;
+    if (!testReceiver) {
+        // If there is no receiver, redirect to home page
+        router.push('/')
+    }
+
+    if (session && session.user.userHandle === testReceiver) {
+        router.push(`/${session.user.userHandle}`)
+    }
+
+    const userExists = async (testReceiver: string | undefined) => {
+        if (!testReceiver) return null
+        const response = await fetch(`${GLOBALS.baseURL}/api/user-exists`, {
+            method: 'POST',
+            body: JSON.stringify({userHandle: testReceiver}),
+        })
+
+        return response.ok;
+    }
+
+    if (!userExists(testReceiver)) {
+        alert("no such route exists")
+        router.push('/')
+    }
+
     return (
         <Skeleton showNavbar={true}>
-            {testReceiver && <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
+            {testReceiver && testGiver && testGiver.userHandle &&
+                <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
         </Skeleton>
     );
 };
 
 export default Page;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const baseURL: string = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-        const session = await getSession(context);
-        if (!session) {
-            return {
-                redirect: {
-                    destination: '/api/auth/signin',
-                    permanent: false,
-                }
-            }
-        }
-        if (!session.user.userHandle)
-            return {
-                redirect: {
-                    destination: '/gethandle',
-                    permanent: false,
-                }
-            }
-        const receiver = context.query.user as string | undefined;
-        if (!receiver) {
-            // If there is no receiver, redirect to home page
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent:
-                        false,
-                }
-            }
-        }
-
-        if(session.user.userHandle === receiver) {
-            return {
-                redirect: {
-                    destination: '/',
-                    permanent:
-                        false,
-                }
-            }
-        }
-
-        const response = await fetch(`${baseURL}/api/user-exists`, {
-                method: 'POST',
-                body: JSON.stringify({userHandle: receiver}),
-            })
-        ;
-
-        const userExists = response.ok;
-        const data = await response.json()
-        return {
-            props: {
-                testGiver: session.user,
-                testReceiver: userExists ? receiver : null,
-            },
-        };
-    }
-;
