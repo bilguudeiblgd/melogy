@@ -35,7 +35,6 @@ const Navbar: React.FC = () => {
                                   <li>
                                       <Link href={`/${session.user?.userHandle}`} className="justify-between">
                                           Profile
-                                          <span className="badge">New</span>
                                       </Link>
                                   </li>
                                   <li><a onClick={(e) =>  signOut()}>Logout</a></li>

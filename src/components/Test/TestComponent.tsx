@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import Phase0Button from "@/components/Test/Phase0Button";
+import React, {useState} from 'react';
 import Phase0Component from "@/components/Test/Phase0Component";
 import Phase1Component from "@/components/Test/Phase1Component";
-import {PHASE, TestInfoInterface, TestTypeDb, TYPES} from "@/components/Test/Properties";
+import {PHASE, TestInfoInterface, TestTypeDb} from "@/components/Test/Properties";
 import {testInfoToMongo} from "@/util/TestUtils";
 
 const defaultInitTestInfo: TestInfoInterface = {
@@ -52,7 +51,7 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
         console.log(testInfo)
     }
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="min-h-screen flex flex-col items-center mt-10">
             {stage === PHASE.PHASE0 && <Phase0Component
                 handleContinueButton={handleContinueButton} testInfo={testInfo}
             />}
