@@ -44,7 +44,7 @@ const CopyLink: React.FC<Props> = ({userHandle}) => {
 
 const NotifCopiedToClipboard: React.FC = () => {
     return (
-        <div className={"fixed top-4"}>
+        <div className={"fixed left-1/2 -translate-x-1/2 top-4"}>
             <div role="alert" className="alert alert-success">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

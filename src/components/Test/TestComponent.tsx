@@ -3,6 +3,7 @@ import Phase0Component from "@/components/Test/Phase0Component";
 import Phase1Component from "@/components/Test/Phase1Component";
 import {PHASE, TestInfoInterface, TestTypeDb} from "@/components/Test/Properties";
 import {testInfoToMongo} from "@/util/TestUtils";
+import PhaseDoneComponent from "@/components/Test/PhaseDoneComponent";
 
 const defaultInitTestInfo: TestInfoInterface = {
     phase0: {
@@ -24,8 +25,6 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
     const [stage, setStage] = useState<PHASE>(PHASE.PHASE0)
     // initialize eliminatedQualities
     let testInfo: TestInfoInterface = defaultInitTestInfo
-    console.log("testReceiver: ", testReceiver);
-    console.log("testGiver: ", testGiver)
     const handleContinueButton = (testInfo: TestInfoInterface) => {
         setStage(PHASE.PHASE1)
     }
@@ -48,7 +47,8 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
             console.error("Error while sending test info:", error);
         }
 
-        console.log(testInfo)
+        setStage(PHASE.PHASE_DONE)
+
     }
     return (
         <div className="min-h-screen flex flex-col items-center mt-10">
@@ -57,7 +57,8 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
             />}
             {stage === PHASE.PHASE1 && <Phase1Component
                 handleContinueButton={handleEndButton} testInfo={testInfo}/>}
-
+            {stage === PHASE.PHASE_DONE && <PhaseDoneComponent
+                testInfo={testInfo} testReceiver={testReceiver}/>}
         </div>
     );
 };

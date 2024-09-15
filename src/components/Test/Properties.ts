@@ -18,7 +18,7 @@ export enum TYPES {
 
 
 export enum PHASE {
-    PHASE0, PHASE1
+    PHASE0, PHASE1, PHASE_DONE
 }
 
 export const Phase0QualitiesPart0 = [

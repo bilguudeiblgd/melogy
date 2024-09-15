@@ -7,19 +7,19 @@ import React, {useContext, useEffect, useState} from "react";
 import {GlobalContext} from "@/pages/_app";
 import Loading from "@/components/Loading";
 import TextEdgy from "@/components/TextEdgy";
-import Link from "next/link";
+import DisplayTopKResult from "@/components/Test/DisplayTopXResult";
 
 const REQUIRED_TEST_FOR_ME = 1
 const REQUIRED_TEST_FOR_OTHERS = 1
+const NUMBER_OF_RESULT_SHOWN = 3
 
 export default function Page() {
     const router = useRouter()
     const userName: string[] | string | undefined = router.query.user
     const GLOBALS = useContext(GlobalContext)
-    const [topThreeType, setTopThreeType] = useState<TypeScoreType[] | null>()
     const [testsForMeSize, setTestsForMeSize] = useState<number | null>(null)
     const [testsGivenSize, setTestsGivenSize] = useState<number | null>(null)
-
+    const [typeResult, setTypeResult] = useState<TypeScoreType[]>([])
     const {data: session, status} = useSession()
 
     useEffect(() => {
@@ -30,14 +30,12 @@ export default function Page() {
                     body: JSON.stringify({userHandle: session?.user.userHandle})
                 })
                 const data = await response.json()
-                const results: TypeScoreType[] = data.data.results
+                const results: TypeScoreType[] = data.data.result
 
                 setTestsForMeSize(data.data.tests_for_me_size)
                 setTestsGivenSize(data.data.tests_given_size)
-
-                if (results && results.length >= 3) {
-                    const topThree = findTopThree(results);
-                    setTopThreeType(topThree); // Update the state with the top three results
+                if (results) {
+                    setTypeResult(results)
                 } else {
                     console.log("Some error let's go")
                 }
@@ -47,15 +45,9 @@ export default function Page() {
         }
 
         fetchResultScore()
-    }, [session])
+    }, [])
 
-    const findTopThree = (res: TypeScoreType[]): TypeScoreType[] => {
-        // Sort the array based on score in descending order
-        const sortedResults = [...res].sort((a, b) => b.score - a.score);
 
-        // Return the top three results
-        return sortedResults.slice(0, 3);
-    };
 
     if (status === "loading") {
         return <Loading/>
@@ -106,13 +98,9 @@ export default function Page() {
     return (<Skeleton showNavbar={true}>
         <div className={"flex flex-col items-center mt-12"}>
             <NumberTestCard testsForMeSize={testsForMeSize} testsGivenSize={testsGivenSize}/>
-            <div className={"mt-8"}>
-                <TextEdgy className={"text-2xl font-bold text-primary"}>RESULT: </TextEdgy>
-                {topThreeType ? topThreeType.map((types, index) =>
-                        <ResultCard index={index} type={types.personality_type} key={index}/>
-                    ) :
-                    <span className="loading loading-ring loading-lg text-primary"></span>
-                }
+            <TextEdgy className={"text-primary mt-4"}>RESULT:</TextEdgy>
+            <div className={"mt-6"}>
+                <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={typeResult}/>
             </div>
 
         </div>
@@ -121,26 +109,7 @@ export default function Page() {
 }
 
 
-interface CardProps {
-    index: number;
-    type: string;
-}
 
-const ResultCard: React.FC<CardProps> = ({index, type}) => {
-    const typeURL = `/types/${type.toLowerCase()}`
-    const colors = ["#de3e5b", "#f8d24c", "#53a548"]
-
-    return (
-        // somehow colors in bg-colors[index] was not working
-        <Link target={"_blank"} href={typeURL} style={{backgroundColor: `${colors[index]}`}}
-              className={`btn flex rounded-2xl relative my-2 justify-center items-center w-64 h-24`}>
-            <TextEdgy className={"text-base-100"}>{type}</TextEdgy>
-            <div className={"absolute bottom-1 left-2"}>
-                <TextEdgy className={"text-base-100 text-2xl"}>{index + 1}</TextEdgy>
-            </div>
-        </Link>
-    )
-}
 
 interface NumberTestProps {
     testsForMeSize: number
@@ -169,7 +138,7 @@ const NumberTestCard: React.FC<NumberTestProps> = ({testsForMeSize, testsGivenSi
                 <div className="stat-value text-primary">{testsForMeSize}</div>
             </div>
             <div className="stat">
-                <div className="stat-figure text-primary">
+                <div className="stat-figure text-secondary">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -183,7 +152,7 @@ const NumberTestCard: React.FC<NumberTestProps> = ({testsForMeSize, testsGivenSi
                     </svg>
                 </div>
                 <div className="stat-title">Total given</div>
-                <div className="stat-value text-primary">{testsGivenSize}</div>
+                <div className="stat-value text-secondary">{testsGivenSize}</div>
             </div>
         </div>
     )

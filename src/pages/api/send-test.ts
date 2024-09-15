@@ -1,9 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type {NextApiRequest, NextApiResponse} from "next";
 import mongooseConnect from "@/lib/mongooseConnect";
 import Test from "@/models/Test";
 import User, {DbUser} from "@/models/User";
-import IUser from "@/types/IUser";
-import {TestTypeDb} from "@/components/Test/Properties";  // Assuming this is the file where TestSchema is defined
+import {TestTypeDb} from "@/components/Test/Properties"; // Assuming this is the file where TestSchema is defined
 
 type Data = {
     status: string;
@@ -53,9 +52,16 @@ export default async function handler(
 
         // Save the test object to the database
         await newTest.save();
-
+        if (!giverUser.tests_given) {
+            // @ts-ignore
+            giverUser.tests_given = []
+        }
         giverUser.tests_given.push(newTest)
         receiverUser.tests_for_me.push(newTest)
+        if (!receiverUser.tests_given) {
+            // @ts-ignore
+            receiverUser.tests_given = []
+        }
 
         updateResultScores(giverUser, newTest)
         await giverUser.save();

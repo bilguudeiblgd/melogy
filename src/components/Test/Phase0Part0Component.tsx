@@ -57,7 +57,7 @@ const Phase0Part0Component: React.FC<Props> = ({handleContinueButton, testInfo})
             </div>
 
             {nextPartEligible &&
-                <button onClick={() => {
+                <button className={"btn btn-secondary btn-outline mt-2"} onClick={() => {
                     updateTestInfo()
                     handleContinueButton(testInfo)
                 }}>Continue</button>
