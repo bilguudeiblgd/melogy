@@ -3,7 +3,7 @@ import type {AppProps} from "next/app";
 import {SessionProvider} from "next-auth/react"
 import React, {createContext, useEffect, useState} from "react";
 import {Black_Han_Sans, Rubik} from 'next/font/google'
-import InApp from 'detect-inapp'
+import InAppSpy from 'inapp-spy'
 import InAppBrowserWarning from "@/components/InAppBrowserWarning";
 
 const BLACK_HAN_SANS = Black_Han_Sans({
@@ -26,9 +26,10 @@ export default function App({
                                 Component,
                                 pageProps: {session, ...pageProps}
                             }: AppProps) {
-    const [inapp, setInapp] = useState<InApp | null>(null)
+    const [inapp, setInapp] = useState<boolean>(false)
     useEffect(() => {
-        setInapp(new InApp(navigator.userAgent || navigator.vendor))
+        const {isInApp} = InAppSpy()
+        setInapp(isInApp)
     }, []);
     var BASE_URL: string = "http://localhost:3000"
     if (process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_BASE_URL) {
@@ -36,7 +37,7 @@ export default function App({
     }
 
 
-    if (inapp && inapp.isInApp) return (
+    if (inapp) return (
         <InAppBrowserWarning/>
     )
     return (

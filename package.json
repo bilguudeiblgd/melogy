@@ -13,7 +13,7 @@
     "@node-rs/bcrypt": "^1.10.4",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
-    "detect-inapp": "^1.4.0",
+    "inapp-spy": "^3.0.0",
     "lodash": "^4.17.21",
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.4",

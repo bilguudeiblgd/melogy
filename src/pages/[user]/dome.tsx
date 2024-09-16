@@ -4,10 +4,10 @@ import {signIn, useSession} from 'next-auth/react';
 import Skeleton from "@/components/Skeleton";
 import TestComponent from "@/components/Test/TestComponent";
 import Loading from "@/components/Loading";
-import InApp from "detect-inapp";
 import GetHandle from "@/components/GetHandle";
 import {GlobalContext} from "@/pages/_app";
 import InAppBrowserWarning from "@/components/InAppBrowserWarning";
+import InAppSpy from "inapp-spy";
 
 
 // interface DomePageProps {
@@ -17,17 +17,19 @@ import InAppBrowserWarning from "@/components/InAppBrowserWarning";
 
 const Page: React.FC = () => {
     const router = useRouter();
-    const [inapp, setInapp] = useState<InApp | null>(null)
+    const [inapp, setInapp] = useState<boolean>(false)
+
     const {data: session, status} = useSession();
     const GLOBALS = useContext(GlobalContext)
 
     const currentURL = `/${router.query.user}/dome`
     // navigators can't be accessed in server side
     useEffect(() => {
-        setInapp(new InApp(navigator.userAgent || navigator.vendor))
+        const {isInApp} = InAppSpy()
+        setInapp(isInApp)
     }, []);
 
-    if (inapp && inapp.isInApp) return (<InAppBrowserWarning/>)
+    if (inapp) return (<InAppBrowserWarning/>)
 
     // unauthenticated user
     if (status === "unauthenticated") {
