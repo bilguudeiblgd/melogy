@@ -17,7 +17,7 @@ export default async function handler(
 
     // Only allow POST requests
     if (req.method !== 'POST') {
-        return res.status(405).json({status: "error", message: "Method Not Allowed"});
+        return res.status(405).json({data: null, message: "Method Not Allowed"});
     }
 
     try {
