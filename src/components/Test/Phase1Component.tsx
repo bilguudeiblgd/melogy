@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import Phase0Button from "@/components/Test/Phase0Button";
+import React, {useState} from 'react';
 import {Phase1Questions, Phase1QuestionType, TestInfoInterface} from "@/components/Test/Properties";
 import Phase1Button from "@/components/Test/Phase1Button";
 import {useRouter} from "next/router";
@@ -39,10 +38,12 @@ function splitInto4Group(arr: object[]) {
 
 let recordAnswers: string[] = []
 
+const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
+const questionsGrouped = splitInto4Group(shuffledQuestions) as Phase1QuestionType[][]
+
 const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
     const router = useRouter()
-    const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
-    const questionsGrouped = splitInto4Group(shuffledQuestions) as Phase1QuestionType[][]
+
     const [groupIndex, setGroupIndex] = useState(0);
     // questionsGrouped[0].forEach((d) => console.log(d));
     const updateInfo = (res: string[]) => {
