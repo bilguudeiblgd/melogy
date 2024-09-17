@@ -24,19 +24,17 @@ function shuffleArray(array: object[]) {
     }
     return newArray;
 }
-function splitInto4Group(array: object[]) {
-    let res = []
-    let tmpArray = array
-    for (let i = 0; i < 4; i++) {
-        let bufferArray = []
-        // to have last 2 groups only 3 elements
-        for(let j = 0; j < 4 - Math.floor(i / 2); j++) {   
-            bufferArray.push(tmpArray[j])
-            tmpArray.shift()
-        }
-        res.push(bufferArray)
-    }
-    return res
+function splitInto4Group(arr: object[]) {
+      if (arr.length !== 14) {
+        throw new Error("Array must have exactly 14 elements.");
+      }
+    
+      return [
+        arr.slice(0, 4),   // First 4 elements
+        arr.slice(4, 8),   // Next 4 elements
+        arr.slice(8, 11),  // Next 3 elements
+        arr.slice(11, 14)  // Last 3 elements
+      ];
 }
 
 let recordAnswers: string[] = []
