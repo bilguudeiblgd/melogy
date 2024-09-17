@@ -26,11 +26,14 @@ function shuffleArray(array: object[]) {
 }
 function splitInto4Group(array: object[]) {
     let res = []
+    let tmpArray = array
     for (let i = 0; i < 4; i++) {
         let bufferArray = []
         // to have last 2 groups only 3 elements
-        for(let j = 0; j < 4 - Math.floor(i / 2); j++)
-            bufferArray.push(array[j])
+        for(let j = 0; j < 4 - Math.floor(i / 2); j++) {   
+            bufferArray.push(tmpArray[j])
+            tmpArray.shift()
+        }
         res.push(bufferArray)
     }
     return res
