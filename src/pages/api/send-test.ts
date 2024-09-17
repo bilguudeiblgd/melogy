@@ -63,7 +63,7 @@ export default async function handler(
             receiverUser.tests_given = []
         }
 
-        updateResultScores(giverUser, newTest)
+        updateResultScores(receiverUser, newTest)
         await giverUser.save();
         await receiverUser.save();
 
