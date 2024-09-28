@@ -2,7 +2,6 @@ import Skeleton from '@/components/Skeleton';
 import {signOut, useSession} from 'next-auth/react'
 import AccessDenied from '@/components/AccessDenied';
 import React, {useContext, useEffect, useRef, useState} from "react";
-import {debounce} from "lodash"
 import {useRouter} from "next/router"
 import {GlobalContext} from "@/pages/_app";
 import Loading from "@/components/Loading";
@@ -46,16 +45,22 @@ export default function GetHandle({callbackUrl}: Props) {
         router.push("/")
     }
 
-
-    const checkHandleDebounced = debounce(async (handle: string) => {
-        if (handle.length < 8) {
-            setFeedbackStatus("Too short")
-            return false
+    const textHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setHandle(value);
+        if (value.length < 8) {
+            setFeedbackStatus("Eight or more characters")
+            setSubmitAllowed(false)
+        } else {
+            setSubmitAllowed(true)
         }
+    }
+
+    const asyncPossibleToRegister = async (userHandle: String) => {
         try {
             const response = await fetch(`${GLOBALS.baseURL}/api/handle-check`, {
                 method: 'POST',
-                body: JSON.stringify({userHandle: handle})
+                body: JSON.stringify({userHandle: userHandle})
             })
             const data = await response.json()
 
@@ -78,20 +83,22 @@ export default function GetHandle({callbackUrl}: Props) {
                 return false
             }
         } catch (e) {
-            console.error(e)
             return false
         }
-    }, 800)
-
-    const textHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setHandle(value);
-        checkHandleDebounced(value);
     }
-
 
     const handleSubmit = async () => {
         try {
+            const possibleToRegister = await asyncPossibleToRegister(handle)
+            if (!possibleToRegister) {
+                setFeedbackStatus("Username already exists")
+                setTimeout(() => {
+                    setFeedbackStatus("")
+                }, 2000)
+                setSubmitAllowed(false)
+                setHandle("")
+                return
+            }
             const response = await fetch(`${GLOBALS.baseURL}/api/handle-submit`, {
                 method: 'POST',
                 body: JSON.stringify({handle, email: session.user.email})
@@ -122,11 +129,14 @@ export default function GetHandle({callbackUrl}: Props) {
                 <div className={"flex h-full -mt-24 flex-col items-center justify-center"}>
                     <TextEdgy className={"text-primary text-2xl mb-4"}>Get Handle!</TextEdgy>
                     <div className={"flex flex-col sm:flex-row items-center justify-center"}>
-                        <input className={"input input-bordered input-primary w-full max-w-xs my-4 sm:mr-4"}
-                               id={"handle"}
-                               value={handle}
-                               onChange={(e) => textHandler(e)}/>
-                        {/*<button onClick={textHandler} className={"btn btn-primary"}>Check</button>*/}
+                        <div
+                            className={`my-6 w-full max-w-xs sm:mr-4 ${!submitAllowed && "tooltip tooltip-open tooltip-primary"}`}
+                            data-tip={feedbackStatus}>
+                            <input className={"input input-bordered input-primary "}
+                                   id={"handle"}
+                                   value={handle}
+                                   onChange={(e) => textHandler(e)}/>
+                        </div>
                         {submitAllowed ? (
                                 <button onClick={handleSubmit} className={"btn btn-info text-base-100"}>
                                     <svg
@@ -146,7 +156,7 @@ export default function GetHandle({callbackUrl}: Props) {
                             :
                             (<button className={`btn btn-secondary ${!submitAllowed && "btn-disabled"} text-base-100`}>
                                 <span className="loading loading-spinner"></span>
-                                {feedbackStatus}
+                                Submit
                             </button>)
                         }
                     </div>
