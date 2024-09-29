@@ -1,7 +1,8 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import mongooseConnect from "@/lib/mongooseConnect";
 import Test from "@/models/Test";
-import {TestTypeDb} from "@/components/Test/Properties"; // Assuming this is the file where TestSchema is defined
+import {TestTypeDb} from "@/components/Test/Properties";
+import User, {DbUser} from "@/models/User"; // Assuming this is the file where TestSchema is defined
 
 type Data = {
     data: TestTypeDb | null;
@@ -28,7 +29,20 @@ export default async function handler(
             return res.status(400).json({data: null, message: "Missing required fields"});
         }
 
-        const test = await Test.findOne<TestTypeDb>({testReceiver: testReceiver, testGiver: testGiver})
+        // Find the testReceiver in the User collection by userHandle
+        const receiverUserObject = await User.findOne<DbUser>({userHandle: testReceiver});
+        if (!receiverUserObject) {
+            return res.status(404).json({data: null, message: "Test receiver not found"});
+        }
+
+        // Find the testGiver in the User collection by userHandle
+        const giverUserObject = await User.findOne<DbUser>({userHandle: testGiver})
+
+        if (!giverUserObject) {
+            return res.status(404).json({data: null, message: "Test giver not found"});
+        }
+
+        const test = await Test.findOne<TestTypeDb>({testReceiver: receiverUserObject, testGiver: giverUserObject})
         console.log("test: ", test)
 
         if (!test) {
@@ -36,6 +50,7 @@ export default async function handler(
         }
         return res.status(200).json({data: test, message: "Test exists"});
     } catch (error) {
+        console.log(error)
         return res.status(500).json({data: null, message: "Internal Server Error"});
     }
 }

@@ -9,6 +9,7 @@ import {GlobalContext} from "@/pages/_app";
 import InAppBrowserWarning from "@/components/InAppBrowserWarning";
 import InAppSpy from "inapp-spy";
 import Text from "@/components/Text";
+import {HomeButton} from "@/components/Test/PhaseDoneComponent";
 
 
 // interface DomePageProps {
@@ -109,6 +110,7 @@ const Page: React.FC = () => {
     if (session && session.user.userHandle === testReceiver) {
         return (<div>
             <Text>Nothing to do</Text>
+            <HomeButton/>
         </div>)
     }
 
@@ -119,6 +121,7 @@ const Page: React.FC = () => {
     if (!testReceiverExists) {
         return (<div>
             <Text>User {"doesn't"} exist</Text>
+            <HomeButton/>
         </div>)
     }
     if (testAvailable === undefined) {
@@ -128,9 +131,9 @@ const Page: React.FC = () => {
     if (!testAvailable) {
         return (<div>
             <Text>Already took the test</Text>
+            <HomeButton/>
         </div>)
     }
-
 
 
     return (

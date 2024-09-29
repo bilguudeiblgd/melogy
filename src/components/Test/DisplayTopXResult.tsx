@@ -41,11 +41,11 @@ const ResultCard: React.FC<CardProps> = ({index, type}) => {
 
     return (
         // somehow colors in bg-colors[index] was not working
-        <Link target={"_blank"} href={typeURL} style={{backgroundColor: `${colors[index]}`}}
+        <Link target={"_blank"} href={typeURL} style={{backgroundColor: `${colors[index]}`,}}
               className={`btn flex rounded-2xl relative my-2 justify-center items-center w-64 h-24`}>
-            <TextEdgy className={"text-base-100"}>{type}</TextEdgy>
+            <TextEdgy className={`text-base-100 ${index == 1 && "text-primary"}`}>{type}</TextEdgy>
             <div className={"absolute bottom-1 left-2"}>
-                <TextEdgy className={"text-base-100 text-2xl"}>{index + 1}</TextEdgy>
+                <TextEdgy className={`text-base-100 ${index == 1 && "text-primary"} text-2xl`}>{index + 1}</TextEdgy>
             </div>
         </Link>
     )

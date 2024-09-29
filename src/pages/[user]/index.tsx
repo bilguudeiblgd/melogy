@@ -48,7 +48,6 @@ export default function Page() {
     }, [GLOBALS.baseURL, session?.user.userHandle])
 
 
-
     if (status === "loading") {
         return <Loading/>
     }
@@ -66,6 +65,7 @@ export default function Page() {
     if (testsGivenSize === null || testsForMeSize === null) {
         return <Loading/>
     }
+
 
     if (testsForMeSize < REQUIRED_TEST_FOR_ME || testsGivenSize < REQUIRED_TEST_FOR_OTHERS) {
         return (
@@ -96,21 +96,39 @@ export default function Page() {
         )
     }
 
+    if (!typeResult) {
+        return <Loading/>
+    }
 
-    return (<Skeleton showNavbar={true} noContainer={false} darkTheme={false}>
-        <div className={"flex flex-col items-center mt-12"}>
-            <NumberTestCard testsForMeSize={testsForMeSize} testsGivenSize={testsGivenSize}/>
-            <TextEdgy className={"text-primary mt-4"}>RESULT:</TextEdgy>
-            <div className={"mt-6"}>
-                <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={typeResult}/>
-            </div>
+    const typeResultIsValid = (typeResult: TypeScoreType[]) => {
+        for (let i = 0; i < typeResult.length; i++) {
+            if (typeResult[i].score !== 0) {
+                return true
+            }
+        }
+        return false
+    }
 
-        </div>
-    </Skeleton>)
+    return (
+        <Skeleton showNavbar={true} noContainer={false} darkTheme={false}>
+            {
+                typeResultIsValid(typeResult) ?
+                    <div className={"flex flex-col items-center mt-12"}>
+                        <NumberTestCard testsForMeSize={testsForMeSize} testsGivenSize={testsGivenSize}/>
+                        <TextEdgy className={"text-primary mt-4"}>RESULT:</TextEdgy>
+                        <div className={"mt-6"}>
+                            <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={typeResult}/>
+                        </div>
+
+                    </div>
+                    :
+                    <Loading/>
+            }
+
+        </Skeleton>
+    )
 
 }
-
-
 
 
 interface NumberTestProps {
