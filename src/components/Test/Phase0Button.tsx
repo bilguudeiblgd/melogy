@@ -14,7 +14,7 @@ const Phase0Button: React.FC<Phase0ButtonProps> = ({ title, index, onClick, sele
             ${selected && "bg-secondary"}
         `}>
             <button
-                className={`btn flex justify-between btn-outline border-neutral-50 w-52 m-1 ${selected ? "hover:bg-primary" : "hover:bg-secondary"}`}
+                className={`btn flex justify-between btn-outline border-neutral-50 w-52 m-1 ${selected ? "" : ""}`}
                 onClick={() => {
                     onClick(index, selected)
                 }}
