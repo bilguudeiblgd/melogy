@@ -57,7 +57,7 @@ export default function Page() {
         }
 
         fetchResultScore()
-    }, [GLOBALS.baseURL, session?.user.userHandle])
+    }, [GLOBALS.baseURL, session, session?.user.userHandle])
 
 
     if (status === "loading") {
