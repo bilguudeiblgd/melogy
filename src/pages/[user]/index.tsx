@@ -45,7 +45,7 @@ export default function Page() {
         }
 
         fetchResultScore()
-    }, [])
+    }, [GLOBALS.baseURL, session?.user.userHandle])
 
 
 

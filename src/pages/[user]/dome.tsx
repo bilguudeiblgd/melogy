@@ -82,7 +82,7 @@ const Page: React.FC = () => {
 
     if (!testReceiverExists) {
         return (<div>
-            <Text>User doesn't exist</Text>
+            <Text>User {"doesn't"} exist</Text>
         </div>)
     }
 
