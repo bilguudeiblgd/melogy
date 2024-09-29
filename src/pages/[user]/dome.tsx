@@ -20,11 +20,16 @@ const Page: React.FC = () => {
     const router = useRouter();
     const [inapp, setInapp] = useState<boolean>(false)
     const [testReceiverExists, setTestReceiverExists] = useState<boolean>(false)
+    const [testTwice, setTestTwice] = useState<boolean>(false)
+
     const {data: session, status} = useSession();
     const GLOBALS = useContext(GlobalContext)
 
     const currentURL = `/${router.query.user}/dome`
     const testReceiver = router.query.user as string | undefined
+
+    const testGiver = session?.user
+
     // navigators can't be accessed in server side
     useEffect(() => {
         const {isInApp} = InAppSpy()
@@ -39,13 +44,37 @@ const Page: React.FC = () => {
             return await response.json();
         }
 
-        userExists(testReceiver).then((data) => {
-            setTestReceiverExists(data.user != null)
+        const queryTest = async (testReceiver: string | undefined, testGiver: string | undefined) => {
+            if (!testReceiver) return null
+            if (!testGiver) return null
+            const response = await fetch(`${GLOBALS.baseURL}/api/query-test`, {
+                method: 'POST',
+                body: JSON.stringify({testReceiver: testReceiver, testGiver: testGiver}),
+            })
+            return await response.json();
+        }
+
+        userExists(testReceiver).then((res) => {
+            if (res == null) {
+                return
+            }
+            setTestReceiverExists(res.user != null)
         }).catch(() => {
             setTestReceiverExists(false)
         })
 
-    }, [GLOBALS.baseURL, router, testReceiver]);
+
+        queryTest(testReceiver, testGiver?.userHandle).then((res) => {
+            console.log(res)
+            if (res == null) {
+                return
+            }
+            setTestTwice(res.data == null)
+        }).catch(() => {
+        })
+
+
+    }, [GLOBALS.baseURL, router, testGiver?.userHandle, testReceiver]);
 
     if (!testReceiver) {
         return <div>
@@ -71,7 +100,6 @@ const Page: React.FC = () => {
         return <GetHandle callbackUrl={currentURL}/>
     }
 
-    const testGiver = session?.user
 
 
     if (session && session.user.userHandle === testReceiver) {
@@ -83,6 +111,11 @@ const Page: React.FC = () => {
     if (!testReceiverExists) {
         return (<div>
             <Text>User {"doesn't"} exist</Text>
+        </div>)
+    }
+    if (testTwice) {
+        return (<div>
+            <Text>Already took the test</Text>
         </div>)
     }
 

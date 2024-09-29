@@ -44,23 +44,23 @@ export const testInfoToMongo = (testInfo: TestInfoInterface): TypeScoreType[] =>
     for (const type in TYPES) {
         info[type] = 0
     }
-
+    // question -> 2 type
     for(const quality of testInfo.phase0.group0) {
         console.log(Phase0QualitiesPart0_TEXT2TYPES[quality])
         Phase0QualitiesPart0_TEXT2TYPES[quality].forEach((type, index) => {
             info[type] += 2
         })
     }
-
+    // question -> 2 type
     for(const quality of testInfo.phase0.group1) {
         Phase0QualitiesPart1_TEXT2TYPES[quality].forEach((type, index) => {
             info[type] += 2
         })
     }
-
+    // 14 -> 13 match
     for(const question of  testInfo.phase1) {
         Phase1Qualities_QUESTION2TYPES[question].forEach((type, index) => {
-            info[type] += 3
+            info[type] += 0.25
         });
     }
 
