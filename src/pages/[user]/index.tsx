@@ -24,12 +24,24 @@ export default function Page() {
 
     useEffect(() => {
         const fetchResultScore = async () => {
+            if (!session) return null
+            if (!session?.user.userHandle) return null
             try {
                 const response = await fetch(`${GLOBALS.baseURL}/api/get-results`, {
                     method: 'POST',
                     body: JSON.stringify({userHandle: session?.user.userHandle})
                 })
                 const data = await response.json()
+                if (!data) {
+                    setTestsForMeSize(null)
+                    setTestsGivenSize(null)
+                    return
+                }
+                if (!data.data) {
+                    setTestsForMeSize(null)
+                    setTestsGivenSize(null)
+                    return
+                }
                 const results: TypeScoreType[] = data.data.result
 
                 setTestsForMeSize(data.data.tests_for_me_size)
