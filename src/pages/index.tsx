@@ -32,7 +32,8 @@ export default function Home() {
                         {/* should have landing page */}
                         <div className={"relative flex-1"}>
                             <Image className={"h-full"}
-                                   src={"/home_illustration.jpg"} width={457} height={814}  alt={"illustration of the idea of the app"}/>
+                                   src={"/home_illustration_new_1920.jpeg"} width={457} height={814}
+                                   alt={"illustration of the idea of the app"}/>
                         </div>
                         <div>
                             <button onClick={() => {signIn()}} className={"btn btn-secondary"}>
