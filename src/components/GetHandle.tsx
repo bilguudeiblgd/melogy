@@ -49,12 +49,19 @@ export default function GetHandle({callbackUrl}: Props) {
     const textHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setHandle(value);
-        if (value.length < 8) {
-            setFeedbackStatus("Eight or more characters")
-            setSubmitAllowed(false)
+        const hasInvalidChars = /[^a-zA-Z0-9]/.test(value);
+
+        if (hasInvalidChars) {
+            setFeedbackStatus("No spaces or special characters allowed");
+            setSubmitAllowed(false);
+        } else if (value.length < 8) {
+            setFeedbackStatus("Eight or more characters required");
+            setSubmitAllowed(false);
         } else {
-            setSubmitAllowed(true)
+            setSubmitAllowed(true);
+            setFeedbackStatus("");
         }
+
     }
 
     const asyncPossibleToRegister = async (userHandle: String) => {
