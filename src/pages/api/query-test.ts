@@ -22,12 +22,15 @@ export default async function handler(
 
     try {
         const {testReceiver, testGiver} = JSON.parse(req.body);
+        console.log(testReceiver, testGiver);
         // Check if the necessary fields are present
         if (!testReceiver || !testGiver) {
             return res.status(400).json({data: null, message: "Missing required fields"});
         }
 
         const test = await Test.findOne<TestTypeDb>({testReceiver: testReceiver, testGiver: testGiver})
+        console.log("test: ", test)
+
         if (!test) {
             return res.status(200).json({data: null, message: "Test doesn't exist"});
         }

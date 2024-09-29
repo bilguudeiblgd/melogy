@@ -1,6 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import IUser from "@/types/IUser";
-import {TestInfoInterface, TestTypeDb, TYPES} from "@/components/Test/Properties";
+import {TestTypeDb, TYPES} from "@/components/Test/Properties";
 
 
 const testSchema = new Schema<TestTypeDb>({
@@ -16,4 +15,4 @@ const testSchema = new Schema<TestTypeDb>({
     }],
 }, {timestamps: true});
 
-export default mongoose.models.Test || mongoose.model<TestTypeDb>('tests', testSchema);
+export default mongoose.models.Test || mongoose.model<TestTypeDb>('Test', testSchema);

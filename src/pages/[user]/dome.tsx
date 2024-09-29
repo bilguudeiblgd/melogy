@@ -20,7 +20,7 @@ const Page: React.FC = () => {
     const router = useRouter();
     const [inapp, setInapp] = useState<boolean>(false)
     const [testReceiverExists, setTestReceiverExists] = useState<boolean>(false)
-    const [testTwice, setTestTwice] = useState<boolean>(false)
+    const [testAvailable, setTestAvailable] = useState<boolean>(false)
 
     const {data: session, status} = useSession();
     const GLOBALS = useContext(GlobalContext)
@@ -47,6 +47,8 @@ const Page: React.FC = () => {
         const queryTest = async (testReceiver: string | undefined, testGiver: string | undefined) => {
             if (!testReceiver) return null
             if (!testGiver) return null
+            console.log(GLOBALS.baseURL)
+            console.log(testReceiver, testGiver)
             const response = await fetch(`${GLOBALS.baseURL}/api/query-test`, {
                 method: 'POST',
                 body: JSON.stringify({testReceiver: testReceiver, testGiver: testGiver}),
@@ -59,19 +61,21 @@ const Page: React.FC = () => {
                 return
             }
             setTestReceiverExists(res.user != null)
+
+            queryTest(testReceiver, testGiver?.userHandle).then((res) => {
+                console.log(res)
+                if (res == null) {
+                    return
+                }
+                setTestAvailable(res.data == null)
+            }).catch(() => {
+            })
+
         }).catch(() => {
             setTestReceiverExists(false)
         })
 
 
-        queryTest(testReceiver, testGiver?.userHandle).then((res) => {
-            console.log(res)
-            if (res == null) {
-                return
-            }
-            setTestTwice(res.data == null)
-        }).catch(() => {
-        })
 
 
     }, [GLOBALS.baseURL, router, testGiver?.userHandle, testReceiver]);
@@ -113,7 +117,7 @@ const Page: React.FC = () => {
             <Text>User {"doesn't"} exist</Text>
         </div>)
     }
-    if (testTwice) {
+    if (!testAvailable) {
         return (<div>
             <Text>Already took the test</Text>
         </div>)
