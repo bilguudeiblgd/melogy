@@ -20,10 +20,13 @@ export default function Home() {
     if (status === "loading") {
         return <Loading/>
     }
+    // #TODO: Bug 1: UI broken on phones - easy
+    // #TODO: Bug 2: [user]/result page has bug on reload. Displays wrong thing
+    // #TODO: Feature: Phase 1 - battle against chosen ones
 
     return (
         <main>
-            <Skeleton showNavbar={true} darkTheme={false}>
+            <Skeleton showNavbar={true} noContainer={false} darkTheme={false}>
                 {!session ?
                     (<div className={"flex flex-col items-center pb-10"}>
                         {/* should have landing page */}

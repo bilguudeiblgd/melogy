@@ -89,7 +89,7 @@ const Page: React.FC = () => {
 
 
     return (
-        <Skeleton showNavbar={true} darkTheme={true}>
+        <Skeleton showNavbar={true} noContainer={true} darkTheme={true}>
             {testReceiver && testGiver && testGiver.userHandle &&
                 <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
         </Skeleton>
