@@ -11,21 +11,6 @@ type Props = {
     testInfo: TestInfoInterface
 }
 
-
-
-function splitInto4Group(arr: object[]) {
-      if (arr.length !== 14) {
-        throw new Error("Array must have exactly 14 elements.");
-      }
-    
-      return [
-        arr.slice(0, 4),   // First 4 elements
-        arr.slice(4, 8),   // Next 4 elements
-        arr.slice(8, 11),  // Next 3 elements
-        arr.slice(11, 14)  // Last 3 elements
-      ];
-}
-
 let recordAnswers: string[] = []
 
 const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
@@ -33,8 +18,8 @@ const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
 const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
     const [groupIndex, setGroupIndex] = useState(0);
     const [twoQuestions, setTwoQuestions] = useState<Phase1QuestionType[]>([shuffledQuestions[0], shuffledQuestions[1]]);
-    const [loading, setLoading] = useState(true)
-    // questionsGrouped[0].forEach((d) => console.log(d));
+    const [loading, setLoading] = useState(false)
+
     const updateInfo = (res: string[]) => {
         testInfo.phase1.push(...res)
     }
