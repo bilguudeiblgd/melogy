@@ -54,7 +54,7 @@ export default function Page() {
     }
 
     if (!session) {
-        signIn(undefined, {
+        signIn("google", {
             callbackUrl: `/${router.query.user}` || ""
         })
     }

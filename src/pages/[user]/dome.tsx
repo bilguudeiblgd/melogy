@@ -90,7 +90,7 @@ const Page: React.FC = () => {
 
     // unauthenticated user
     if (status === "unauthenticated") {
-        signIn(undefined, {
+        signIn("google", {
             callbackUrl: `/${router.query.user}/dome` || '/'
         })
     }
