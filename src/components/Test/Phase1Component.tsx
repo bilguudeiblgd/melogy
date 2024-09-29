@@ -3,6 +3,7 @@ import {Phase1Questions, Phase1QuestionType, TestInfoInterface} from "@/componen
 import Phase1Button from "@/components/Test/Phase1Button";
 import {shuffleArray} from "@/util/TestUtils";
 import TextEdgy from "@/components/TextEdgy";
+import Loading from "@/components/Loading";
 
 
 type Props = {
@@ -32,7 +33,7 @@ const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
 const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
     const [groupIndex, setGroupIndex] = useState(0);
     const [twoQuestions, setTwoQuestions] = useState<Phase1QuestionType[]>([shuffledQuestions[0], shuffledQuestions[1]]);
-
+    const [loading, setLoading] = useState(true)
     // questionsGrouped[0].forEach((d) => console.log(d));
     const updateInfo = (res: string[]) => {
         testInfo.phase1.push(...res)
@@ -51,8 +52,10 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
                 updateInfo(recordAnswers)
                 handleContinueButton(testInfo);
                 console.log("LAst chosen test: ", chosenText)
+                setLoading(false)
 
             }, 1000)
+            setLoading(true)
             return
         }
 
@@ -60,7 +63,9 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
         setGroupIndex(groupIndex + 1);
 
     }
-
+    if (loading) {
+        return <Loading/>
+    }
     return (
         <>
             <TextEdgy className={"mb-4 text-white"}>Which one are they most likely to do?</TextEdgy>
@@ -69,7 +74,6 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
                                   onClick={() => handleClick(groupIndex, index, question.text)}/>)
                 : <TextEdgy>SUCCESS</TextEdgy>
             }
-
         </>
     );
 };
