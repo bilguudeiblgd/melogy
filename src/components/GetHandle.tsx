@@ -21,7 +21,7 @@ export default function GetHandle({callbackUrl}: Props) {
     const router = useRouter()
     const {data: session, status, update} = useSession()
     const [handle, setHandle] = useState<string>("")
-    const [feedbackStatus, setFeedbackStatus] = useState<string>("Write your username")
+    const [feedbackStatus, setFeedbackStatus] = useState<string>("Minimum 8 characters")
     const [submitAllowed, setSubmitAllowed] = useState<boolean>(false)
     const GLOBALS = useContext(GlobalContext)
     const modalRef = useRef<HTMLDialogElement | null>(null)
@@ -55,7 +55,7 @@ export default function GetHandle({callbackUrl}: Props) {
             setFeedbackStatus("No spaces or special characters allowed");
             setSubmitAllowed(false);
         } else if (value.length < 8) {
-            setFeedbackStatus("Eight or more characters required");
+            setFeedbackStatus("Minimum 8 characters");
             setSubmitAllowed(false);
         } else {
             setSubmitAllowed(true);
@@ -163,7 +163,6 @@ export default function GetHandle({callbackUrl}: Props) {
                                 </button>)
                             :
                             (<button className={`btn btn-secondary ${!submitAllowed && "btn-disabled"} text-base-100`}>
-                                <span className="loading loading-spinner"></span>
                                 Submit
                             </button>)
                         }
