@@ -19,8 +19,8 @@ import Text from "@/components/Text";
 const Page: React.FC = () => {
     const router = useRouter();
     const [inapp, setInapp] = useState<boolean>(false)
-    const [testReceiverExists, setTestReceiverExists] = useState<boolean>(false)
-    const [testAvailable, setTestAvailable] = useState<boolean>(false)
+    const [testReceiverExists, setTestReceiverExists] = useState<boolean | undefined>(undefined)
+    const [testAvailable, setTestAvailable] = useState<boolean | undefined>(undefined)
 
     const {data: session, status} = useSession();
     const GLOBALS = useContext(GlobalContext)
@@ -112,11 +112,19 @@ const Page: React.FC = () => {
         </div>)
     }
 
+    if (testReceiverExists === undefined) {
+        return <Loading/>
+    }
+
     if (!testReceiverExists) {
         return (<div>
             <Text>User {"doesn't"} exist</Text>
         </div>)
     }
+    if (testAvailable === undefined) {
+        return <Loading/>
+    }
+
     if (!testAvailable) {
         return (<div>
             <Text>Already took the test</Text>
