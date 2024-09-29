@@ -29,7 +29,7 @@ const Phase0Part1Component : React.FC<Props> = ({handleContinueButton, testInfo}
             }
             setQualities([...tmpArray])
         } else {
-            for (let i = index; i > 2; i--) {
+            for (let i = index; i > 0; i--) {
                 [tmpArray[i], tmpArray[i - 1]] = [tmpArray[i - 1], tmpArray[i]];
             }
             setQualities([...tmpArray])
