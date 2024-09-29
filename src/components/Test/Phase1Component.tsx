@@ -45,12 +45,13 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
         if (groupIndex == 12) {
             //     record the answer
             setTimeout(() => {
-                handleContinueButton(testInfo);
-                console.log("LAst chosen test: ", chosenText)
                 for (let i = 0; i < 11; i++) {
                     recordAnswers.push(chosenText)
                 }
                 updateInfo(recordAnswers)
+                handleContinueButton(testInfo);
+                console.log("LAst chosen test: ", chosenText)
+
             }, 1000)
             return
         }

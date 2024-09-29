@@ -24,8 +24,6 @@ type Props = {
 const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
     const [stage, setStage] = useState<PHASE>(PHASE.PHASE0)
     // initialize eliminatedQualities
-    console.log("testReceiver: ", testReceiver)
-    console.log("testGiver: ", testGiver)
     let testInfo: TestInfoInterface = defaultInitTestInfo
     const handleContinueButton = (testInfo: TestInfoInterface) => {
         setStage(PHASE.PHASE1)
