@@ -1,5 +1,5 @@
 import Skeleton from '@/components/Skeleton';
-import {signOut, useSession} from 'next-auth/react'
+import {useSession} from 'next-auth/react'
 import AccessDenied from '@/components/AccessDenied';
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router"
@@ -19,12 +19,13 @@ interface Props {
 
 export default function GetHandle({callbackUrl}: Props) {
     const router = useRouter()
-    const {data: session, status} = useSession()
+    const {data: session, status, update} = useSession()
     const [handle, setHandle] = useState<string>("")
     const [feedbackStatus, setFeedbackStatus] = useState<string>("Write your username")
     const [submitAllowed, setSubmitAllowed] = useState<boolean>(false)
     const GLOBALS = useContext(GlobalContext)
     const modalRef = useRef<HTMLDialogElement | null>(null)
+    console.log(session?.user)
 
     // When rendering client side don't display anything until loading is complete
     // If no session exists, display access denied message
@@ -107,9 +108,9 @@ export default function GetHandle({callbackUrl}: Props) {
                 const data = await response.json()
                 setFeedbackStatus(data.status)
                 // getSession
-                // document.dispatchEvent(event);
-                alert("Success! Please log in again")
-                signOut({callbackUrl: callbackUrl || "/"})
+                await update({userHandle: handle})
+                // alert("Success! Please log in again")
+                // signOut({callbackUrl: callbackUrl || "/"})
             } else {
                 const errorData = await response.json();
                 setFeedbackStatus(`Error: ${errorData.message || 'Failed to register handle.'}`);

@@ -4,6 +4,7 @@ import clientPromise from "@/lib/mongodb"
 import {MongoDBAdapter} from "@auth/mongodb-adapter"
 import type {Adapter} from 'next-auth/adapters';
 import {TYPES} from "@/components/Test/Properties";
+import {update} from "lodash";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variable");
@@ -64,7 +65,11 @@ export const authOptions: NextAuthOptions = {
 
     adapter: MongoDBAdapter(clientPromise,) as Adapter,
     callbacks: {
-        async jwt({token, user, account}) {
+        async jwt({token, user, trigger, account, session}) {
+            if (trigger == "update") {
+                console.log("update is called")
+                token.userHandle = session?.userHandle;
+            }
             if (account) {
                 token.accessToken = account.access_token
                 // token.

@@ -19,7 +19,7 @@ const RUBIK = Rubik({
 
 
 export const GlobalContext = createContext({
-    baseURL: ""
+    baseURL: "",
 })
 
 export default function App({
