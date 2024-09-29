@@ -19,7 +19,7 @@ const Phase0Button: React.FC<Phase0ButtonProps> = ({ title, index, onClick, sele
                     onClick(index, selected)
                 }}
             >
-                <Text className={`text-white ${selected ? 'line-through' : ""}`}>
+                <Text className={`text-white ${!selected ? 'line-through' : ""}`}>
                     {title}
                 </Text>
                 <UpDownIcon selected={selected}/>
