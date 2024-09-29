@@ -23,7 +23,7 @@ export default function Home() {
 
     return (
         <main>
-            <Skeleton showNavbar={true}>
+            <Skeleton showNavbar={true} darkTheme={false}>
                 {!session ?
                     (<div className={"flex flex-col items-center pb-10"}>
                         {/* should have landing page */}

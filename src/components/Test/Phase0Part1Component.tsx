@@ -1,67 +1,63 @@
-import React, {useEffect, useState} from 'react';
-import {Phase0QualitiesPart1, TestInfoInterface} from "@/components/Test/Properties";
+import React, {useState} from 'react';
+import {Phase0QualitiesPart1, Phase0QuestionType, TestInfoInterface} from "@/components/Test/Properties";
 import Phase0Button from "@/components/Test/Phase0Button";
+import {shuffleArray} from "@/util/TestUtils";
+import TextEdgy from "@/components/TextEdgy";
 
 type Props = {
     handleContinueButton: (arg: TestInfoInterface) => void;
     testInfo: TestInfoInterface
 }
 
-
 const Phase0Part1Component : React.FC<Props> = ({handleContinueButton, testInfo}) => {
-    const [eliminatedQualities, setEliminatedQualities] = useState<boolean[]>([]);
-    const [eliminatedCount, setEliminatedCount] = useState(0);
+    const shuffledQuestions = shuffleArray(Phase0QualitiesPart1) as Phase0QuestionType[]
+    const [qualities, setQualities] = useState<Phase0QuestionType[]>(shuffledQuestions)
     const [nextPartEligible, setNextPartEligible] = useState(false);
-    // initialize eliminatedQualities
-    useEffect(() => {
-        let arr: boolean[] = []
-        Phase0QualitiesPart1.forEach(() => {
-            arr.push(false)
-        })
-        setEliminatedQualities(arr)
-    }, []);
-    const handleSelecting = (index: number, selected: boolean) => {
-        let tmpArray = eliminatedQualities
-        const nowSelected = !tmpArray[index]
-        if (nowSelected) {
-            if(eliminatedCount + 1 > 4) return
-
-            else setEliminatedCount(eliminatedCount + 1)
-        }
-        else setEliminatedCount(eliminatedCount - 1)
-        tmpArray[index] = nowSelected
-        setEliminatedQualities([...tmpArray])
-        if (eliminatedCount == 3)
-            setNextPartEligible(true)
-        else setNextPartEligible(false)
-        console.log(eliminatedQualities)
-    }
 
     const updateTestInfo = () => {
-        eliminatedQualities.forEach((val, index) => {
-            if(!val)
-                testInfo.phase0.group1.push(Phase0QualitiesPart1[index].text)
-        });
+        for (let i = 0; i < 3; i++) {
+            testInfo.phase0.group1.push(qualities[i].text)
+        }
+    }
+
+    const handleSelecting = (index: number, selected: boolean) => {
+        let tmpArray = qualities
+        setNextPartEligible(true)
+        if (selected) {
+            for (let i = index; i < tmpArray.length - 1; i++) {
+                [tmpArray[i], tmpArray[i + 1]] = [tmpArray[i + 1], tmpArray[i]];
+            }
+            setQualities([...tmpArray])
+        } else {
+            for (let i = index; i > 2; i--) {
+                [tmpArray[i], tmpArray[i - 1]] = [tmpArray[i - 1], tmpArray[i]];
+            }
+            setQualities([...tmpArray])
+        }
     }
 
     return (
         <>
-            <div>
-                <p>Eliminate what {"he/she's"} not like</p>
+            <div className={"mb-4"}>
+                <TextEdgy className={"text-white"}>What {"he/she's"} like</TextEdgy>
             </div>
-            <div>
 
-                {Phase0QualitiesPart1.map((item, i) =>
-                    <Phase0Button key={i} title={item.text} index={i} onClick={handleSelecting}
-                                  selected={eliminatedQualities[i]}/>
+            <div className={"w-full"}>
+                {qualities.map((item, i) =>
+                    <Phase0Button key={i} title={item.text} index={i}
+                                  onClick={handleSelecting}
+                                  selected={i < 3}
+                    />
                 )}
             </div>
 
             {nextPartEligible &&
-                <button className={"btn btn-secondary btn-outline mt-2"} onClick={() => {
+                <button className={"btn btn-secondary mt-2"} onClick={() => {
                     updateTestInfo()
                     handleContinueButton(testInfo)
-                }}>Continue</button>
+                }}>
+                    <TextEdgy className={"text-white"}>Continue</TextEdgy>
+                </button>
             }
         </>
     );

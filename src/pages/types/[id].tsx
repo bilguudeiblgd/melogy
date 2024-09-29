@@ -13,7 +13,7 @@ interface ContentPageProps {
 export default function Page({id, markdown}: InferGetStaticPropsType<typeof getStaticProps>) {
 
     return (
-        <Skeleton showNavbar={true}>
+        <Skeleton showNavbar={true} darkTheme={false}>
             <div className={"pb-4"}>
                 <article
                     className={`px-2 md:px-12 mt-4 mx-auto prose lg:prose-md prose-headings:text-primary prose-slate`}>

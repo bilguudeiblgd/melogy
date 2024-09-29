@@ -3,7 +3,8 @@ import {
     Phase0QualitiesPart1,
     Phase1Questions,
     TestInfoInterface,
-    TYPES, TypeScoreType
+    TYPES,
+    TypeScoreType
 } from "@/components/Test/Properties";
 
 export const TYPES_INDEX_MAP: { [key in TYPES]: number } = {
@@ -72,4 +73,20 @@ export const testInfoToMongo = (testInfo: TestInfoInterface): TypeScoreType[] =>
     infoSorted.sort((a,b) => b.score - a.score)
     console.log("Info: ", infoSorted)
     return infoSorted
+}
+
+
+export function shuffleArray(array: object[]) {
+    // Create a copy of the original array to avoid mutating it
+    const newArray = array.slice();
+
+    // Fisher-Yates Shuffle Algorithm
+    for (let i = newArray.length - 1; i > 0; i--) {
+        // Generate a random index between 0 and i
+        const j = Math.floor(Math.random() * (i + 1));
+
+        // Swap elements at index i and j
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
 }

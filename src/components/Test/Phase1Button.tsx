@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
+import Text from "@/components/Text";
 
 interface Phase1ButtonProps {
     title: string;
@@ -10,14 +11,14 @@ const Phase1Button: React.FC<Phase1ButtonProps> = ({ title, index, onClick}) => 
     return (
         <div>
             <button
-                className={"btn w-48 my-2"}
+                className={"btn btn-secondary w-52 my-2"}
                 onClick={() =>  {
                     onClick(index)
                 }}
             >
-                <p >
+                <Text className={"text-white"}>
                     {title}
-                </p>
+                </Text>
             </button>
         </div>
     );

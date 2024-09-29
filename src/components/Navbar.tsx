@@ -5,14 +5,18 @@ import Link from 'next/link';
 import Image from "next/image";
 import Logo from "@/components/Logo";
 
-const Navbar: React.FC = () => {
+type Props = {
+    darkTheme: boolean
+}
+
+const Navbar: React.FC<Props> = ({darkTheme}) => {
     const {data: session} = useSession()
     return (
         <div className="w-full">
           <div className="navbar w-full bg-transparent">
               <div className="flex-1">
                   <Link href="/" className="btn btn-ghost text-xl">
-                      <Logo />
+                      <Logo darkTheme={darkTheme}/>
                   </Link>
               </div>
               <div className="flex-none">

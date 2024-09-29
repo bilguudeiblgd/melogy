@@ -50,16 +50,9 @@ export default async function handler(
 
         // Save the test object to the database
         await newTest.save();
-        if (!giverUser.tests_given) {
-            // @ts-ignore
-            giverUser.tests_given = []
-        }
+
         giverUser.tests_given.push(newTest)
         receiverUser.tests_for_me.push(newTest)
-        if (!receiverUser.tests_given) {
-            // @ts-ignore
-            receiverUser.tests_given = []
-        }
 
         updateResultScores(receiverUser, newTest)
         await giverUser.save();

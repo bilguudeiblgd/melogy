@@ -41,6 +41,10 @@ export const Phase0QualitiesPart1 = [
     {text: "Reckless", types: [TYPES.WILDCARD, TYPES.JESTER]}
 ];
 
+export interface Phase0QuestionType {
+    text: string,
+    type: TYPES[]
+}
 
 export interface TestInfoInterface {
     phase0: {

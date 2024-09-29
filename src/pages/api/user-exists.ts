@@ -1,9 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import db from '../../lib/mongooseConnect'
-import mongoose from "mongoose";
-import mongooseConnect from "../../lib/mongooseConnect";
-import mongodb from "@/lib/mongodb";
-import {User as UserType} from "next-auth"
+import type {NextApiRequest, NextApiResponse} from "next";
+import mongooseConnect from '../../lib/mongooseConnect'
 import User from "@/models/User";
 import IUser from "@/types/IUser";
 
@@ -16,11 +12,16 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>,
 ) {
-    await mongooseConnect()
-    const query = JSON.parse(req.body)
-    const user = await User.findOne(query);
-    if(!user)
-        return res.status(500).json({ status: "User doesn't exist", user: null });
+    try {
+        await mongooseConnect()
+        const query = JSON.parse(req.body)
+        const user = await User.findOne(query);
+        if (!user)
+            return res.status(200).json({status: "User doesn't exist", user: null});
 
-    return res.status(200).json({ status: "User does exist!", user: user });
+        return res.status(200).json({status: "User does exist!", user: user});
+    } catch (e) {
+        return res.status(500).json({status: "Internal server error", user: null});
+    }
+
 }

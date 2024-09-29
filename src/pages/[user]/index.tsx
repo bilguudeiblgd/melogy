@@ -69,7 +69,7 @@ export default function Page() {
 
     if (testsForMeSize < REQUIRED_TEST_FOR_ME || testsGivenSize < REQUIRED_TEST_FOR_OTHERS) {
         return (
-            <Skeleton showNavbar={true}>
+            <Skeleton showNavbar={true} darkTheme={false}>
                 <div className={"flex flex-col items-center mt-12"}>
                     <NumberTestCard testsForMeSize={testsForMeSize} testsGivenSize={testsGivenSize}/>
 
@@ -97,7 +97,7 @@ export default function Page() {
     }
 
 
-    return (<Skeleton showNavbar={true}>
+    return (<Skeleton showNavbar={true} darkTheme={false}>
         <div className={"flex flex-col items-center mt-12"}>
             <NumberTestCard testsForMeSize={testsForMeSize} testsGivenSize={testsGivenSize}/>
             <TextEdgy className={"text-primary mt-4"}>RESULT:</TextEdgy>

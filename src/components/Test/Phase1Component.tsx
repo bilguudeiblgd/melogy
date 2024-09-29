@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {Phase1Questions, Phase1QuestionType, TestInfoInterface} from "@/components/Test/Properties";
 import Phase1Button from "@/components/Test/Phase1Button";
 import {useRouter} from "next/router";
+import {shuffleArray} from "@/util/TestUtils";
+import TextEdgy from "@/components/TextEdgy";
 
 
 type Props = {
@@ -9,20 +11,8 @@ type Props = {
     testInfo: TestInfoInterface
 }
 
-function shuffleArray(array: object[]) {
-    // Create a copy of the original array to avoid mutating it
-    const newArray = array.slice();
 
-    // Fisher-Yates Shuffle Algorithm
-    for (let i = newArray.length - 1; i > 0; i--) {
-        // Generate a random index between 0 and i
-        const j = Math.floor(Math.random() * (i + 1));
 
-        // Swap elements at index i and j
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-}
 function splitInto4Group(arr: object[]) {
       if (arr.length !== 14) {
         throw new Error("Array must have exactly 14 elements.");
@@ -64,7 +54,7 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
 
     return (
         <>
-            <h2>Which one are they most likely to do?</h2>
+            <TextEdgy className={"mb-4 text-white"}>Which one are they most likely to do?</TextEdgy>
             {groupIndex < 4 && questionsGrouped[groupIndex].map((question, index) =>
                 <Phase1Button key={index} title={question.text} index={index} onClick={() => handleClick(groupIndex, index)}/>)
             }
