@@ -15,6 +15,7 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>,
 ) {
+    // #TODO just instead get the user and use service to get the data. Minimize the APIs
     await mongooseConnect()
     const query = JSON.parse(req.body)
     try {

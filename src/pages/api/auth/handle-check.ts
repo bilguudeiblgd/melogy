@@ -1,5 +1,5 @@
 import type {NextApiRequest, NextApiResponse} from "next";
-import mongooseConnect from "../../lib/mongooseConnect";
+import mongooseConnect from "../../../lib/mongooseConnect";
 import User from "@/models/User"
 
 type Data = {

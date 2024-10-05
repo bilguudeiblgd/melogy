@@ -1,9 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import db from '../../lib/mongooseConnect'
-import mongoose from "mongoose";
-import mongooseConnect from "../../lib/mongooseConnect";
+import type {NextApiRequest, NextApiResponse} from "next";
+import mongooseConnect from '../../../lib/mongooseConnect'
 import User from "@/models/User"
-import mongodb from "@/lib/mongodb";
+
 type Data = {
     status: string;
 };

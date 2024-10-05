@@ -66,7 +66,7 @@ export default function GetHandle({callbackUrl}: Props) {
 
     const asyncPossibleToRegister = async (userHandle: String) => {
         try {
-            const response = await fetch(`${GLOBALS.baseURL}/api/handle-check`, {
+            const response = await fetch(`${GLOBALS.baseURL}/api/auth/handle-check`, {
                 method: 'POST',
                 body: JSON.stringify({userHandle: userHandle})
             })
@@ -107,7 +107,7 @@ export default function GetHandle({callbackUrl}: Props) {
                 setHandle("")
                 return
             }
-            const response = await fetch(`${GLOBALS.baseURL}/api/handle-submit`, {
+            const response = await fetch(`${GLOBALS.baseURL}/api/auth/handle-submit`, {
                 method: 'POST',
                 body: JSON.stringify({handle, email: session.user.email})
             })

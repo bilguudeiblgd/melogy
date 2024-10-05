@@ -4,7 +4,6 @@ import clientPromise from "@/lib/mongodb"
 import {MongoDBAdapter} from "@auth/mongodb-adapter"
 import type {Adapter} from 'next-auth/adapters';
 import {TYPES} from "@/components/Test/Properties";
-import {update} from "lodash";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET environment variable");

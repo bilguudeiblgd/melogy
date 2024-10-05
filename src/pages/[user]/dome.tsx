@@ -38,7 +38,7 @@ const Page: React.FC = () => {
 
         const userExists = async (testReceiver: string | undefined) => {
             if (!testReceiver) return null
-            const response = await fetch(`${GLOBALS.baseURL}/api/user-exists`, {
+            const response = await fetch(`${GLOBALS.baseURL}/api/user/exists`, {
                 method: 'POST',
                 body: JSON.stringify({userHandle: testReceiver}),
             })
@@ -50,7 +50,7 @@ const Page: React.FC = () => {
             if (!testGiver) return null
             console.log(GLOBALS.baseURL)
             console.log(testReceiver, testGiver)
-            const response = await fetch(`${GLOBALS.baseURL}/api/query-test`, {
+            const response = await fetch(`${GLOBALS.baseURL}/api/test/exists`, {
                 method: 'POST',
                 body: JSON.stringify({testReceiver: testReceiver, testGiver: testGiver}),
             })
@@ -75,9 +75,6 @@ const Page: React.FC = () => {
         }).catch(() => {
             setTestReceiverExists(false)
         })
-
-
-
 
     }, [GLOBALS.baseURL, router, testGiver?.userHandle, testReceiver]);
 
