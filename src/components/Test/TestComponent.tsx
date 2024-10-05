@@ -36,7 +36,7 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
             info: info
         }
         try {
-            const response = await fetch('/api/send-test', {
+            const response = await fetch('/api/test/send', {
                 method: 'POST',
                 body: JSON.stringify(testObject),
             });

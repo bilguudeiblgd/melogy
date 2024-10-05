@@ -19,7 +19,9 @@ const mongooseConnect = async () => {
   }
   if (cached.connection) return cached.connection
   if (!cached.promise) {
-    cached.promise = mongoose.connect(uri)
+    cached.promise = mongoose.connect(uri, {
+      dbName: process.env.MONGODB_DBNAME || 'dev'
+    })
   }
   try {
     cached.connection = await cached.promise

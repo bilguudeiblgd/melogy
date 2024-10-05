@@ -2,7 +2,7 @@ import type {NextApiRequest, NextApiResponse} from "next";
 import mongooseConnect from "@/lib/mongooseConnect";
 import Test from "@/models/Test";
 import User, {DbUser} from "@/models/User";
-import {TestTypeDb} from "@/components/Test/Properties"; // Assuming this is the file where TestSchema is defined
+import {TestTypeDb} from "@/components/Test/Properties";
 
 type Data = {
     status: string;
