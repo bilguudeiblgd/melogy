@@ -101,7 +101,6 @@ export const authOptions: NextAuthOptions = {
         strategy: 'jwt'
     },
 
-    // adapter: MongoDBAdapter(clientPromise) as Adapter,
 }
 
 
