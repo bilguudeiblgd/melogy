@@ -5,6 +5,7 @@ import React, {createContext, useEffect, useState} from "react";
 import {Black_Han_Sans, Rubik} from 'next/font/google'
 import InAppSpy from 'inapp-spy'
 import InAppBrowserWarning from "@/components/InAppBrowserWarning";
+import {GoogleTagManager} from "@next/third-parties/google";
 
 const BLACK_HAN_SANS = Black_Han_Sans({
     subsets: ['latin'],
@@ -45,8 +46,8 @@ export default function App({
             <SessionProvider session={session}>
                 <main className={`${RUBIK.variable} ${BLACK_HAN_SANS.variable} `}>
                     <Component {...pageProps} />
+                    <GoogleTagManager gtmId={`${process.env.NEXT_PUBLIC_GOOGLE_ID}`}/>
                 </main>
-
             </SessionProvider>
         </GlobalContext.Provider>
     )
