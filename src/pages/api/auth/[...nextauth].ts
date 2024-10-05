@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
     ],
     secret: process.env.NEXTAUTH_SECRET,
 
-    adapter: MongoDBAdapter(clientPromise,) as Adapter,
+    adapter: MongoDBAdapter(clientPromise, {databaseName: process.env.MONGODB_DBNAME || 'dev'}) as Adapter,
     callbacks: {
         async jwt({token, user, trigger, account, session}) {
             if (trigger == "update") {
