@@ -10,7 +10,7 @@ export default function Document() {
         <Main />
         <NextScript />
       </body>
-        <GoogleTagManager gtmId={"G-884PKLDN69"}/>
+        <GoogleTagManager gtmId={"GTM-W6W8X5F7"}/>
     </Html>
   );
 }
