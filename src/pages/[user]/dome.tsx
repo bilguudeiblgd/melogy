@@ -3,6 +3,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {signIn, useSession} from 'next-auth/react';
 import Skeleton from "@/components/Skeleton";
 import TestComponent from "@/components/Test/TestComponent";
+import TestReceiverInfo from '@/components/Test/TestReceiverInfo';
 import Loading from "@/components/Loading";
 import GetHandle from "@/components/GetHandle";
 import {GlobalContext} from "@/pages/_app";
@@ -135,6 +136,7 @@ const Page: React.FC = () => {
 
     return (
         <Skeleton showNavbar={true} noContainer={true} darkTheme={true}>
+            <TestReceiverInfo testReceiver={testReceiver}/>
             {testReceiver && testGiver && testGiver.userHandle &&
                 <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
         </Skeleton>
