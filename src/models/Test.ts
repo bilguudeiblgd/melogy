@@ -15,4 +15,5 @@ const testSchema = new Schema<TestTypeDb>({
     }],
 }, {timestamps: true});
 
-export default mongoose.models.Test || mongoose.model<TestTypeDb>('Test', testSchema);
+// had to follow naming conventions of next-auth db adapter
+export default mongoose.models.tests || mongoose.model<TestTypeDb>('tests', testSchema);

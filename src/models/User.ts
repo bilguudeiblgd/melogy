@@ -1,6 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
 import IUser from "@/types/IUser";
-import Test from "@/models/Test";
 import {TestTypeDb, TYPES} from "@/components/Test/Properties";
 
 export interface DbUser extends IUser {
@@ -38,4 +37,5 @@ const userSchema = new Schema<DbUser>({
     }
 }, {timestamps: true});
 
+// had to follow naming conventions of next-auth db adapter
 export default mongoose.models.users || mongoose.model<DbUser>('users', userSchema);

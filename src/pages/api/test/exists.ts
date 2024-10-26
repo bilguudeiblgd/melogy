@@ -23,7 +23,7 @@ export default async function handler(
 
     try {
         const {testReceiver, testGiver} = JSON.parse(req.body);
-        console.log(testReceiver, testGiver);
+        console.log("test rec and giv:", testReceiver, testGiver);
         // Check if the necessary fields are present
         if (!testReceiver || !testGiver) {
             return res.status(400).json({data: null, message: "Missing required fields"});
