@@ -17,7 +17,7 @@ export default function Home() {
     const {data: session, status} = useSession()
     const router = useRouter()
 
-    if(session && session.user && !session.user.userHandle) {
+    if (session && session.user && !session.user.userHandle) {
         return <GetHandle callbackUrl={"/"}/>
     }
 
@@ -40,8 +40,10 @@ export default function Home() {
                                    alt={"illustration of the idea of the app"}/>
                         </div>
                         <div>
-                            <button onClick={() => {signIn()}} className={"btn btn-secondary"}>
-                                <TextEdgy className={"text-base-100"} >See who you are</TextEdgy>
+                            <button onClick={() => {
+                                signIn()
+                            }} className={"btn btn-secondary"}>
+                                <TextEdgy className={"text-base-100"}>See who you are</TextEdgy>
                             </button>
                         </div>
                     </div>)
