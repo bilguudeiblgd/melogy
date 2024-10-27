@@ -22,8 +22,7 @@ export class TestService {
                 "Authorization": `Bearer ${this.session.accessToken}`
             }
         }).then(async (value) => {
-            const data = await value.json()
-            console.log(data)
+            return await value.json()
         }).catch((e) => {
             console.log(e)
         })
