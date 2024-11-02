@@ -62,44 +62,48 @@ type LoggedInHomePageProps = {
 
 const LoggedInHomePage: React.FC<LoggedInHomePageProps> = ({session}) => {
     const globalContext = useContext(GlobalContext)
+    const [testsGiven, setTestsGiven] = React.useState<object[] | null>(null)
     useEffect(() => {
         let testService = new TestService(globalContext.baseURL, session)
-        testService.getTestsGiven()
+        testService.getTestsGiven()?.then(data => {
+            setTestsGiven(data)
+        })
+
     }, [globalContext, session])
 
     return (
-        <div className={"h-full w-full flex flex-col justify-center items-center -mt-24 "}>
-            <div>
-                <p className={"text-primary font-bold mb-2 text-sm"}>Send this link to your friends:</p>
-            </div>
-            <div>
-                {session.user.userHandle && <CopyLink userHandle={session.user.userHandle}/>}
-            </div>
-            <div className={"py-2"}>
-                <p className={"text-secondary font-semibold text-sm "}>x people have visited your link</p>
-            </div>
+        <>
 
-            <div className={"flex flex-row"}>
-                <button className={"btn btn-primary h-16 w-28 mx-2"}>
-                    <Link href={`/${session?.user.userHandle}`}
-                          className={"flex flex-col items-center justify-center"}>
-                        <Image src={"/eyes_2.png"} alt={"Illustration of eyes"} width={40} height={40}/>
-                        <TextEdgy className={"text-base-100"}>SEE ME!</TextEdgy>
-                    </Link>
-                </button>
-                <button className={"btn btn-outline btn-primary h-16 w-28 mx-2"}>
-                    <div className={"flex flex-col items-center justify-center"}>
-                        <TextEdgy className={"text-3xl font-custom"}>14</TextEdgy>
-                        <TextEdgy className={"text-sm"}>ARCHETYPES!</TextEdgy>
-                    </div>
-                </button>
+            <div className={"h-full w-full flex flex-col justify-center items-center -mt-24 "}>
+                <div>
+                    <p className={"text-primary font-bold mb-2 text-sm"}>Send this link to your friends:</p>
+                </div>
+                <div>
+                    {session.user.userHandle && <CopyLink userHandle={session.user.userHandle}/>}
+                </div>
+                <div className={"py-2"}>
+                    <p className={"text-secondary font-semibold text-sm "}>x people have visited your link</p>
+                </div>
+
+                <div className={"flex flex-row"}>
+                    <button className={"btn btn-primary h-16 w-28 mx-2"}>
+                        <Link href={`/${session?.user.userHandle}`}
+                              className={"flex flex-col items-center justify-center"}>
+                            <Image src={"/eyes_2.png"} alt={"Illustration of eyes"} width={40} height={40}/>
+                            <TextEdgy className={"text-base-100"}>SEE ME!</TextEdgy>
+                        </Link>
+                    </button>
+                    <button className={"btn btn-outline btn-primary h-16 w-28 mx-2"}>
+                        <div className={"flex flex-col items-center justify-center"}>
+                            <TextEdgy className={"text-3xl font-custom"}>14</TextEdgy>
+                            <TextEdgy className={"text-sm"}>ARCHETYPES!</TextEdgy>
+                        </div>
+                    </button>
+                </div>
+
             </div>
+        </>
 
-            <div>
-
-            </div>
-
-        </div>
     )
 }
 
