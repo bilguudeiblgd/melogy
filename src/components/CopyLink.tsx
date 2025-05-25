@@ -29,11 +29,11 @@ const CopyLink: React.FC<Props> = ({userHandle}) => {
         <div >
             {copied && <NotifCopiedToClipboard />}
             <button onClick={() => buttonHandler(generatedURL)}
-                    className={"btn border-2 rounded-full p-4 flex flex-row items-center"}>
+                    className={"btn border-none rounded-full p-4 flex flex-row items-center btn-primary"}>
                 <div>
-                    <p>{generatedURL}</p>
+                    <p className="text-accent text-bold">{generatedURL}</p>
                 </div>
-                <div className={"pl-6 pr-2"}>
+                <div className={"text-accent pl-6 pr-2"}>
                     <FaRegCopy size={16}/>
                 </div>
             </button>

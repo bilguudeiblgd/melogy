@@ -5,18 +5,14 @@ import Link from 'next/link';
 import Image from "next/image";
 import Logo from "@/components/Logo";
 
-type Props = {
-    darkTheme: boolean
-}
-
-const Navbar: React.FC<Props> = ({darkTheme}) => {
+const Navbar: React.FC = () => {
     const {data: session} = useSession()
     return (
         <div className="w-full">
-          <div className="navbar w-full bg-transparent">
+          <div className="navbar my-2 w-full bg-transparent">
               <div className="flex-1">
                   <Link href="/" className="btn btn-ghost text-xl">
-                      <Logo darkTheme={darkTheme}/>
+                      <Logo/>
                   </Link>
               </div>
               <div className="flex-none">
@@ -46,7 +42,7 @@ const Navbar: React.FC<Props> = ({darkTheme}) => {
                           </div>
                       )
                       // The signin link redirects to login page /pages/auth/login.tsx
-                      : <a onClick={(e) => signIn()} className="btn btn-ghost">Login</a>
+                      : <a onClick={(e) => signIn()} className="btn btn-accent text-primary">Login</a>
                   }
               </div>
           </div>

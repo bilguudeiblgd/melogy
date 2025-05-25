@@ -13,10 +13,16 @@ interface ContentPageProps {
 export default function Page({id, markdown}: InferGetStaticPropsType<typeof getStaticProps>) {
 
     return (
-        <Skeleton showNavbar={true} noContainer={false} darkTheme={false}>
+        <Skeleton showNavbar={true} noContainer={false}>
             <div className={"pb-4"}>
                 <article
-                    className={`px-2 md:px-12 mt-4 mx-auto prose lg:prose-md prose-headings:text-primary prose-slate`}>
+                    className={`px-2 md:px-12 mt-4 mx-auto prose lg:prose-md prose-headings:text-primary prose-slate 
+                    prose-p:text-white prose-a:text-accent
+                    prose-h1:text-white prose-h2:text-white prose-h3:text-white prose-h4:text-white prose-h5:text-white prose-h6:text-white
+                    prose-ul:text-white prose-ol:text-white prose-li:text-white prose-blockquote:text-white prose-code:text-white prose-pre:text-white prose-table:text-white prose-td:text-white prose-th:text-white
+                    prose-blockquote:border-secondary
+                    prose-strong:text-accent
+                    prose-hr:border-white`}>
                     <div dangerouslySetInnerHTML={{__html: markdown}}/>
                 </article>
                 <div className={"flex mt-12 mb-16"}>

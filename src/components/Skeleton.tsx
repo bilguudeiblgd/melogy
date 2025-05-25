@@ -4,26 +4,25 @@ import React from "react";
 
 interface SkeletonProps {
     showNavbar: boolean;
-    darkTheme: boolean;
     noContainer: boolean;
     children: React.ReactNode;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({showNavbar, darkTheme = false, noContainer = false, children}) => {
+const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, children}) => {
     return (
         <>
-            <div className={`${darkTheme && "bg-primary"}`}>
+            <div>
                 {
                     noContainer ?
                         <main className={`h-screen`}>
                             <div className={`w-full container px-2 mx-auto md:px-10`}>
-                                {showNavbar && <Navbar darkTheme={darkTheme}/>}
+                                {showNavbar && <Navbar/>}
                             </div>
                             {children}
                         </main>
                         :
-                        <main className={`container px-2 md:px-10 mx-auto h-screen`}>
-                            {showNavbar && <Navbar darkTheme={darkTheme}/>}
+                        <main className={`container max-w-lg px-2 md:px-10 mx-auto h-screen`}>
+                            {showNavbar && <Navbar />}
                             {children}
                         </main>
                 }

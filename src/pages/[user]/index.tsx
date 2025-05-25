@@ -82,7 +82,7 @@ export default function Page() {
 
     if (testsForMeSize < REQUIRED_TEST_FOR_ME || testsGivenSize < REQUIRED_TEST_FOR_OTHERS) {
         return (
-            <Skeleton showNavbar={true} noContainer={false} darkTheme={false}>
+            <Skeleton showNavbar={true} noContainer={false}>
                 <div className={"flex flex-col items-center mt-12"}>
                     <NumberTestCard testsForMeSize={testsForMeSize} testsGivenSize={testsGivenSize}/>
 
@@ -90,17 +90,17 @@ export default function Page() {
                         <TextEdgy className={"text-primary mb-4"}>TASKS LEFT:</TextEdgy>
                         {testsForMeSize < REQUIRED_TEST_FOR_ME &&
                             <div className={"flex justify-start mb-2 items-center"}>
-                                <input type="checkbox checkbox-primary" disabled={true} checked={testsForMeSize >= 1}
-                                       className="checkbox"/>
-                                <span className="ml-2 text-left">Ask {REQUIRED_TEST_FOR_ME} people to tests you.</span>
+                                <input type="checkbox checkbox-accent" disabled={true} checked={testsForMeSize >= 1}
+                                       className="checkbox disabled:bg-accent checkbox-accent"/>
+                                <span className="ml-2 text-accent font-primary font-bold text-left">Ask {REQUIRED_TEST_FOR_ME} people to tests you.</span>
                             </div>
                         }
                         {testsGivenSize < REQUIRED_TEST_FOR_OTHERS &&
                             <div className={"flex justify-start items-center"}>
-                                <input type="checkbox checkbox-secondary" disabled={true} checked={testsGivenSize >= 1}
-                                       className="checkbox"/>
+                                <input type="checkbox" disabled={true} checked={testsGivenSize >= 1}
+                                       className="checkbox disabled:bg-accent checkbox-accent"/>
                                 <span
-                                    className="ml-2 text-left">Give {REQUIRED_TEST_FOR_OTHERS} tests for other people.</span>
+                                    className="ml-2 text-accent font-primary font-bold text-left">Give {REQUIRED_TEST_FOR_OTHERS} tests for other people.</span>
                             </div>
                         }
                     </div>
@@ -123,7 +123,7 @@ export default function Page() {
     }
 
     return (
-        <Skeleton showNavbar={true} noContainer={false} darkTheme={false}>
+        <Skeleton showNavbar={true} noContainer={false}>
             {
                 typeResultIsValid(typeResult) ?
                     <div className={"flex flex-col items-center mt-12"}>
@@ -151,7 +151,7 @@ interface NumberTestProps {
 
 const NumberTestCard: React.FC<NumberTestProps> = ({testsForMeSize, testsGivenSize}) => {
     return (
-        <div className="stats shadow">
+        <div className="stats bg-secondary shadow">
 
             <div className="stat">
                 <div className="stat-figure text-primary">
@@ -167,11 +167,11 @@ const NumberTestCard: React.FC<NumberTestProps> = ({testsForMeSize, testsGivenSi
                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                     </svg>
                 </div>
-                <div className="stat-title">Total tests for you</div>
+                <div className="stat-title font-bold font-primary text-primary">Total tests for you</div>
                 <div className="stat-value text-primary">{testsForMeSize}</div>
             </div>
             <div className="stat">
-                <div className="stat-figure text-secondary">
+                <div className="stat-figure text-accent">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -184,8 +184,8 @@ const NumberTestCard: React.FC<NumberTestProps> = ({testsForMeSize, testsGivenSi
                             d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                     </svg>
                 </div>
-                <div className="stat-title">Total given</div>
-                <div className="stat-value text-secondary">{testsGivenSize}</div>
+                <div className="stat-title font-bold font-primary text-primary">Total given</div>
+                <div className="stat-value text-accent">{testsGivenSize}</div>
             </div>
         </div>
     )

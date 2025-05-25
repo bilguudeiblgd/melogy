@@ -28,12 +28,16 @@ const config: Config = {
     themes: [
       {
         mytheme: {
-          "primary": "#3d358b",
-          "secondary": "#53a548",
+          primary: "#18195A",
+          "secondary": "#FF7F4F",
+          "accent": "E6FF1A",
+          neutral: "#1D1D1D",
           "base-100": "#ffffff",
-          "my-red": "#de3e5b",
-          "my-yellow": "#f8d24c",
-          "my-green": "#53a548"
+
+          info: "#3ABFF8",
+          success: "#36D399",
+          warning: "#FBBD23",
+          error: "#F87272",
         }
       }
     ],
