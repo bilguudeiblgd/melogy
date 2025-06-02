@@ -8,14 +8,15 @@ import Loading from "@/components/Loading";
 
 type Props = {
     handleContinueButton: (arg: TestInfoInterface) => void;
-    testInfo: TestInfoInterface
+    testInfo: TestInfoInterface;
+    testReceiver: string
 }
 
 let recordAnswers: string[] = []
 
 const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
 
-const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
+const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo, testReceiver}) => {
     const [groupIndex, setGroupIndex] = useState(0);
     const [twoQuestions, setTwoQuestions] = useState<Phase1QuestionType[]>([shuffledQuestions[0], shuffledQuestions[1]]);
     const [loading, setLoading] = useState(false)
@@ -53,7 +54,7 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
     }
     return (
         <>
-            <TextEdgy className={"mb-4 text-white"}>Which one are they most likely to do?</TextEdgy>
+            <TextEdgy className={"mb-4 text-white"}>Which one is {testReceiver} most likely to do?</TextEdgy>
             {groupIndex <= 12 ? twoQuestions.map((question: Phase1QuestionType, index: number) =>
                     <Phase1Button key={index} title={question.text} index={index}
                                   onClick={() => handleClick(groupIndex, index, question.text)}/>)

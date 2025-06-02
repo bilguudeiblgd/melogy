@@ -24,7 +24,9 @@ const PhaseDoneComponent: React.FC<Props> = ({testInfo, testReceiver}) => {
 
             <TextEdgy className={"text-sm font-bold text-primary"}>You think {testReceiver} is: </TextEdgy>
             <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={testResult}/>
-
+            <div>
+                
+            </div>
             <HomeButton/>
         </div>
     );

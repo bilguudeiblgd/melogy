@@ -8,10 +8,11 @@ import Phase0Part1Component from "@/components/Test/Phase0Part1Component";
 
 type Props = {
     handleContinueButton: (arg: TestInfoInterface) => void;
-    testInfo: TestInfoInterface
+    testInfo: TestInfoInterface;
+    testReceiver: string
 }
 
-const Phase0Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
+const Phase0Component: React.FC<Props> = ({handleContinueButton, testInfo, testReceiver}) => {
     const [partOneFinished, setPartOneFinished] = useState(false)
 
     const handlePart0Continue = (arg: TestInfoInterface) => {
@@ -20,9 +21,9 @@ const Phase0Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
 
     return (<>
         { !partOneFinished ?
-            <Phase0Part0Component handleContinueButton={handlePart0Continue} testInfo={testInfo} />
+            <Phase0Part0Component handleContinueButton={handlePart0Continue} testInfo={testInfo} testReceiver={testReceiver} />
             :
-            <Phase0Part1Component handleContinueButton={handleContinueButton} testInfo={testInfo} />
+            <Phase0Part1Component handleContinueButton={handleContinueButton} testInfo={testInfo} testReceiver={testReceiver} />
         }
     </>)
 };

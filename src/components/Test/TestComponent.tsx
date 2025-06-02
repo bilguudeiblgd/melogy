@@ -15,15 +15,17 @@ const defaultInitTestInfo: TestInfoInterface = {
 
 type Props = {
     testReceiver: string;
-    testGiver: string
+    testGiver: string;
+    groupNumber: number;
 };
 
 
 
 
-const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
+const TestComponent: React.FC<Props> = ({testReceiver, testGiver, groupNumber}) => {
     const [stage, setStage] = useState<PHASE>(PHASE.PHASE0)
     // initialize eliminatedQualities
+    
     let testInfo: TestInfoInterface = defaultInitTestInfo
     const handleContinueButton = (testInfo: TestInfoInterface) => {
         setStage(PHASE.PHASE1)
@@ -33,7 +35,8 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
         let testObject: TestTypeDb = {
             testReceiver: testReceiver,
             testGiver: testGiver,
-            info: info
+            info: info,
+            group: "all"
         }
         try {
             const response = await fetch('/api/test/send', {
@@ -53,12 +56,12 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
     return (
         <div className="min-h-screen flex flex-col items-center mt-10">
             {stage === PHASE.PHASE0 && <Phase0Component
-                handleContinueButton={handleContinueButton} testInfo={testInfo}
+                handleContinueButton={handleContinueButton} testInfo={testInfo} testReceiver={testReceiver}
             />}
             {stage === PHASE.PHASE1 && <Phase1Component
-                handleContinueButton={handleEndButton} testInfo={testInfo}/>}
+                handleContinueButton={handleEndButton} testInfo={testInfo} testReceiver={testReceiver} />}
             {stage === PHASE.PHASE_DONE && <PhaseDoneComponent
-                testInfo={testInfo} testReceiver={testReceiver}/>}
+                testInfo={testInfo} testReceiver={testReceiver} testReceiver={testReceiver} />}
         </div>
     );
 };

@@ -10,6 +10,7 @@ import InAppBrowserWarning from "@/components/InAppBrowserWarning";
 import InAppSpy from "inapp-spy";
 import Text from "@/components/Text";
 import {HomeButton} from "@/components/Test/PhaseDoneComponent";
+import { ReNavigation } from '@/components/ReNavigation';
 
 
 // interface DomePageProps {
@@ -27,8 +28,9 @@ const Page: React.FC = () => {
     const GLOBALS = useContext(GlobalContext)
 
     const currentURL = `/${router.query.user}/dome`
-    const testReceiver = router.query.user as string | undefined
-
+    const testReceiverUrl = router.query.user as string | undefined
+    const testReceiver = testReceiverUrl?.split("?")[0]
+    const groupNumber = parseInt(testReceiverUrl?.split("?")[1] as string)
     const testGiver = session?.user
 
     // navigators can't be accessed in server side
@@ -48,8 +50,6 @@ const Page: React.FC = () => {
         const queryTest = async (testReceiver: string | undefined, testGiver: string | undefined) => {
             if (!testReceiver) return null
             if (!testGiver) return null
-            console.log(GLOBALS.baseURL)
-            console.log(testReceiver, testGiver)
             const response = await fetch(`${GLOBALS.baseURL}/api/test/exists`, {
                 method: 'POST',
                 body: JSON.stringify({testReceiver: testReceiver, testGiver: testGiver}),
@@ -102,13 +102,8 @@ const Page: React.FC = () => {
         return <GetHandle callbackUrl={currentURL}/>
     }
 
-
-
     if (session && session.user.userHandle === testReceiver) {
-        return (<div>
-            <Text>Nothing to do</Text>
-            <HomeButton/>
-        </div>)
+        return <ReNavigation path={`/`}/>
     }
 
     if (testReceiverExists === undefined) {
@@ -136,9 +131,11 @@ const Page: React.FC = () => {
     return (
         <Skeleton showNavbar={true} noContainer={true}>
             {testReceiver && testGiver && testGiver.userHandle &&
-                <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
+                <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver} groupNumber={groupNumber}/>}
         </Skeleton>
     );
 };
 
 export default Page;
+
+

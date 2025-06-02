@@ -13,6 +13,9 @@ import { TestService } from "@/middleware/test.service";
 import { GlobalContext } from "@/pages/_app";
 import GroupDropdown from '@/components/GroupDropdown';
 
+// #TODO - add group selection
+// #TODO - fix phase 0 and 1, they are just too complicated, make it drag and drop
+
 
 export default function Home() {
     const { data: session, status } = useSession()
@@ -62,19 +65,38 @@ type LoggedInHomePageProps = {
 }
 
 const LoggedInHomePage: React.FC<LoggedInHomePageProps> = ({ session }) => {
-    const globalContext = useContext(GlobalContext)
-    const [testsGiven, setTestsGiven] = React.useState<object[] | null>(null)
-    useEffect(() => {
-        let testService = new TestService(globalContext.baseURL, session)
-        testService.getTestsGiven()?.then(data => {
-            setTestsGiven(data)
-        })
+    const [groups, setGroups] = React.useState<string[]>(session.user.groups || []);
+    const [selectedGroup, setSelectedGroup] = React.useState<string | null>(null);
+    const [addingGroup, setAddingGroup] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const GLOBALS = useContext(GlobalContext);
 
-    }, [globalContext, session])
+    // Optionally, fetch latest groups from API on mount
+    // React.useEffect(() => {
+    //     async function fetchGroups() {
+    //         const res = await fetch(`${GLOBALS.baseURL}/api/user/${session.user.userHandle}`);
+    //         const user = await res.json();
+    //         setGroups(user.groups || []);
+    //     }
+    //     fetchGroups();
+    // }, [session.user.userHandle, GLOBALS.baseURL]);
 
     const handleGroupSelect = (group: string) => {
-        console.log('Selected group:', group);
-        // Add your group selection logic here
+        setSelectedGroup(group);
+    };
+
+    const handleAddGroup = async (group: string) => {
+        if (!group || groups.includes(group)) return;
+        setLoading(true);
+        // Update backend
+        await fetch(`${GLOBALS.baseURL}/api/user/${session.user.userHandle}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ group })
+        });
+        setGroups(prev => [...prev, group]);
+        setSelectedGroup(group);
+        setLoading(false);
     };
 
     return (
@@ -89,13 +111,20 @@ const LoggedInHomePage: React.FC<LoggedInHomePageProps> = ({ session }) => {
                         {session.user.userHandle && <CopyLink userHandle={session.user.userHandle} />}
                     </div>
                     <div className="absolute -bottom-4 right-4">
-                        <GroupDropdown onSelect={handleGroupSelect} />
+                        <GroupDropdown
+                            groups={groups}
+                            onSelect={handleGroupSelect}
+                            onAddGroup={handleAddGroup}
+                        />
                     </div>
                     <div className="h-5 w-5"></div>
                 </div>
 
-                <div className={"py-8"}>
-                    <p className={"text-secondary font-semibold text-sm "}>x people have visited your link</p>
+                {selectedGroup && (
+                    <div className="mt-2 text-primary font-bold">Selected group: {selectedGroup}</div>
+                )}
+
+                <div className={"py-4"}>
                 </div>
 
                 <button className="btn card btn-accent py-8 px-0 w-96 shadow-xl items-start">
@@ -107,7 +136,6 @@ const LoggedInHomePage: React.FC<LoggedInHomePageProps> = ({ session }) => {
 
             </div>
         </>
-
     )
 }
 

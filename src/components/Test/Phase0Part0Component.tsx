@@ -6,11 +6,12 @@ import TextEdgy from "@/components/TextEdgy";
 
 type Props = {
     handleContinueButton: (arg: TestInfoInterface) => void;
-    testInfo: TestInfoInterface
+    testInfo: TestInfoInterface;
+    testReceiver: string
 }
 
 
-const Phase0Part0Component: React.FC<Props> = ({handleContinueButton, testInfo}) => {
+const Phase0Part0Component: React.FC<Props> = ({handleContinueButton, testInfo, testReceiver}) => {
     const shuffledQuestions = shuffleArray(Phase0QualitiesPart0) as Phase0QuestionType[]
     const [qualities, setQualities] = useState<Phase0QuestionType[]>(shuffledQuestions)
     const [nextPartEligible, setNextPartEligible] = useState(false);
@@ -40,7 +41,7 @@ const Phase0Part0Component: React.FC<Props> = ({handleContinueButton, testInfo})
     return (
         <>
             <div className={"mb-4"}>
-                <TextEdgy className={"text-white"}>What {"he/she's"} like</TextEdgy>
+                <TextEdgy className={"text-white"}>What {testReceiver} like</TextEdgy>
             </div>
 
             <div className={"w-full"}>

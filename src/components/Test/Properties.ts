@@ -16,6 +16,16 @@ export enum TYPES {
     MOOD = "MOOD",
     SAGE = "SAGE"
 }
+
+// export const DUO_DYNAMIC_TYPES: Record<string, string> = {
+//     [`${TYPES.RANDOM},${TYPES.GUARDIAN}`]: "Hustle and Guardian",
+
+//     [`${TYPES.HUSTLE},${TYPES.GUARDIAN}`]: "Hustle and Guardian",
+//     [`${TYPES.HUSTLE},${TYPES.EMPATH}`]: "Hustle and Empath",
+//     [`${TYPES.HUSTLE},${TYPES.CAPTAIN}`]: "Hustle and Captain",
+//     [`${TYPES.HUSTLE},${TYPES.JESTER}`]: "Hustle and Jester",
+//     [`${TYPES.HUSTLE},${TYPES.CHATTERBOX}`]: "Hustle and Chatterbox",
+// }
 // #TODO: have types and interface in 1 folder
 
 // This creates a map: { "HUSTLE": TYPES.HUSTLE, ... }
@@ -103,7 +113,8 @@ export type TypeScoreType = {
 export type TestTypeDb = {
     testReceiver: string | null;
     testGiver: string | null;
-    info: TypeScoreType[]
+    info: TypeScoreType[];
+    group: string;
 }
 
 export const Phase1Questions = [

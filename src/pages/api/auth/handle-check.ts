@@ -12,8 +12,10 @@ export default async function handler(
 ) {
     await mongooseConnect()
     const query = JSON.parse(req.body)
+    console.log(query)
     try {
         const user = await User.find(query);
+        console.log(user)
         if (user.length > 0)
             return res.status(200).json({message: "Handle exists"});
         return res.status(200).json({message: "Possible to register"});

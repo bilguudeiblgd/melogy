@@ -9,6 +9,7 @@ export interface DbUser extends IUser {
         personality_type: string,
         score: number,
     }]
+    groups: string[]
 }
 
 const userSchema = new Schema<DbUser>({
@@ -34,6 +35,10 @@ const userSchema = new Schema<DbUser>({
         default: Object.values(TYPES).map((value) => {
            return {personality_type: value, score: 0}
         }),
+    },
+    groups: {
+        type: [String],
+        default: ['All']
     }
 }, {timestamps: true});
 
