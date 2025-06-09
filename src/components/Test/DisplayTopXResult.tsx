@@ -19,7 +19,7 @@ const DisplayTopKResult: React.FC<Props> = ({ topK, typeResult }) => {
     
     const topKResult = findTopK(typeResult, topK)
     return (
-        <div>
+        <div className="flex flex-col justify-center items-center">
             {topKResult ? topKResult.map((types, index) =>
                 <ResultCard index={index} type={types.personality_type} 
                 key={index}
@@ -72,7 +72,7 @@ const ResultCard: React.FC<CardProps> = ({ index, type }) => {
             style={{
                 backgroundColor: CARD_COLORS[index],
             }}
-            className="flex flex-row rounded-3xl my-4 px-6 py-4 items-center w-full max-w-xl shadow-lg"
+            className="flex flex-row rounded-3xl my-4 px-6 py-4 items-center w-full max-w-[400px] mx-auto shadow-lg"
         >
             {/* Number */}
             <div className="flex flex-col items-center mr-6">

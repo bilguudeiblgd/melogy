@@ -22,6 +22,7 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
     const [testsGiven, setTestsGiven] = useState<TestWithUser[]>([]);
     const [testsReceived, setTestsReceived] = useState<TestWithUser[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -29,17 +30,24 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
             try {
                 // Fetch tests given
                 const givenResponse = await fetch(`/api/user/${userHandle}/get-tests-given`);
+                if (!givenResponse.ok) {
+                    throw new Error('Failed to fetch tests given');
+                }
                 const givenData = await givenResponse.json();
-                setTestsGiven(givenData);
+                setTestsGiven(Array.isArray(givenData) ? givenData : []);
 
                 // Fetch tests received
                 const receivedResponse = await fetch(`/api/user/${userHandle}/get-tests-received`);
+                if (!receivedResponse.ok) {
+                    throw new Error('Failed to fetch tests received');
+                }
                 const receivedData = await receivedResponse.json();
-                setTestsReceived(receivedData);
+                setTestsReceived(Array.isArray(receivedData) ? receivedData : []);
 
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching test history:', error);
+                setError(error instanceof Error ? error.message : 'An error occurred');
                 setLoading(false);
             }
         };
@@ -51,13 +59,17 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
         return <div className="animate-pulse">Loading test history...</div>;
     }
 
+    if (error) {
+        return <div className="text-error text-center">{error}</div>;
+    }
+
     return (
         <div className="space-y-8">
             {/* Tests Given Section */}
             <div>
                 <h2 className="text-2xl font-bold mb-4 text-primary">Tests Given</h2>
                 <div className="space-y-4">
-                    {testsGiven.length === 0 ? (
+                    {!testsGiven || testsGiven.length === 0 ? (
                         <p className="text-gray-500">No tests given yet</p>
                     ) : (
                         testsGiven.map((test, index) => (
@@ -88,7 +100,7 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
             <div>
                 <h2 className="text-2xl font-bold mb-4 text-primary">Tests Received</h2>
                 <div className="space-y-4">
-                    {testsReceived.length === 0 ? (
+                    {!testsReceived || testsReceived.length === 0 ? (
                         <p className="text-gray-500">No tests received yet</p>
                     ) : (
                         testsReceived.map((test, index) => (

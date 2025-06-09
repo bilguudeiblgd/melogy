@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import React from "react";
+import React, { useEffect } from "react";
 
 
 interface SkeletonProps {
@@ -10,7 +10,9 @@ interface SkeletonProps {
 }
 
 const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, maxWidth = "2xl", children}) => {
-    console.log("Skeleton", maxWidth)
+    useEffect(() => {
+        console.log("maxWidth: ", maxWidth)
+    }, [maxWidth])
     return (
         <>
             <div>
@@ -23,7 +25,7 @@ const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, max
                             {children}
                         </main>
                         :
-                        <main className={`container max-w-${maxWidth} px-2 md:px-10 mx-auto h-screen`}>
+                        <main className={`container max-w-xl px-2 md:px-10 mx-auto h-screen`}>
                             {showNavbar && <Navbar />}
                             {children}
                         </main>
