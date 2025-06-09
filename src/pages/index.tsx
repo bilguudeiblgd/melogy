@@ -34,7 +34,7 @@ export default function Home() {
 
     return (
         <main>
-            <Skeleton showNavbar={true} noContainer={false}>
+            <Skeleton showNavbar={true} noContainer={false} maxWidth={"lg"}>
                 {!session ?
                     (<div className={"flex flex-col items-center pb-10"}>
                         {/* should have landing page */}

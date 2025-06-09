@@ -9,7 +9,7 @@ import {
 
 export const TYPES_INDEX_MAP: { [key in TYPES]: number } = {
     [TYPES.HUSTLE]: 0,
-    [TYPES.GUARDIAN]: 1,
+    [TYPES.PROTECTOR]: 1,
     [TYPES.EMPATH]: 2,
     [TYPES.CAPTAIN]: 3,
     [TYPES.JESTER]: 4,
@@ -19,9 +19,9 @@ export const TYPES_INDEX_MAP: { [key in TYPES]: number } = {
     [TYPES.ROMANTIC]: 8,
     [TYPES.TRENDSETTER]: 9,
     [TYPES.MAVERICK]: 10,
-    [TYPES.WILDCARD]: 11,
+    [TYPES.RANDOM]: 11,
     [TYPES.MOOD]: 12,
-    [TYPES.SAGE]: 13,
+    [TYPES.WISDOM]: 13,
 };
 
 //  great great functional programming here. Just changing data structures for efficient searching and that also gives easy code apparently

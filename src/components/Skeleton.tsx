@@ -5,10 +5,11 @@ import React from "react";
 interface SkeletonProps {
     showNavbar: boolean;
     noContainer: boolean;
+    maxWidth: string;
     children: React.ReactNode;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, children}) => {
+const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, maxWidth = "2xl", children}) => {
     return (
         <>
             <div>
@@ -21,7 +22,7 @@ const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, chi
                             {children}
                         </main>
                         :
-                        <main className={`container max-w-lg px-2 md:px-10 mx-auto h-screen`}>
+                        <main className={`container max-w-${maxWidth} px-2 md:px-10 mx-auto h-screen`}>
                             {showNavbar && <Navbar />}
                             {children}
                         </main>

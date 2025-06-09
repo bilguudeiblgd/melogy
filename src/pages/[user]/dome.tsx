@@ -129,7 +129,7 @@ const Page: React.FC = () => {
 
 
     return (
-        <Skeleton showNavbar={true} noContainer={true}>
+        <Skeleton showNavbar={true} noContainer={true} maxWidth={"lg"}>
             {testReceiver && testGiver && testGiver.userHandle &&
                 <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver} groupNumber={groupNumber}/>}
         </Skeleton>

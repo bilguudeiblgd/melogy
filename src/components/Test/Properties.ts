@@ -2,7 +2,7 @@ import { upperCase } from "lodash";
 
 export enum TYPES {
     HUSTLE = "HUSTLE",
-    GUARDIAN = "GUARDIAN",
+    PROTECTOR = "PROTECTOR",
     EMPATH = "EMPATH",
     CAPTAIN = "CAPTAIN",
     JESTER = "JESTER",
@@ -12,9 +12,9 @@ export enum TYPES {
     ROMANTIC = "ROMANTIC",
     TRENDSETTER = "TRENDSETTER",
     MAVERICK = "MAVERICK",
-    WILDCARD = "WILDCARD",
+    RANDOM = "RANDOM",
     MOOD = "MOOD",
-    SAGE = "SAGE"
+    WISDOM = "WISDOM"
 }
 
 // export const DUO_DYNAMIC_TYPES: Record<string, string> = {
@@ -46,7 +46,7 @@ export const stringToTypeEnum = (str: string): TYPES | null => {
 
 export const type2description: Record<TYPES, string> = {
     [TYPES.HUSTLE]: "Always chasing goals",
-    [TYPES.GUARDIAN]: "Protects the group",
+    [TYPES.PROTECTOR]: "Protects the group",
     [TYPES.EMPATH]: "Feels with you",
     [TYPES.CAPTAIN]: "Leads the way",
     [TYPES.JESTER]: "Brings the laughs",
@@ -56,9 +56,9 @@ export const type2description: Record<TYPES, string> = {
     [TYPES.ROMANTIC]: "Loves with passion",
     [TYPES.TRENDSETTER]: "Sets the trends",
     [TYPES.MAVERICK]: "Breaks the rules",
-    [TYPES.WILDCARD]: "Full of surprises",
+    [TYPES.RANDOM]: "Full of surprises",
     [TYPES.MOOD]: "Changes like weather",
-    [TYPES.SAGE]: "Shares wise words",
+    [TYPES.WISDOM]: "Shares wise words",
 };
 
 
@@ -67,23 +67,23 @@ export enum PHASE {
 }
 
 export const Phase0QualitiesPart0 = [
-    { text: "Determined", types: [TYPES.HUSTLE, TYPES.GUARDIAN] },
+    { text: "Determined", types: [TYPES.HUSTLE, TYPES.PROTECTOR] },
     { text: "Caring", types: [TYPES.EMPATH, TYPES.CAPTAIN] },
     { text: "Entertaining", types: [TYPES.JESTER, TYPES.CHATTERBOX] },
     { text: "Logical", types: [TYPES.BRAINIAC, TYPES.CRITIC] },
     { text: "Good taste", types: [TYPES.ROMANTIC, TYPES.TRENDSETTER] },
-    { text: "Bold", types: [TYPES.MAVERICK, TYPES.WILDCARD] },
-    { text: "Deep", types: [TYPES.MOOD, TYPES.SAGE] }
+    { text: "Bold", types: [TYPES.MAVERICK, TYPES.RANDOM] },
+    { text: "Deep", types: [TYPES.MOOD, TYPES.WISDOM] }
 ];
 
 export const Phase0QualitiesPart1 = [
     { text: "Judgmental", types: [TYPES.CHATTERBOX, TYPES.CRITIC] },
     { text: "Controlling", types: [TYPES.HUSTLE, TYPES.CAPTAIN] },
-    { text: "Stubborn", types: [TYPES.MAVERICK, TYPES.GUARDIAN] },
+    { text: "Stubborn", types: [TYPES.MAVERICK, TYPES.PROTECTOR] },
     { text: "Self-focused", types: [TYPES.ROMANTIC, TYPES.TRENDSETTER] },
-    { text: "Self-neglecting", types: [TYPES.SAGE, TYPES.EMPATH] },
+    { text: "Self-neglecting", types: [TYPES.WISDOM, TYPES.EMPATH] },
     { text: "Lazy", types: [TYPES.BRAINIAC, TYPES.MOOD] },
-    { text: "Reckless", types: [TYPES.WILDCARD, TYPES.JESTER] }
+    { text: "Reckless", types: [TYPES.RANDOM, TYPES.JESTER] }
 ];
 
 export interface Phase0QuestionType {
@@ -118,12 +118,12 @@ export type TestTypeDb = {
 }
 
 export const Phase1Questions = [
-    { text: "Stand up for people", types: [TYPES.GUARDIAN] },
+    { text: "Stand up for people", types: [TYPES.PROTECTOR] },
     { text: "Love solving puzzles", types: [TYPES.BRAINIAC] },
-    { text: "Give life changing advice", types: [TYPES.SAGE] },
+    { text: "Give life changing advice", types: [TYPES.WISDOM] },
     { text: "Focus on self improvement", types: [TYPES.HUSTLE] },
     { text: "Organize group activities", types: [TYPES.CAPTAIN] },
-    { text: "Do the most random things", types: [TYPES.WILDCARD] },
+    { text: "Do the most random things", types: [TYPES.RANDOM] },
     { text: "Understand how others feel", types: [TYPES.EMPATH] },
     { text: "Never run out of things to say", types: [TYPES.CHATTERBOX] },
     { text: "Make everyone laugh", types: [TYPES.JESTER] },

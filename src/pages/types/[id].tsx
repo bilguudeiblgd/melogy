@@ -11,9 +11,8 @@ interface ContentPageProps {
 }
 
 export default function Page({id, markdown}: InferGetStaticPropsType<typeof getStaticProps>) {
-
     return (
-        <Skeleton showNavbar={true} noContainer={false}>
+        <Skeleton showNavbar={true} noContainer={false} maxWidth={"2xl"}>
             <div className={"pb-4"}>
                 <article
                     className={`px-2 md:px-12 mt-4 mx-auto prose lg:prose-md prose-headings:text-primary prose-slate 
@@ -39,6 +38,7 @@ export default function Page({id, markdown}: InferGetStaticPropsType<typeof getS
 export const getStaticPaths = (async () => {
     // Generate an array of 14 page ids
     const typeValues = Object.values(TYPES).map((type) => type.toLowerCase());
+    console.log(typeValues)
     const paths = typeValues.map((type) => {
         return {
             params: {
@@ -54,9 +54,10 @@ export const getStaticPaths = (async () => {
 
 export const getStaticProps = (async (context) => {
     // when URL is localhost, it doesn't work. Why?
-    const serverURL = "https://melogy.vercel.app"
+    console.log(process.env.NEXT_PUBLIC_BASE_URL)
+    const serverURL = process.env.NEXT_PUBLIC_BASE_URL
 
-    if (!context.params) {
+    if (!context.params || serverURL == undefined) {
         return {
             notFound: true
         }
@@ -78,7 +79,7 @@ export const getStaticProps = (async (context) => {
 
     const md: string = await res.text()
     const mdHtml: string = await markDownToHtml(md)
-    console.log(md)
+    console.log(mdHtml)
     return {
         props: {
             id,
