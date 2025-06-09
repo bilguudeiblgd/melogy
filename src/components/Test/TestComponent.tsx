@@ -61,7 +61,7 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver, groupNumber}) 
             {stage === PHASE.PHASE1 && <Phase1Component
                 handleContinueButton={handleEndButton} testInfo={testInfo} testReceiver={testReceiver} />}
             {stage === PHASE.PHASE_DONE && <PhaseDoneComponent
-                testInfo={testInfo} testReceiver={testReceiver} testReceiver={testReceiver} />}
+                testInfo={testInfo} testReceiver={testReceiver} />}
         </div>
     );
 };
