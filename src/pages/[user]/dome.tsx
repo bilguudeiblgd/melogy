@@ -29,8 +29,7 @@ const Page: React.FC = () => {
 
     const currentURL = `/${router.query.user}/dome`
     const testReceiverUrl = router.query.user as string | undefined
-    const testReceiver = testReceiverUrl?.split("?")[0]
-    const groupNumber = parseInt(testReceiverUrl?.split("?")[1] as string)
+    const testReceiver = testReceiverUrl
     const testGiver = session?.user
 
     // navigators can't be accessed in server side
@@ -80,7 +79,7 @@ const Page: React.FC = () => {
 
     if (!testReceiver) {
         return <div>
-            not a good path
+        not a good path
         </div>
     }
 
@@ -131,7 +130,7 @@ const Page: React.FC = () => {
     return (
         <Skeleton showNavbar={true} noContainer={true} maxWidth={"lg"}>
             {testReceiver && testGiver && testGiver.userHandle &&
-                <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver} groupNumber={groupNumber}/>}
+                <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
         </Skeleton>
     );
 };

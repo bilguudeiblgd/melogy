@@ -38,7 +38,6 @@ export default function Page({id, markdown}: InferGetStaticPropsType<typeof getS
 export const getStaticPaths = (async () => {
     // Generate an array of 14 page ids
     const typeValues = Object.values(TYPES).map((type) => type.toLowerCase());
-    console.log(typeValues)
     const paths = typeValues.map((type) => {
         return {
             params: {

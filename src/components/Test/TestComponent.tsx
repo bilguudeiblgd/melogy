@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Phase0Component from "@/components/Test/Phase0Component";
 import Phase1Component from "@/components/Test/Phase1Component";
 import {PHASE, TestInfoInterface, TestTypeDb} from "@/components/Test/Properties";
-import {testInfoToMongo} from "@/util/TestUtils";
+import {processTestInfo} from "@/util/TestUtils";
 import PhaseDoneComponent from "@/components/Test/PhaseDoneComponent";
 
 const defaultInitTestInfo: TestInfoInterface = {
@@ -16,13 +16,10 @@ const defaultInitTestInfo: TestInfoInterface = {
 type Props = {
     testReceiver: string;
     testGiver: string;
-    groupNumber: number;
 };
 
 
-
-
-const TestComponent: React.FC<Props> = ({testReceiver, testGiver, groupNumber}) => {
+const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
     const [stage, setStage] = useState<PHASE>(PHASE.PHASE0)
     // initialize eliminatedQualities
     
@@ -31,12 +28,12 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver, groupNumber}) 
         setStage(PHASE.PHASE1)
     }
     const handleEndButton = async (testInfo: TestInfoInterface) => {
-        let info = testInfoToMongo(testInfo)
+        let info = processTestInfo(testInfo)
         let testObject: TestTypeDb = {
             testReceiver: testReceiver,
             testGiver: testGiver,
             info: info,
-            group: "all"
+            group: "default"
         }
         try {
             const response = await fetch('/api/test/send', {

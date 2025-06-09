@@ -11,11 +11,10 @@ import { Session } from "next-auth";
 import React, { useContext, useEffect } from "react";
 import { TestService } from "@/middleware/test.service";
 import { GlobalContext } from "@/pages/_app";
-import GroupDropdown from '@/components/GroupDropdown';
 
-// #TODO - add group selection
+// #TODO - add group selection (changed into later edit format. User can see other people's results)
 // #TODO - fix phase 0 and 1, they are just too complicated, make it drag and drop
-
+// #TODO - can we add back button to phase 0 and 1?
 
 export default function Home() {
     const { data: session, status } = useSession()
@@ -110,13 +109,6 @@ const LoggedInHomePage: React.FC<LoggedInHomePageProps> = ({ session }) => {
                     <div>
                         {session.user.userHandle && <CopyLink userHandle={session.user.userHandle} />}
                     </div>
-                    <div className="absolute -bottom-4 right-4">
-                        <GroupDropdown
-                            groups={groups}
-                            onSelect={handleGroupSelect}
-                            onAddGroup={handleAddGroup}
-                        />
-                    </div>
                     <div className="h-5 w-5"></div>
                 </div>
 
@@ -138,13 +130,4 @@ const LoggedInHomePage: React.FC<LoggedInHomePageProps> = ({ session }) => {
         </>
     )
 }
-
-//
-// export async function getStaticProps() {
-//   await connect()
-//   console.log("Hello from static props")
-//   // const users = mongoose.model('users')
-//   // console.log(users)
-//   return {}
-// }
 

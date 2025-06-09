@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {TestInfoInterface} from "@/components/Test/Properties";
-import {testInfoToMongo} from "@/util/TestUtils";
+import {processTestInfo} from "@/util/TestUtils";
 import DisplayTopKResult from "@/components/Test/DisplayTopXResult";
 import TextEdgy from "@/components/TextEdgy";
 import Link from "next/link";
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const PhaseDoneComponent: React.FC<Props> = ({testInfo, testReceiver}) => {
-    const testResult = testInfoToMongo(testInfo)
+    const testResult = processTestInfo(testInfo)
 
     useEffect(() => {
 

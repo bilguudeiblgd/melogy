@@ -10,6 +10,7 @@ interface SkeletonProps {
 }
 
 const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, maxWidth = "2xl", children}) => {
+    console.log("Skeleton", maxWidth)
     return (
         <>
             <div>

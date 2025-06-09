@@ -38,7 +38,7 @@ export const Phase1Qualities_QUESTION2TYPES : { [key: string]: TYPES[] } = Phase
 }, {});
 
 
-export const testInfoToMongo = (testInfo: TestInfoInterface): TypeScoreType[] => {
+export const processTestInfo = (testInfo: TestInfoInterface): TypeScoreType[] => {
     let info: {[key: string]: number} = {}
     // initialize
     for (const type in TYPES) {
@@ -71,7 +71,6 @@ export const testInfoToMongo = (testInfo: TestInfoInterface): TypeScoreType[] =>
         }
     }
     infoSorted.sort((a,b) => b.score - a.score)
-    console.log("Info: ", infoSorted)
     return infoSorted
 }
 

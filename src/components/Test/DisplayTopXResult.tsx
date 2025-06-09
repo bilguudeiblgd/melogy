@@ -63,8 +63,8 @@ interface CardProps {
 const ResultCard: React.FC<CardProps> = ({ index, type }) => {
     const typeURL = `/types/${type.toLowerCase()}`;
     const resolvedType = stringToTypeEnum(type)
+
     const description = resolvedType ? type2description[resolvedType] : ""
-    
     return (
         <Link
             target="_blank"

@@ -36,9 +36,8 @@ export const stringToTypeEnum = (str: string): TYPES | null => {
         return Object.values(TYPES).includes(value as TYPES);
     }
 
-    if (!isValidType(str.toUpperCase())) {
+    if (isValidType(str.toUpperCase())) {
         return str.toUpperCase() as TYPES
-
     }
     else return null
 }

@@ -45,19 +45,19 @@ const CopyLink: React.FC<Props> = ({userHandle}) => {
 const NotifCopiedToClipboard: React.FC = () => {
     return (
         <div className={"fixed left-1/2 -translate-x-1/2 top-4"}>
-            <div role="alert" className="alert alert-success">
+            <div role="alert" className="alert bg-secondary alert-success">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    className="h-6 w-10 shrink-0 stroke-current">
+                    className="h-6 w-6 shrink-0 stroke-current text-accent">
                     <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth="2"
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span>Copied to clipboard</span>
+                <span className="text-accent">Copied to clipboard</span>
             </div>
         </div>
     )
