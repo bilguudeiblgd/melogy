@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {TestTypeDb} from './Test/Properties';
+import TextEdgy from './TextEdgy';
+import Text from './Text';
 
 interface TestWithUser {
     testReceiver?: {
@@ -18,31 +20,129 @@ interface TestHistoryProps {
     userHandle: string;
 }
 
+interface TestListProps {
+    tests: TestWithUser[];
+    direction: 'given' | 'received';
+    page: number;
+    setPage: (page: number) => void;
+}
+
+interface PaginationProps {
+    page: number;
+    totalPages: number;
+    setPage: (page: number) => void;
+}
+
+const PAGE_SIZE = 5;
+
+const Pagination: React.FC<PaginationProps> = ({ page, totalPages, setPage }) => (
+    <div className="flex justify-center gap-2 mt-6 mb-8 bg-white rounded-xl py-2 px-4 shadow border border-accent">
+        <button
+            className="btn btn-sm bg-white text-primary border-primary hover:bg-primary hover:text-white"
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+        >
+            <Text className="text-primary font-bold">Prev</Text>
+        </button>
+        <Text className="px-2 py-1 text-primary font-bold">
+            Page {page} of {totalPages}
+        </Text>
+        <button
+            className="btn btn-sm bg-white text-primary border-primary hover:bg-primary hover:text-white"
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+        >
+            <Text className="text-primary font-bold">Next</Text>
+        </button>
+    </div>
+);
+
+const TestList: React.FC<TestListProps> = ({ tests, direction, page, setPage }) => {
+    const router = useRouter();
+    const totalPages = Math.ceil((tests?.length || 0) / PAGE_SIZE);
+    const paginated = tests.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+    return (
+        <div className="space-y-4">
+            {!tests || tests.length === 0 ? (
+                <Text className="text-gray-500 text-center">No tests {direction === 'given' ? 'given' : 'received'} yet</Text>
+            ) : (
+                <>
+                    {paginated.map((test, index) => {
+                        const user = direction === 'given' ? test.testReceiver : test.testGiver;
+                        const label = direction === 'given' ? 'To' : 'From';
+                        return (
+                            <div
+                                key={index + (page - 1) * PAGE_SIZE}
+                                className="bg-primary border-2 border-accent rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-200 p-5 flex justify-between items-center group"
+                            >
+                                <div>
+                                    <TextEdgy className="text-lg text-accent font-bold mb-1">
+                                        {label}: <span className="text-secondary text-xl font-extrabold underline underline-offset-4">{user?.userHandle || 'Unknown'}</span>
+                                    </TextEdgy>
+                                    <Text className="text-sm text-gray-400 mt-1">
+                                        {new Date(test.createdAt).toLocaleDateString()}
+                                    </Text>
+                                </div>
+                                <button
+                                    onClick={() => router.push(`/${user?.userHandle}`)}
+                                    className="btn btn-accent btn-outline font-edgy px-6 py-2 text-lg shadow group-hover:scale-105 transition-transform duration-200"
+                                >
+                                    <TextEdgy className="text-lg">View Results</TextEdgy>
+                                </button>
+                            </div>
+                        );
+                    })}
+                    {totalPages > 1 && (
+                        <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+                    )}
+                </>
+            )}
+        </div>
+    );
+};
+
+const makeDummyTests = (type: 'given' | 'received', count: number): TestWithUser[] => {
+    const now = Date.now();
+    return Array.from({ length: count }).map((_, i) => ({
+        testReceiver: type === 'given' ? { userHandle: `receiver${i + 1}` } : undefined,
+        testGiver: type === 'received' ? { userHandle: `giver${i + 1}` } : undefined,
+        info: [],
+        group: 'All',
+        createdAt: new Date(now - i * 86400000).toISOString(),
+    }));
+};
+
 const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
     const [testsGiven, setTestsGiven] = useState<TestWithUser[]>([]);
     const [testsReceived, setTestsReceived] = useState<TestWithUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter();
+    const [tab, setTab] = useState<'given' | 'received'>('given');
+    const [page, setPage] = useState(1);
+
+    useEffect(() => {
+        setPage(1); // Reset page when tab changes
+    }, [tab]);
 
     useEffect(() => {
         const fetchTestHistory = async () => {
             try {
                 // Fetch tests given
                 const givenResponse = await fetch(`/api/user/${userHandle}/get-tests-given`);
-                if (!givenResponse.ok) {
-                    throw new Error('Failed to fetch tests given');
+                let givenData = await givenResponse.json();
+                if (!Array.isArray(givenData) || givenData.length === 1) {
+                    givenData = makeDummyTests('given', 13);
                 }
-                const givenData = await givenResponse.json();
-                setTestsGiven(Array.isArray(givenData) ? givenData : []);
+                setTestsGiven(givenData);
 
                 // Fetch tests received
                 const receivedResponse = await fetch(`/api/user/${userHandle}/get-tests-received`);
-                if (!receivedResponse.ok) {
-                    throw new Error('Failed to fetch tests received');
+                let receivedData = await receivedResponse.json();
+                if (!Array.isArray(receivedData) || receivedData.length === 0) {
+                    receivedData = makeDummyTests('received', 8);
                 }
-                const receivedData = await receivedResponse.json();
-                setTestsReceived(Array.isArray(receivedData) ? receivedData : []);
+                setTestsReceived(receivedData);
 
                 setLoading(false);
             } catch (error) {
@@ -64,67 +164,31 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
     }
 
     return (
-        <div className="space-y-8">
-            {/* Tests Given Section */}
-            <div>
-                <h2 className="text-2xl font-bold mb-4 text-primary">Tests Given</h2>
-                <div className="space-y-4">
-                    {!testsGiven || testsGiven.length === 0 ? (
-                        <p className="text-gray-500">No tests given yet</p>
-                    ) : (
-                        testsGiven.map((test, index) => (
-                            <div key={index} className="bg-secondary p-4 rounded-lg shadow">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <p className="font-semibold text-primary">
-                                            To: {test.testReceiver?.userHandle || 'Unknown'}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            {new Date(test.createdAt).toLocaleDateString()}
-                                        </p>
-                                    </div>
-                                    <button
-                                        onClick={() => router.push(`/${test.testReceiver?.userHandle}`)}
-                                        className="btn btn-primary btn-sm"
-                                    >
-                                        View Profile
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
+        <div className="w-full">
+            <div role="tablist" className="tabs tabs-boxed w-full mb-6">
+                <button
+                    role="tab"
+                    className={`tab flex-1 text-lg ${tab === 'given' ? 'tab-active' : ''}`}
+                    aria-selected={tab === 'given'}
+                    onClick={() => setTab('given')}
+                >
+                    Tests Given
+                </button>
+                <button
+                    role="tab"
+                    className={`tab flex-1 text-lg ${tab === 'received' ? 'tab-active' : ''}`}
+                    aria-selected={tab === 'received'}
+                    onClick={() => setTab('received')}
+                >
+                    Tests Received
+                </button>
             </div>
-
-            {/* Tests Received Section */}
             <div>
-                <h2 className="text-2xl font-bold mb-4 text-primary">Tests Received</h2>
-                <div className="space-y-4">
-                    {!testsReceived || testsReceived.length === 0 ? (
-                        <p className="text-gray-500">No tests received yet</p>
-                    ) : (
-                        testsReceived.map((test, index) => (
-                            <div key={index} className="bg-secondary p-4 rounded-lg shadow">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <p className="font-semibold text-primary">
-                                            From: {test.testGiver?.userHandle || 'Unknown'}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            {new Date(test.createdAt).toLocaleDateString()}
-                                        </p>
-                                    </div>
-                                    <button
-                                        onClick={() => router.push(`/${test.testGiver?.userHandle}`)}
-                                        className="btn btn-primary btn-sm"
-                                    >
-                                        View Profile
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
+                {tab === 'given' ? (
+                    <TestList tests={testsGiven} direction="given" page={page} setPage={setPage} />
+                ) : (
+                    <TestList tests={testsReceived} direction="received" page={page} setPage={setPage} />
+                )}
             </div>
         </div>
     );

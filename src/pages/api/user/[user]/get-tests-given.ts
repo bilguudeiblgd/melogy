@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         await mongooseConnect()
-        console.log(mongoose.modelNames())
+        console.log("get-tests-given mongoose.modelNames(): ", mongoose.modelNames())
+        
         if (!mongoose.modelNames().includes("tests"))
             return res.status(500).json({error: 'model tests has not been initialized'});
 

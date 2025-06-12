@@ -28,7 +28,7 @@ export default function TestHistoryPage() {
 
     return (
         <Skeleton showNavbar={true} noContainer={false} maxWidth={"lg"}>
-            <div className="flex flex-col items-center mt-12">
+            <div className="flex flex-col items-center mt-12 pb-12">
                 <TextEdgy className="text-2xl text-accent mb-8">Test History</TextEdgy>
                 <div className="w-full px-4">
                     {session?.user.userHandle && (

@@ -25,6 +25,15 @@ const mongooseConnect = async () => {
   }
   try {
     cached.connection = await cached.promise
+
+    if(!mongoose.models.tests) {
+      require("@/models/Test")
+    }
+
+    if (!mongoose.models.users) {
+      require('@/models/User');
+    }
+
   } catch (e) {
     cached.promise = undefined;
     throw e;
