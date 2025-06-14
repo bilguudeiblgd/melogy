@@ -1,7 +1,8 @@
 import React from 'react';
 import {Phase0QualitiesPart1, Phase0QuestionType, TestInfoInterface} from "@/components/Test/Properties";
 import {shuffleArray} from "@/util/TestUtils";
-import { Phase0RankingList } from './Phase0Part0Component';
+import { Phase0RankingList } from './Phase0Component';
+
 
 type Props = {
     handleContinueButton: (arg: TestInfoInterface) => void;

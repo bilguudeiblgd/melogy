@@ -17,7 +17,7 @@ export const TYPES_INDEX_MAP: { [key in TYPES]: number } = {
     [TYPES.BRAINIAC]: 6,
     [TYPES.CRITIC]: 7,
     [TYPES.ROMANTIC]: 8,
-    [TYPES.TRENDSETTER]: 9,
+    [TYPES.STYL]: 9,
     [TYPES.MAVERICK]: 10,
     [TYPES.RANDOM]: 11,
     [TYPES.MOOD]: 12,
