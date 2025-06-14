@@ -16,6 +16,7 @@ declare module 'next-auth' {
         email: string;
         image: string;
         userHandle?: string;
+        groups?: string[];
     }
 
     interface Session {
@@ -66,7 +67,6 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({token, user, trigger, account, session}) {
             if (trigger == "update") {
-                console.log("update is called")
                 token.userHandle = session?.userHandle;
             }
             if (account) {
@@ -84,7 +84,7 @@ export const authOptions: NextAuthOptions = {
             // @ts-ignore
             session.accessToken = token.accessToken
             session.user.userHandle = token.userHandle
-            console.log(user)
+            console.log("user, adapter, session: ", user)
             return session
         },
 

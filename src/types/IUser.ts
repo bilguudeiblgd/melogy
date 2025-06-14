@@ -6,6 +6,7 @@ interface IUser extends Document {
     image: string;
     userHandle: string;
     emailVerified: string,
+    groups: string[];
 }
 
 export default IUser

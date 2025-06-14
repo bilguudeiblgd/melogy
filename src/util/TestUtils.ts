@@ -9,7 +9,7 @@ import {
 
 export const TYPES_INDEX_MAP: { [key in TYPES]: number } = {
     [TYPES.HUSTLE]: 0,
-    [TYPES.GUARDIAN]: 1,
+    [TYPES.PROTECTOR]: 1,
     [TYPES.EMPATH]: 2,
     [TYPES.CAPTAIN]: 3,
     [TYPES.JESTER]: 4,
@@ -17,11 +17,11 @@ export const TYPES_INDEX_MAP: { [key in TYPES]: number } = {
     [TYPES.BRAINIAC]: 6,
     [TYPES.CRITIC]: 7,
     [TYPES.ROMANTIC]: 8,
-    [TYPES.TRENDSETTER]: 9,
+    [TYPES.STYL]: 9,
     [TYPES.MAVERICK]: 10,
-    [TYPES.WILDCARD]: 11,
+    [TYPES.RANDOM]: 11,
     [TYPES.MOOD]: 12,
-    [TYPES.SAGE]: 13,
+    [TYPES.WISDOM]: 13,
 };
 
 //  great great functional programming here. Just changing data structures for efficient searching and that also gives easy code apparently
@@ -38,7 +38,7 @@ export const Phase1Qualities_QUESTION2TYPES : { [key: string]: TYPES[] } = Phase
 }, {});
 
 
-export const testInfoToMongo = (testInfo: TestInfoInterface): TypeScoreType[] => {
+export const processTestInfo = (testInfo: TestInfoInterface): TypeScoreType[] => {
     let info: {[key: string]: number} = {}
     // initialize
     for (const type in TYPES) {
@@ -71,7 +71,6 @@ export const testInfoToMongo = (testInfo: TestInfoInterface): TypeScoreType[] =>
         }
     }
     infoSorted.sort((a,b) => b.score - a.score)
-    console.log("Info: ", infoSorted)
     return infoSorted
 }
 
@@ -90,3 +89,4 @@ export function shuffleArray(array: object[]) {
     }
     return newArray;
 }
+

@@ -39,7 +39,7 @@ export default function GetHandle({callbackUrl}: Props) {
     }
 
     if (!session) {
-        return <Skeleton showNavbar={true} noContainer={false} darkTheme={false}><AccessDenied/></Skeleton>
+        return <Skeleton showNavbar={true} noContainer={false} maxWidth={"lg"}><AccessDenied/></Skeleton>
     }
 
     if (session.user.userHandle) {

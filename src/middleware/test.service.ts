@@ -13,20 +13,19 @@ export class TestService {
     }
 
 
-    async getTestsGiven(): Promise<any> {
+    getTestsGiven() {
         if (!this.session.user.userHandle)
             return null
         console.log(this.session)
-        fetch(`${this.requestURL}/user/${this.session.user.userHandle}/get-tests-given`, {
+        return fetch(`${this.requestURL}/user/${this.session.user.userHandle}/get-tests-given`, {
             headers: {
                 "Authorization": `Bearer ${this.session.accessToken}`
             }
-        }).then(async (value) => {
-            return await value.json()
-        }).catch((e) => {
-            console.log(e)
-        })
-        return null
+        }).then(data => data.json())
+            .catch((err) => {
+                console.log(err)
+                return null
+            })
     }
 
 }

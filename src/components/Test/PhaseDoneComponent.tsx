@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {TestInfoInterface} from "@/components/Test/Properties";
-import {testInfoToMongo} from "@/util/TestUtils";
+import {processTestInfo} from "@/util/TestUtils";
 import DisplayTopKResult from "@/components/Test/DisplayTopXResult";
 import TextEdgy from "@/components/TextEdgy";
 import Link from "next/link";
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const PhaseDoneComponent: React.FC<Props> = ({testInfo, testReceiver}) => {
-    const testResult = testInfoToMongo(testInfo)
+    const testResult = processTestInfo(testInfo)
 
     useEffect(() => {
 
@@ -24,7 +24,9 @@ const PhaseDoneComponent: React.FC<Props> = ({testInfo, testReceiver}) => {
 
             <TextEdgy className={"text-sm font-bold text-primary"}>You think {testReceiver} is: </TextEdgy>
             <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={testResult}/>
-
+            <div>
+                
+            </div>
             <HomeButton/>
         </div>
     );

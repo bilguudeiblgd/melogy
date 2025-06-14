@@ -1,29 +1,32 @@
 import Navbar from "@/components/Navbar";
-import React from "react";
+import React, { useEffect } from "react";
 
 
 interface SkeletonProps {
     showNavbar: boolean;
-    darkTheme: boolean;
     noContainer: boolean;
+    maxWidth: string;
     children: React.ReactNode;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({showNavbar, darkTheme = false, noContainer = false, children}) => {
+const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, maxWidth = "2xl", children}) => {
+    useEffect(() => {
+        console.log("maxWidth: ", maxWidth)
+    }, [maxWidth])
     return (
         <>
-            <div className={`${darkTheme && "bg-primary"}`}>
+            <div>
                 {
                     noContainer ?
                         <main className={`h-screen`}>
                             <div className={`w-full container px-2 mx-auto md:px-10`}>
-                                {showNavbar && <Navbar darkTheme={darkTheme}/>}
+                                {showNavbar && <Navbar/>}
                             </div>
                             {children}
                         </main>
                         :
-                        <main className={`container px-2 md:px-10 mx-auto h-screen`}>
-                            {showNavbar && <Navbar darkTheme={darkTheme}/>}
+                        <main className={`container max-w-xl px-2 md:px-10 mx-auto h-screen`}>
+                            {showNavbar && <Navbar />}
                             {children}
                         </main>
                 }
