@@ -3,6 +3,7 @@ import mongooseConnect from "@/lib/mongooseConnect";
 import Test from "@/models/Test";
 import User, {DbUser} from "@/models/User";
 import {TestTypeDb} from "@/components/Test/Properties";
+import { group } from "console";
 
 type Data = {
     status: string;
@@ -22,7 +23,7 @@ export default async function handler(
     }
 
     try {
-        const { testReceiver, testGiver, info } = JSON.parse(req.body);
+        const { testReceiver, testGiver, info, group } = JSON.parse(req.body);
         // Check if the necessary fields are present
         if (!info || !testReceiver || !testGiver) {
             return res.status(400).json({ status: "error", message: "Missing required fields" });
@@ -40,12 +41,12 @@ export default async function handler(
         if (!giverUser) {
             return res.status(404).json({ status: "error", message: "Test giver not found" });
         }
-        console.log("receiver id:", receiverUser._id)
         // Create the new test object based on the schema
         const newTest = new Test({
             testReceiver: receiverUser._id,
             testGiver: giverUser._id,
-            info
+            info: info,
+            group: group
         });
 
         // Save the test object to the database

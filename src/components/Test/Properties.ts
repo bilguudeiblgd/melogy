@@ -1,4 +1,5 @@
 import { upperCase } from "lodash";
+import {Document} from "mongoose";
 
 export enum TYPES {
     HUSTLE = "HUSTLE",
@@ -109,11 +110,18 @@ export type TypeScoreType = {
     score: number
 }
 
-export type TestTypeDb = {
+export interface TestTypeDb extends Document {
     testReceiver: string | null;
     testGiver: string | null;
     info: TypeScoreType[];
-    group: string;
+    group?: string;
+}
+
+export interface TestRequestPayload {
+    testReceiver: string;
+    testGiver: string;
+    info: TypeScoreType[];
+    group?: string;
 }
 
 export const Phase1Questions = [

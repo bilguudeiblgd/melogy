@@ -5,10 +5,10 @@ import {TestTypeDb, TYPES} from "@/components/Test/Properties";
 export interface DbUser extends IUser {
     tests_for_me: [TestTypeDb],
     tests_given: [TestTypeDb]
-    results?: [{
+    results?: {
         personality_type: string,
         score: number,
-    }]
+    }[]
     groups: string[]
 }
 

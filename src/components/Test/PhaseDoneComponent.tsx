@@ -1,9 +1,13 @@
-import React, {useEffect} from 'react';
-import {TestInfoInterface} from "@/components/Test/Properties";
+import React, {useEffect, useState} from 'react';
+import {TestInfoInterface, TYPES, TypeScoreType} from "@/components/Test/Properties";
 import {processTestInfo} from "@/util/TestUtils";
 import DisplayTopKResult from "@/components/Test/DisplayTopXResult";
 import TextEdgy from "@/components/TextEdgy";
 import Link from "next/link";
+import {useSession} from "next-auth/react";
+import {useContext} from "react";
+import {GlobalContext} from "@/pages/_app";
+import { processDuoDescription } from '@/pages/tests';
 
 const NUMBER_OF_RESULT_SHOWN = 2
 
@@ -13,19 +17,41 @@ interface Props {
 }
 
 const PhaseDoneComponent: React.FC<Props> = ({testInfo, testReceiver}) => {
-    const testResult = processTestInfo(testInfo)
+    const {data: session} = useSession();
+    const GLOBALS = useContext(GlobalContext);
+    const [userResults, setUserResults] = useState<TypeScoreType[]>([]);
+    const testResult = processTestInfo(testInfo);
 
     useEffect(() => {
+        const fetchUserResults = async () => {
+            if (!session?.user.userHandle) return;
+            try {
+                const response = await fetch(`${GLOBALS.baseURL}/api/get-results`, {
+                    method: 'POST',
+                    body: JSON.stringify({ userHandle: session.user.userHandle })
+                });
+                const data = await response.json();
+                if (data?.data?.result) {
+                    setUserResults(data.data.result);
+                }
+            } catch (error) {
+                console.error('Error fetching user results:', error);
+            }
+        };
 
-    }, [])
+        fetchUserResults();
+    }, [session?.user.userHandle, GLOBALS.baseURL]);
 
     return (
         <div className={"flex flex-col items-center"}>
-
-            <TextEdgy className={"text-sm font-bold text-primary"}>You think {testReceiver} is: </TextEdgy>
-            <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={testResult}/>
             <div>
-                
+                <TextEdgy className={"text-md font-bold text-center text-secondary"}>You think <span className="text-accent">{testReceiver}</span> is: </TextEdgy>
+                <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={testResult}/>
+            </div>
+            
+            <div className="flex flex-col items-center">
+                <TextEdgy className={"text-lg mt-8 font-bold text-center text-secondary"}>How you match with {testReceiver}: </TextEdgy>
+                <a target="_blank" className="btn btn-secondary mt-4" href={`/tests?giver=${session?.user.userHandle}&receiver=${testReceiver}`} >View Duo</a>
             </div>
             <HomeButton/>
         </div>

@@ -4,6 +4,7 @@ import Phase1Component from "@/components/Test/Phase1Component";
 import {PHASE, TestInfoInterface, TestTypeDb} from "@/components/Test/Properties";
 import {processTestInfo} from "@/util/TestUtils";
 import PhaseDoneComponent from "@/components/Test/PhaseDoneComponent";
+import {TestRequestPayload} from "@/components/Test/Properties";
 
 const defaultInitTestInfo: TestInfoInterface = {
     phase0: {
@@ -25,11 +26,14 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
     
     let testInfo: TestInfoInterface = defaultInitTestInfo
     const handleContinueButton = (testInfo: TestInfoInterface) => {
+        console.log("handleContinueButton", testInfo)
         setStage(PHASE.PHASE1)
     }
     const handleEndButton = async (testInfo: TestInfoInterface) => {
+        console.log("handleEndButton", testInfo)
+
         let info = processTestInfo(testInfo)
-        let testObject: TestTypeDb = {
+        let testObject: TestRequestPayload = {
             testReceiver: testReceiver,
             testGiver: testGiver,
             info: info,

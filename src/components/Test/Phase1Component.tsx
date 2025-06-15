@@ -24,7 +24,6 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo, testR
     const updateInfo = (res: string[]) => {
         testInfo.phase1.push(...res)
     }
-    console.log(shuffledQuestions)
     const handleClick = (groupIndex: number, index: number, chosenText: string) => {
         //        do stuff
         recordAnswers.push(chosenText)
