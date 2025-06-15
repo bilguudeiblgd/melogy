@@ -13,7 +13,7 @@ const testSchema = new Schema<TestTypeDb>({
         },
         score: Number,
     }],
-    group: {type: Schema.Types.String, required: true},
+    group: {type: Schema.Types.String, required: false, default: 'default'}
 }, {timestamps: true});
 
 // had to follow naming conventions of next-auth db adapter

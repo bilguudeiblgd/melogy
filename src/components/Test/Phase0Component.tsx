@@ -18,6 +18,7 @@ const Phase0Component: React.FC<Props> = ({handleContinueButton, testInfo, testR
     const [partOneFinished, setPartOneFinished] = useState(false)
 
     const handlePart0Continue = (arg: TestInfoInterface) => {
+        console.log("testInfo phase0", testInfo)
         setPartOneFinished(true)
     }
 

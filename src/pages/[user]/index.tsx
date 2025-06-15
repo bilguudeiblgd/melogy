@@ -171,7 +171,7 @@ const NumberTestCard: React.FC<NumberTestProps> = ({ userName, testsForMeSize, t
                     <div className="stat-value text-primary">{testsForMeSize}</div>
                 </div>
                 <div className="stat">
-                    <div className="stat-figure text-accent">
+                    <div className="stat-figure text-primary">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -185,11 +185,11 @@ const NumberTestCard: React.FC<NumberTestProps> = ({ userName, testsForMeSize, t
                         </svg>
                     </div>
                     <div className="stat-title font-bold font-primary text-primary">Total given</div>
-                    <div className="stat-value text-accent">{testsGivenSize}</div>
+                    <div className="stat-value text-primary">{testsGivenSize}</div>
                 </div>
             </div>
             <div className="w-full my-2">
-                <TextEdgy className="text-sm text-center text-accent">
+                <TextEdgy className="text-md text-center text-accent underline">
                     See all tests
                 </TextEdgy>
             </div>

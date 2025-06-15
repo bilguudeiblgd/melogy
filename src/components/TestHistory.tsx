@@ -62,6 +62,11 @@ const TestList: React.FC<TestListProps> = ({ tests, direction, page, setPage }) 
     const totalPages = Math.ceil((tests?.length || 0) / PAGE_SIZE);
     const paginated = tests.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+    console.log(`tests ${direction}: `, tests)
+    const getTestUrl = (test: TestWithUser) => {
+        return `/tests?giver=${test.testGiver?.userHandle}&receiver=${test.testReceiver?.userHandle}`;
+    }
+
     return (
         <div className="space-y-4">
             {!tests || tests.length === 0 ? (
@@ -71,6 +76,7 @@ const TestList: React.FC<TestListProps> = ({ tests, direction, page, setPage }) 
                     {paginated.map((test, index) => {
                         const user = direction === 'given' ? test.testReceiver : test.testGiver;
                         const label = direction === 'given' ? 'To' : 'From';
+                        const testUrl = getTestUrl(test);
                         return (
                             <div
                                 key={index + (page - 1) * PAGE_SIZE}
@@ -85,7 +91,7 @@ const TestList: React.FC<TestListProps> = ({ tests, direction, page, setPage }) 
                                     </Text>
                                 </div>
                                 <button
-                                    onClick={() => router.push(`/${user?.userHandle}`)}
+                                    onClick={() => router.push(testUrl)}
                                     className="btn btn-accent btn-outline font-edgy px-6 py-2 text-lg shadow group-hover:scale-105 transition-transform duration-200"
                                 >
                                     <TextEdgy className="text-lg">View Results</TextEdgy>
@@ -131,7 +137,7 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
                 // Fetch tests given
                 const givenResponse = await fetch(`/api/user/${userHandle}/get-tests-given`);
                 let givenData = await givenResponse.json();
-                if (!Array.isArray(givenData) || givenData.length === 1) {
+                if (!Array.isArray(givenData) || givenData.length === 0) {
                     givenData = makeDummyTests('given', 13);
                 }
                 setTestsGiven(givenData);
