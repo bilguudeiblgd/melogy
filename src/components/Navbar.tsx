@@ -7,6 +7,8 @@ import Logo from "@/components/Logo";
 
 const Navbar: React.FC = () => {
     const { data: session } = useSession()
+    const defaultImage = "/default-avatar.jpg"; // Default avatar image
+
     return (
         <div className="w-full">
             <div className="navbar my-2 w-full bg-transparent">
@@ -22,10 +24,14 @@ const Navbar: React.FC = () => {
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                     <div className="w-10 rounded-full">
                                         <Image
-                                            alt="Tailwind CSS Navbar component"
-                                            src={`${session.user?.image}`}
+                                            alt="User avatar"
+                                            src={session.user?.image || defaultImage}
                                             width={96}
                                             height={96}
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = defaultImage;
+                                            }}
                                         />
                                     </div>
                                 </div>
