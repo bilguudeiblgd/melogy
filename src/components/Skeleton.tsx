@@ -19,13 +19,13 @@ const Skeleton: React.FC<SkeletonProps> = ({showNavbar, noContainer = false, max
                 {
                     noContainer ?
                         <main className={`h-screen`}>
-                            <div className={`w-full container px-2 mx-auto md:px-10`}>
+                            <div className={`w-full container mx-auto px-8 md:px-10`}>
                                 {showNavbar && <Navbar/>}
                             </div>
                             {children}
                         </main>
                         :
-                        <main className={`container max-w-xl px-2 md:px-10 mx-auto h-screen`}>
+                        <main className={`container max-w-xl px-8 md:px-10 mx-auto h-screen`}>
                             {showNavbar && <Navbar />}
                             {children}
                         </main>

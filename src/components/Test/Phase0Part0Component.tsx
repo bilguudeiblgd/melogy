@@ -12,7 +12,7 @@ const Phase0Part0Component: React.FC<{
     return (
         <Phase0RankingList
             initialQualities={shuffledQuestions}
-            label={`What ${testReceiver} like`}
+            label={`What ${testReceiver} is like`}
             onContinue={(top3) => {
                 testInfo.phase0.group0 = top3;
                 handleContinueButton(testInfo);

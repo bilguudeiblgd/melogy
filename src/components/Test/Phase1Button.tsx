@@ -1,5 +1,6 @@
 import React from 'react';
 import Text from "@/components/Text";
+import TextEdgy from "@/components/TextEdgy";
 
 interface Phase1ButtonProps {
     title: string;
@@ -16,9 +17,9 @@ const Phase1Button: React.FC<Phase1ButtonProps> = ({ title, index, onClick}) => 
                     onClick(index)
                 }}
             >
-                <Text className={"text-white"}>
+                <TextEdgy className={"text-white font-bold"}>
                     {title}
-                </Text>
+                </TextEdgy>
             </button>
         </div>
     );

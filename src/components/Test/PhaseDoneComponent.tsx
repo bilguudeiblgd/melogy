@@ -50,10 +50,11 @@ const PhaseDoneComponent: React.FC<Props> = ({testInfo, testReceiver}) => {
             </div>
             
             <div className="flex flex-col items-center">
-                <TextEdgy className={"text-lg mt-8 font-bold text-center text-secondary"}>How you match with {testReceiver}: </TextEdgy>
-                <a target="_blank" className="btn btn-secondary mt-4" href={`/tests?giver=${session?.user.userHandle}&receiver=${testReceiver}`} >View Duo</a>
+                <TextEdgy className={"text-lg mt-8 font-bold text-center text-secondary"}>Your match with <span className="text-accent">{testReceiver}</span>: </TextEdgy>
+                <a target="_blank" className="btn btn-secondary mt-4" href={`/tests?giver=${session?.user.userHandle}&receiver=${testReceiver}`} >
+                    <TextEdgy className={"text-white font-bold"}>View Duo</TextEdgy>
+                </a>
             </div>
-            <HomeButton/>
         </div>
     );
 };

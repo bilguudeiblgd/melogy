@@ -121,7 +121,7 @@ const Page: React.FC = () => {
 
     if (!testAvailable) {
         return (<div>
-            <Text>Already took the test</Text>
+            <Text className={"text-secondary"}>Already took the test</Text>
             <HomeButton/>
         </div>)
     }
