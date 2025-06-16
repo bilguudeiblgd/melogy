@@ -15,7 +15,7 @@ const Phase0Part1Component: React.FC<Props> = ({handleContinueButton, testInfo, 
     return (
         <Phase0RankingList
             initialQualities={shuffledQuestions}
-            label={`What ${testReceiver} dislike`}
+            label={`What ${testReceiver} is like`}
             onContinue={(top3) => {
                 testInfo.phase0.group1 = top3;
                 handleContinueButton(testInfo);

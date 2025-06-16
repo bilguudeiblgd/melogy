@@ -18,7 +18,6 @@ const Phase0Component: React.FC<Props> = ({handleContinueButton, testInfo, testR
     const [partOneFinished, setPartOneFinished] = useState(false)
 
     const handlePart0Continue = (arg: TestInfoInterface) => {
-        console.log("testInfo phase0", testInfo)
         setPartOneFinished(true)
     }
 
@@ -55,7 +54,7 @@ const Phase0RankingList: React.FC<Phase0RankingListProps> = ({ initialQualities,
     return (
         <>
             <div className={"mb-4"}>
-                <TextEdgy className={"text-white"}>{label}</TextEdgy>
+                <TextEdgy className={"text-white text-center"}>{label}</TextEdgy>
                 <TextEdgy className="text-accent text-sm mt-2">Drag and drop to rank your top 3</TextEdgy>
             </div>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -70,20 +69,23 @@ const Phase0RankingList: React.FC<Phase0RankingListProps> = ({ initialQualities,
                             {qualities.map((item, i) => (
                                 <Draggable key={item.text} draggableId={item.text} index={i}>
                                     {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            className={`flex items-center mb-2 p-2 rounded-lg border-2 shadow cursor-grab transition-colors duration-200
-                                                ${i < 3 ? 'bg-accent/80 border-accent text-primary font-bold ring-2 ring-accent' : 'bg-accent/25 border-accent'}
-                                                ${snapshot.isDragging ? 'bg-accent/20 border-accent' : 'border-dashed'}
-                                            `}
-                                            style={{...provided.draggableProps.style, userSelect: 'none'}}
-                                        >
-                                            <span className={`mr-3 text-xl font-bold ${i < 3 ? 'text-primary' : 'text-accent'}`}>☰</span>
-                                            <span className={`font-edgy text-lg ${i < 3 ? 'text-primary' : 'text-primary/80'}`}>{item.text}</span>
-                                            {i < 3 && <span className="ml-2 px-2 py-1 rounded bg-primary text-accent text-xs font-bold">TOP {i+1}</span>}
-                                        </div>
+                                        <>
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                className={`flex items-center mb-2 p-2 rounded-lg border-2 shadow cursor-grab transition-colors duration-200
+                                                    ${i < 3 ? 'bg-accent/80 border-accent text-primary font-bold ring-2 ring-accent' : 'bg-accent/20 border-accent'}
+                                                    ${snapshot.isDragging ? 'bg-accent/20 border-accent' : 'border-dashed'}
+                                                `}
+                                                style={{...provided.draggableProps.style, userSelect: 'none'}}
+                                            >
+                                                <span className={`mr-3 text-xl font-bold ${i < 3 ? 'text-primary' : 'text-accent'}`}>☰</span>
+                                                <span className={`font-edgy text-lg ${i < 3 ? 'text-primary' : 'text-primary/80'}`}>{item.text}</span>
+                                                {i < 3 && <span className="ml-2 px-2 py-1 rounded bg-primary text-accent text-xs font-bold">TOP {i+1}</span>}
+                                            </div>
+                                            {i === 2 && <div className="border-t-2 border-dashed border-accent/50 my-2"></div>}
+                                        </>
                                     )}
                                 </Draggable>
                             ))}

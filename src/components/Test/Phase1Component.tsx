@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Phase1Questions, Phase1QuestionType, TestInfoInterface} from "@/components/Test/Properties";
+import React, { useState } from 'react';
+import { Phase1Questions, Phase1QuestionType, TestInfoInterface } from "@/components/Test/Properties";
 import Phase1Button from "@/components/Test/Phase1Button";
-import {shuffleArray} from "@/util/TestUtils";
+import { shuffleArray } from "@/util/TestUtils";
 import TextEdgy from "@/components/TextEdgy";
 import Loading from "@/components/Loading";
 
@@ -16,7 +16,7 @@ let recordAnswers: string[] = []
 
 const shuffledQuestions = shuffleArray(Phase1Questions) as Phase1QuestionType[]
 
-const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo, testReceiver}) => {
+const Phase1Component: React.FC<Props> = ({ handleContinueButton, testInfo, testReceiver }) => {
     const [groupIndex, setGroupIndex] = useState(0);
     const [twoQuestions, setTwoQuestions] = useState<Phase1QuestionType[]>([shuffledQuestions[0], shuffledQuestions[1]]);
     const [loading, setLoading] = useState(false)
@@ -49,16 +49,19 @@ const Phase1Component: React.FC<Props> = ({handleContinueButton, testInfo, testR
 
     }
     if (loading) {
-        return <Loading/>
+        return <Loading />
     }
     return (
         <>
             <TextEdgy className={"mb-4 text-white"}>Which one is {testReceiver} most likely to do?</TextEdgy>
-            {groupIndex <= 12 ? twoQuestions.map((question: Phase1QuestionType, index: number) =>
+
+            <div className={"flex flex-col items-center"}>
+                {groupIndex <= 12 ? twoQuestions.map((question: Phase1QuestionType, index: number) =>
                     <Phase1Button key={index} title={question.text} index={index}
-                                  onClick={() => handleClick(groupIndex, index, question.text)}/>)
-                : <TextEdgy>SUCCESS</TextEdgy>
-            }
+                        onClick={() => handleClick(groupIndex, index, question.text)} />)
+                    : <TextEdgy>SUCCESS</TextEdgy>
+                }
+            </div>
         </>
     );
 };

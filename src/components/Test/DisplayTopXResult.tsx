@@ -93,7 +93,7 @@ const ResultCard: React.FC<CardProps> = ({ index, type }) => {
                     style={{
                         color: TYPE_COLORS[index],
                         fontWeight: 900,
-                        fontSize: "2.2rem",
+                        fontSize: "1.8rem",
                         lineHeight: 1,
                     }}
                 >
