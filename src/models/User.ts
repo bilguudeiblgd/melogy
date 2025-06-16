@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: '/default-avatar.png',
+        default: null,
     },
     createdAt: {
         type: Date,
