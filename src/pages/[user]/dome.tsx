@@ -44,8 +44,8 @@ const Page: React.FC = () => {
                 return await response.json();
             }
 
-            testExistence().then(() => {
-                setTestExists(true)
+            testExistence().then((data) => {
+                setTestExists(data.data != null)
             })
 
         }
