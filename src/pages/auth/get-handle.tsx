@@ -117,40 +117,46 @@ export default function GetHandlePage() {
 
     return (
         <Skeleton showNavbar={true} noContainer={false} maxWidth={"lg"}>
-            <div className="hero min-h-full bg-base-200">
-                <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center lg:text-left lg:pl-8">
-                        <TextEdgy className={"text-5xl font-bold"}>Get Your Handle!</TextEdgy>
-                        <div className="py-6">
-                            <Text>Choose a handle for yourself.</Text>
-                            <ul className="list-disc list-inside pl-4 pt-2">
-                                <li>Will be displayed as your username.</li>
-                                <li>People will use it to find your test.</li>
-                            </ul>
-                        </div>
+            <div className={"flex margin-auto bg-secondary rounded-lg flex-col items-center mt-24"}>
+                <TextEdgy className={"text-primary text-center text-2xl mt-4 mb-4"}>Get Handle!</TextEdgy>
+                <div className={"flex flex-col sm:flex-row items-center justify-center"}>
+                    <div
+                        className={`my-6 w-full max-w-xs sm:mr-4 ${!submitAllowed && "tooltip tooltip-open tooltip-primary"}`}
+                        data-tip={feedbackStatus}>
+                        <input className={"input input-bordered input-primary "}
+                               id={"handle"}
+                               value={handle}
+                               onChange={(e) => textHandler(e)}
+                                disabled={isSubmitting}/>
                     </div>
-                    <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                        <div className="card-body">
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Handle</span>
-                                </label>
-                                <input type="text" placeholder="yourhandle"
-                                       className={`input input-bordered ${feedbackStatus.toLowerCase().includes('not available') || feedbackStatus.toLowerCase().includes('exists') ? 'input-error' : ''} ${feedbackStatus.toLowerCase().includes('available') ? 'input-success' : ''}`}
-                                       id={"handle"}
-                                       value={handle}
-                                       onChange={(e) => textHandler(e)}/>
-                                <label className="label">
-                                    <span className="label-text-alt">{feedbackStatus}</span>
-                                </label>
-                            </div>
-                            <div className="form-control mt-6">
-                                <button onClick={handleSubmit} className="btn btn-primary" disabled={!submitAllowed}>
-                                    Submit
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {submitAllowed ? (
+                            <button onClick={handleSubmit} className={"btn btn-primary text-base-100"} disabled={isSubmitting}>
+                                {isSubmitting ? <span className="loading loading-spinner"></span> :
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                    </svg>
+                                }
+                                Submit
+                            </button>)
+                        :
+                        (<button className={`btn btn-secondary ${!submitAllowed && "btn-disabled"} text-base-100`}>
+                            Submit
+                        </button>)
+                    }
+                </div>
+                <div className="mb-4">
+                    <Text className={"text-primary/80"}>Choose handle for yourself</Text>
+                    <Text className={"text-primary/80"}>- Will be displayed as your username</Text>
+                    <Text className={"text-primary/80"}>- People will use it to do your test</Text>
                 </div>
             </div>
         </Skeleton>

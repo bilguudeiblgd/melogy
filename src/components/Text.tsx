@@ -8,7 +8,7 @@ interface TextProps {
 }
 
 const Text = ({ children, className = '' }: TextProps) => {
-    return <p className={`${className} text-secondary font-primary`}>{children}</p>;
+    return <p className={`${className} font-primary`}>{children}</p>;
 };
 
 export default Text;
