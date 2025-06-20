@@ -109,6 +109,10 @@ const TestDonePage: React.FC = () => {
         );
     }
 
+    if(!session?.user?.userHandle) {
+        return <GetHandle callbackUrl={router.asPath} />
+    }
+
     if (!testObject) {
         return (
             <Skeleton showNavbar={false} noContainer={true} maxWidth={"lg"}>
