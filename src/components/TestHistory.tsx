@@ -143,6 +143,7 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
                 const receivedResponse = await fetch(`/api/user/${userHandle}/get-tests-received`);
                 let receivedData = await receivedResponse.json() as TestWithUser[] | null;
                 setTestsReceived(receivedData || []);
+
                 setLoading(false);
             } catch (error) {
                 setError(error instanceof Error ? error.message : 'An error occurred');
