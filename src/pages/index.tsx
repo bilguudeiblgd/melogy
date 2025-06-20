@@ -20,11 +20,13 @@ export default function Home() {
     const { data: session, status } = useSession()
     const router = useRouter()
 
-    if (session && session.user && !session.user.userHandle) {
-        return <GetHandle callbackUrl={"/"} />
-    }
+    useEffect(() => {
+        if (status === "authenticated" && session && !session.user.userHandle) {
+            router.push("/auth/get-handle?callbackUrl=/");
+        }
+    }, [session, status, router]);
 
-    if (status === "loading") {
+    if (status === "loading" || (status === "authenticated" && session && !session.user.userHandle)) {
         return <Loading />
     }
     // #TODO: Bug 1: UI broken on phones - easy

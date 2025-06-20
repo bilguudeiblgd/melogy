@@ -4,7 +4,6 @@ import {signIn, useSession} from 'next-auth/react';
 import Skeleton from "@/components/Skeleton";
 import TestComponent from "@/components/Test/TestComponent";
 import Loading from "@/components/Loading";
-import GetHandle from "@/components/GetHandle";
 import {GlobalContext} from "@/pages/_app";
 import InAppBrowserWarning from "@/components/InAppBrowserWarning";
 import InAppSpy from "inapp-spy";
@@ -29,6 +28,10 @@ const Page: React.FC = () => {
 
     useEffect(() => {
         if (status === "authenticated") {
+            if (!session.user.userHandle) {
+                router.replace(`/auth/get-handle?callbackUrl=${encodeURIComponent(currentURL)}`);
+                return;
+            }
             const testGiver = session?.user?.userHandle
             const testExistence = async () => {
                 const response = await fetch(`${GLOBALS.baseURL}/api/test/exists`, {
@@ -81,7 +84,7 @@ const Page: React.FC = () => {
 
     // if user doesn't have handle
     if (session && !session.user.userHandle) {
-        return <GetHandle callbackUrl={currentURL}/>
+        return <Loading />;
     }
 
     if (session && session.user.userHandle === testReceiver) {

@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {TestRequestPayload, TypeScoreType} from "@/components/Test/Properties";
+import React, { useEffect, useState } from 'react';
+import { TestRequestPayload, TypeScoreType } from "@/components/Test/Properties";
 import DisplayTopKResult from "@/components/Test/DisplayTopXResult";
 import TextEdgy from "@/components/TextEdgy";
-import {useRouter} from "next/router";
-import {HomeButton} from "@/components/Test/PhaseDoneComponent";
+import { useRouter } from "next/router";
+import { HomeButton } from "@/components/Test/PhaseDoneComponent";
 import Skeleton from "@/components/Skeleton";
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import GetHandle from '@/components/GetHandle';
 
 const NUMBER_OF_RESULT_SHOWN = 2;
@@ -18,23 +18,20 @@ const TestDonePage: React.FC = () => {
 
     const { data: session, status } = useSession();
 
-    // try {
-    //     const response = await fetch('/api/test/send', {
-    //         method: 'POST',
-    //         body: JSON.stringify(testObject),
-    //     });
-
-
     useEffect(() => {
         setError(null)
-        const currentUrl = router.asPath;
         
         if (status === "unauthenticated") {
-            // Optionally, pass callbackUrl to return after login
             router.replace(`/auth/signin?callbackUrl=${encodeURIComponent(router.asPath)}`);
+            return;
         }
 
         if (status === "authenticated") {
+            if (!session.user.userHandle) {
+                router.replace(`/auth/get-handle?callbackUrl=${encodeURIComponent(router.asPath)}`);
+                return;
+            }
+
             const testObjectParam = router.query.testObject as string | undefined;
             if (!testObjectParam) {
                 setError("No test results found");
@@ -109,19 +106,11 @@ const TestDonePage: React.FC = () => {
         );
     }
 
-    if(!session?.user?.userHandle) {
-        return <GetHandle callbackUrl={router.asPath} />
-    }
-
     if (!testObject) {
         return (
             <Skeleton showNavbar={false} noContainer={true} maxWidth={"lg"}>
                 <div className="flex flex-col items-center justify-center min-h-[60vh]">
-                    {!session?.user?.userHandle ? (
-                        <GetHandle callbackUrl={router.asPath} />
-                    ) : (
-                        <TextEdgy className="text-primary text-xl">Loading results...</TextEdgy>
-                    )}
+                    <TextEdgy className="text-primary text-xl">Loading results...</TextEdgy>
                 </div>
             </Skeleton>
         );
@@ -134,16 +123,16 @@ const TestDonePage: React.FC = () => {
                     <TextEdgy className={"text-md font-bold text-center text-secondary"}>
                         You think <span className="text-accent">{testObject.testReceiver}</span> is:
                     </TextEdgy>
-                    <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={testObject.info}/>
+                    <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={testObject.info} />
                 </div>
-                
+
                 <div className="flex flex-col items-center">
                     <TextEdgy className={"text-lg mt-8 font-bold text-center text-secondary"}>
                         Your match with <span className="text-accent">{testObject.testReceiver}</span>:
                     </TextEdgy>
-                    <a 
-                        target="_blank" 
-                        className={`btn btn-secondary mt-4${!testSendResolved ? ' pointer-events-none opacity-50' : ''}`} 
+                    <a
+                        target="_blank"
+                        className={`btn btn-secondary mt-4${!testSendResolved ? ' pointer-events-none opacity-50' : ''}`}
                         href={`/tests?giver=${testObject.testGiver}&receiver=${testObject.testReceiver}`}
                         tabIndex={testSendResolved ? 0 : -1}
                         aria-disabled={!testSendResolved}
