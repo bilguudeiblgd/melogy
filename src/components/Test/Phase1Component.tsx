@@ -36,10 +36,10 @@ const Phase1Component: React.FC<Props> = ({ handleContinueButton, testInfo, test
                 }
                 updateInfo(recordAnswers)
                 handleContinueButton(testInfo);
-                console.log("LAst chosen test: ", chosenText)
+                console.log("Last chosen test: ", chosenText)
                 setLoading(false)
 
-            }, 1000)
+            }, 500)
             setLoading(true)
             return
         }
@@ -48,13 +48,11 @@ const Phase1Component: React.FC<Props> = ({ handleContinueButton, testInfo, test
         setGroupIndex(groupIndex + 1);
 
     }
-    if (loading) {
-        return <Loading />
-    }
+    
     return (
         <>
             <TextEdgy className={"mb-4 text-white"}>Which one is {testReceiver} most likely to do?</TextEdgy>
-
+            {loading ? <Loading/> :
             <div className={"flex flex-col items-center"}>
                 {groupIndex <= 12 ? twoQuestions.map((question: Phase1QuestionType, index: number) =>
                     <Phase1Button key={index} title={question.text} index={index}
@@ -62,6 +60,7 @@ const Phase1Component: React.FC<Props> = ({ handleContinueButton, testInfo, test
                     : <TextEdgy>SUCCESS</TextEdgy>
                 }
             </div>
+            }
         </>
     );
 };

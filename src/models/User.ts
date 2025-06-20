@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose from 'mongoose';
 import IUser from "@/types/IUser";
 import {TestTypeDb, TYPES} from "@/components/Test/Properties";
 
@@ -12,13 +12,38 @@ export interface DbUser extends IUser {
     groups: string[]
 }
 
-const userSchema = new Schema<DbUser>({
-    name: String,
-    email: String,
-    image: String,
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
     userHandle: {
         type: String,
-        required: false
+        required: true,
+        unique: true,
+        validate: {
+            validator: function(v: string) {
+                return /^[a-zA-Z0-9]{8,}$/.test(v);
+            },
+            message: 'userHandle must be at least 8 characters long and contain only letters and numbers'
+        }
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        required: false, // Not required for Google auth
+    },
+    image: {
+        type: String,
+        default: null,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
     emailVerified: String,
     tests_for_me: [{type: mongoose.SchemaTypes.ObjectId, ref: "tests"}],
@@ -43,4 +68,4 @@ const userSchema = new Schema<DbUser>({
 }, {timestamps: true});
 
 // had to follow naming conventions of next-auth db adapter
-export default mongoose.models.users || mongoose.model<DbUser>('users', userSchema);
+export default mongoose.models.users || mongoose.model('users', userSchema);

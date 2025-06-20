@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import Phase0Component from "@/components/Test/Phase0Component";
 import Phase1Component from "@/components/Test/Phase1Component";
-import {PHASE, TestInfoInterface, TestTypeDb} from "@/components/Test/Properties";
+import {PHASE, TestInfoInterface, TestTypeDb, TestRequestPayload} from "@/components/Test/Properties";
 import {processTestInfo} from "@/util/TestUtils";
 import PhaseDoneComponent from "@/components/Test/PhaseDoneComponent";
-import {TestRequestPayload} from "@/components/Test/Properties";
+import { useRouter } from 'next/router';
+import { signIn, useSession } from 'next-auth/react';
+import TextEdgy from "@/components/TextEdgy";
 
 const defaultInitTestInfo: TestInfoInterface = {
     phase0: {
@@ -16,44 +18,33 @@ const defaultInitTestInfo: TestInfoInterface = {
 
 type Props = {
     testReceiver: string;
-    testGiver: string;
 };
 
+const TestComponent: React.FC<Props> = ({testReceiver}) => {
+    const router = useRouter();
+    const { data: session } = useSession();
+    const [stage, setStage] = useState<PHASE>(PHASE.PHASE0);
 
-const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
-    const [stage, setStage] = useState<PHASE>(PHASE.PHASE0)
-    // initialize eliminatedQualities
-    
     let testInfo: TestInfoInterface = defaultInitTestInfo
-    const handleContinueButton = (testInfo: TestInfoInterface) => {
-        console.log("handleContinueButton", testInfo)
-        setStage(PHASE.PHASE1)
-    }
-    const handleEndButton = async (testInfo: TestInfoInterface) => {
-        console.log("handleEndButton", testInfo)
 
-        let info = processTestInfo(testInfo)
-        let testObject: TestRequestPayload = {
+    const [testObject, setTestObject] = useState<TestRequestPayload | null>(null);
+
+    const handleContinueButton = (testInfo: TestInfoInterface) => {
+        setStage(PHASE.PHASE1);
+    }
+
+    const handleEndButton = async (testInfo: TestInfoInterface) => {
+        const info = processTestInfo(testInfo);
+        const newTestObject: TestRequestPayload = {
             testReceiver: testReceiver,
-            testGiver: testGiver,
+            testGiver: undefined,
             info: info,
             group: "default"
-        }
-        try {
-            const response = await fetch('/api/test/send', {
-                method: 'POST',
-                body: JSON.stringify(testObject),
-            });
-
-            const result = await response.json()
-            console.log("Response from server:", result);
-        } catch (error) {
-            console.error("Error while sending test info:", error);
-        }
-
-        setStage(PHASE.PHASE_DONE)
-
+        };
+        setTestObject(newTestObject);
+        setStage(PHASE.PHASE_DONE);
     }
+
     return (
         <div className="min-h-screen flex flex-col items-center mt-10">
             {stage === PHASE.PHASE0 && <Phase0Component
@@ -61,8 +52,26 @@ const TestComponent: React.FC<Props> = ({testReceiver, testGiver}) => {
             />}
             {stage === PHASE.PHASE1 && <Phase1Component
                 handleContinueButton={handleEndButton} testInfo={testInfo} testReceiver={testReceiver} />}
-            {stage === PHASE.PHASE_DONE && <PhaseDoneComponent
-                testInfo={testInfo} testReceiver={testReceiver} />}
+            {stage === PHASE.PHASE_DONE && testObject && (
+                <div className="flex flex-col items-center justify-center min-h-[60vh]">
+                    <TextEdgy className="text-accent text-xl mb-8">Test completed!</TextEdgy>
+                    {session?.user ? (
+                        <button 
+                            onClick={() => router.push(`/${testReceiver}/test-done?testObject=${encodeURIComponent(JSON.stringify(testObject))}`)}
+                            className="btn btn-secondary"
+                        >
+                            <TextEdgy className="text-white">See results</TextEdgy>
+                        </button>
+                    ) : (
+                        <button 
+                            onClick={() => signIn(undefined, { callbackUrl: `/${testReceiver}/test-done?testObject=${encodeURIComponent(JSON.stringify(testObject))}` })}
+                            className="btn btn-secondary"
+                        >
+                            <TextEdgy className="text-white">Sign in to see results</TextEdgy>
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

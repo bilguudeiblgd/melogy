@@ -7,11 +7,7 @@ export const ReNavigation = ({ path, }: { path: string }) => {
     const defaultPath = "/"
     const router = useRouter()
     useEffect(() => {
-        router.push(path).then((state) => {
-            if(!state) router.replace(defaultPath).catch((e) => {
-                console.log(e)
-            })
-        })
+        router.push(path)
     }, [path, router])
     return (
         <Loading/>

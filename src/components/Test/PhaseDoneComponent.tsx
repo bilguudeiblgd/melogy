@@ -13,9 +13,10 @@ const NUMBER_OF_RESULT_SHOWN = 2
 
 interface Props {
     testInfo: TestInfoInterface,
-    testReceiver: string
+    testReceiver: string,
 }
 
+// no longer used
 const PhaseDoneComponent: React.FC<Props> = ({testInfo, testReceiver}) => {
     const {data: session} = useSession();
     const GLOBALS = useContext(GlobalContext);

@@ -32,6 +32,7 @@ export default function Page() {
     const [receiverTopType, setReceiverTopType] = useState<TYPES | null>(null);
 
     const { data: session } = useSession();
+    const currentUserHandle = session?.user.userHandle;
 
     useEffect(() => {
         const fetchTest = async () => {
@@ -71,7 +72,6 @@ export default function Page() {
         return <AccessDenied />
     }
 
-    
 
     const renderTopTypes = (info: TypeScoreType[]) => {
         const topThree = info.slice(0, 3);
@@ -111,21 +111,34 @@ export default function Page() {
     return (
         <Skeleton showNavbar={true} noContainer={false} maxWidth={"lg"}>
             <div className="py-8">
-                <TextEdgy className="text-2xl text-center text-secondary font-bold mb-6">
-                    {giver} {"->"} {receiver}
-                </TextEdgy>
+                {/* <TextEdgy className="text-2xl text-center text-secondary font-bold mb-6">
+                    Your type: <span className="text-accent">{giverTopType}</span>
+                </TextEdgy> */}
 
                 {loading ? (
                     <div>Loading...</div>
                 ) : testData ? (
                     <div className="space-y-4">
                         <TextEdgy className="text-lg text-accent text-center">
-                            <span className="text-secondary">Duo dynamic:</span> {processDuoDescription(giverTopType, receiverTopType)}
+                            <span className="text-secondary">Your match with {currentUserHandle}:</span> {processDuoDescription(giverTopType, receiverTopType)}
                         </TextEdgy>
-
-                        <div>
+                    {
+                        currentUserHandle === giver ? (
+                            <div className="">
+                            <TextEdgy className="mt-10 mb-4 text-lg text-secondary text-center">
+                                What you think {receiver}{"'"}s type is:
+                            </TextEdgy>
                             {renderTopTypes(testData.info)}
                         </div>
+                        ) : (
+                            <div className="">
+                            <TextEdgy className="mt-10 mb-4 text-lg text-secondary text-center">
+                                What {giver} thinks your type is:
+                            </TextEdgy>
+                            {renderTopTypes(testData.info)}
+                        </div>
+                        )
+                    }
                     </div>
                 ) : (
                     <TextEdgy className="text-lg text-gray-600">

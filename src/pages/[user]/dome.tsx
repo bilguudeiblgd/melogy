@@ -4,25 +4,20 @@ import {signIn, useSession} from 'next-auth/react';
 import Skeleton from "@/components/Skeleton";
 import TestComponent from "@/components/Test/TestComponent";
 import Loading from "@/components/Loading";
-import GetHandle from "@/components/GetHandle";
 import {GlobalContext} from "@/pages/_app";
 import InAppBrowserWarning from "@/components/InAppBrowserWarning";
 import InAppSpy from "inapp-spy";
 import Text from "@/components/Text";
 import {HomeButton} from "@/components/Test/PhaseDoneComponent";
 import { ReNavigation } from '@/components/ReNavigation';
+import { TestRequestPayload } from '@/components/Test/Properties';
 
 
-// interface DomePageProps {
-//     testGiver: IUser;
-//     testReceiver: string | null;
-// }
 
 const Page: React.FC = () => {
     const router = useRouter();
-    const [inapp, setInapp] = useState<boolean>(false)
     const [testReceiverExists, setTestReceiverExists] = useState<boolean | undefined>(undefined)
-    const [testAvailable, setTestAvailable] = useState<boolean | undefined>(undefined)
+    const [testExists, setTestExists] = useState<boolean | undefined>(undefined)
 
     const {data: session, status} = useSession();
     const GLOBALS = useContext(GlobalContext)
@@ -30,12 +25,30 @@ const Page: React.FC = () => {
     const currentURL = `/${router.query.user}/dome`
     const testReceiverUrl = router.query.user as string | undefined
     const testReceiver = testReceiverUrl
-    const testGiver = session?.user
 
-    // navigators can't be accessed in server side
     useEffect(() => {
-        const {isInApp} = InAppSpy()
-        setInapp(isInApp)
+        if (status === "authenticated") {
+            if (!session.user.userHandle) {
+                router.replace(`/auth/get-handle?callbackUrl=${encodeURIComponent(currentURL)}`);
+                return;
+            }
+            const testGiver = session?.user?.userHandle
+            const testExistence = async () => {
+                const response = await fetch(`${GLOBALS.baseURL}/api/test/exists`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        testGiver: testGiver,
+                        testReceiver: testReceiver
+                    }),
+                })
+                return await response.json();
+            }
+
+            testExistence().then(() => {
+                setTestExists(true)
+            })
+
+        }
 
         const userExists = async (testReceiver: string | undefined) => {
             if (!testReceiver) return null
@@ -46,50 +59,23 @@ const Page: React.FC = () => {
             return await response.json();
         }
 
-        const queryTest = async (testReceiver: string | undefined, testGiver: string | undefined) => {
-            if (!testReceiver) return null
-            if (!testGiver) return null
-            const response = await fetch(`${GLOBALS.baseURL}/api/test/exists`, {
-                method: 'POST',
-                body: JSON.stringify({testReceiver: testReceiver, testGiver: testGiver}),
-            })
-            return await response.json();
-        }
-
         userExists(testReceiver).then((res) => {
             if (res == null) {
                 return
             }
             setTestReceiverExists(res.user != null)
 
-            queryTest(testReceiver, testGiver?.userHandle).then((res) => {
-                console.log(res)
-                if (res == null) {
-                    return
-                }
-                setTestAvailable(res.data == null)
-            }).catch(() => {
-            })
 
         }).catch(() => {
             setTestReceiverExists(false)
         })
 
-    }, [GLOBALS.baseURL, router, testGiver?.userHandle, testReceiver]);
+    }, [GLOBALS.baseURL, router, testReceiver, status, session]);
 
     if (!testReceiver) {
         return <div>
         not a good path
         </div>
-    }
-
-    if (inapp) return (<InAppBrowserWarning/>)
-
-    // unauthenticated user
-    if (status === "unauthenticated") {
-        signIn("google", {
-            callbackUrl: `/${router.query.user}/dome` || '/'
-        })
     }
 
     if (status === "loading") {
@@ -98,11 +84,22 @@ const Page: React.FC = () => {
 
     // if user doesn't have handle
     if (session && !session.user.userHandle) {
-        return <GetHandle callbackUrl={currentURL}/>
+        return <Loading />;
     }
 
     if (session && session.user.userHandle === testReceiver) {
-        return <ReNavigation path={`/`}/>
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh'
+            }}>
+                <Text>You can{"'"}t take a test for yourself.</Text>
+                <HomeButton/>
+            </div>
+        )
     }
 
     if (testReceiverExists === undefined) {
@@ -115,22 +112,15 @@ const Page: React.FC = () => {
             <HomeButton/>
         </div>)
     }
-    if (testAvailable === undefined) {
-        return <Loading/>
+
+    if (testExists) {
+        return <ReNavigation path={`/tests?giver=${session?.user?.userHandle}&receiver=${testReceiver}`}/>
     }
-
-    if (!testAvailable) {
-        return (<div>
-            <Text className={"text-secondary"}>Already took the test</Text>
-            <HomeButton/>
-        </div>)
-    }
-
-
+  
     return (
-        <Skeleton showNavbar={true} noContainer={true} maxWidth={"lg"}>
-            {testReceiver && testGiver && testGiver.userHandle &&
-                <TestComponent testGiver={testGiver.userHandle} testReceiver={testReceiver}/>}
+        <Skeleton showNavbar={false} noContainer={true} maxWidth={"lg"}>
+            {testReceiver &&
+                <TestComponent testReceiver={testReceiver}/>}
         </Skeleton>
     );
 };
