@@ -18,7 +18,7 @@ declare module 'next-auth' {
         id: string
         name: string;
         email: string;
-        image: string;
+        image: string | null;
         userHandle?: string;
         groups?: string[];
     }
@@ -90,7 +90,7 @@ export const authOptions: NextAuthOptions = {
                         userHandle: user.userHandle,
                         name: user.name,
                         email: user.email || `${user.userHandle}@temp.com`,
-                        image: null
+                        image: user.image
                     };
                 } catch (error: any) {
                     console.error("[Auth] Error:", error?.message);
@@ -118,6 +118,13 @@ export const authOptions: NextAuthOptions = {
             session.user.userHandle = token.userHandle;
             return session;
         },
+        // async redirect({ url, baseUrl }) {
+        //     console.log("redirect", url, baseUrl);
+        //     console.log("origin", new URL(url).origin)
+        //     if (url.startsWith("/")) return `${baseUrl}${url}`
+        //     if (new URL(url).origin === baseUrl) return url
+        //     return baseUrl
+        //   }
     },
     pages: {
         signIn: "/auth/signin",

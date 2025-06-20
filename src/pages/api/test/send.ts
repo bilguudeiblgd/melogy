@@ -41,6 +41,13 @@ export default async function handler(
         if (!giverUser) {
             return res.status(404).json({ status: "error", message: "Test giver not found" });
         }
+
+        // Check if a test already exists with the same giver and receiver
+        const existingTest = await Test.findOne({ testReceiver: receiverUser._id, testGiver: giverUser._id });
+        if (existingTest) {
+            return res.status(409).json({ status: "error", message: "A test between these users already exists." });
+        }
+
         // Create the new test object based on the schema
         const newTest = new Test({
             testReceiver: receiverUser._id,

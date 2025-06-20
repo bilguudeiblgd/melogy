@@ -136,23 +136,15 @@ const TestHistory: React.FC<TestHistoryProps> = ({userHandle}) => {
             try {
                 // Fetch tests given
                 const givenResponse = await fetch(`/api/user/${userHandle}/get-tests-given`);
-                let givenData = await givenResponse.json();
-                if (!Array.isArray(givenData) || givenData.length === 0) {
-                    givenData = makeDummyTests('given', 13);
-                }
-                setTestsGiven(givenData);
+                let givenData = await givenResponse.json() as TestWithUser[] | null;
+                setTestsGiven(givenData || []);
 
                 // Fetch tests received
                 const receivedResponse = await fetch(`/api/user/${userHandle}/get-tests-received`);
-                let receivedData = await receivedResponse.json();
-                if (!Array.isArray(receivedData) || receivedData.length === 0) {
-                    receivedData = makeDummyTests('received', 8);
-                }
-                setTestsReceived(receivedData);
-
+                let receivedData = await receivedResponse.json() as TestWithUser[] | null;
+                setTestsReceived(receivedData || []);
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching test history:', error);
                 setError(error instanceof Error ? error.message : 'An error occurred');
                 setLoading(false);
             }

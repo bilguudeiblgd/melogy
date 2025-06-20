@@ -119,7 +119,7 @@ export interface TestTypeDb extends Document {
 
 export interface TestRequestPayload {
     testReceiver: string;
-    testGiver: string;
+    testGiver?: string;
     info: TypeScoreType[];
     group?: string;
 }

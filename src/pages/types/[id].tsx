@@ -4,6 +4,8 @@ import {GetStaticPaths, GetStaticProps, InferGetStaticPropsType} from "next";
 import Skeleton from "@/components/Skeleton";
 import markDownToHtml from "@/util/markDownToHtml";
 import TextEdgy from "@/components/TextEdgy";
+import path from "path";
+import fs from "fs";
 
 interface ContentPageProps {
     id: string;
@@ -52,11 +54,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 export const getStaticProps = (async (context) => {
-    // when URL is localhost, it doesn't work. Why?
-    console.log(process.env.NEXT_PUBLIC_BASE_URL)
-    const serverURL = process.env.NEXT_PUBLIC_BASE_URL
-
-    if (!context.params || serverURL == undefined) {
+    if (!context.params) {
         return {
             notFound: true
         }
@@ -67,24 +65,23 @@ export const getStaticProps = (async (context) => {
             notFound: true
         }
     }
-    const res = await fetch(`${serverURL}/types_markdowns/${id}.mdx`)
 
-    if (!res) {
+    const filePath = path.join(process.cwd(), 'public', 'types_markdowns', `${id}.mdx`);
+
+    try {
+        const md: string = fs.readFileSync(filePath, 'utf-8');
+        const mdHtml: string = await markDownToHtml(md)
+        return {
+            props: {
+                id,
+                markdown: mdHtml
+            },
+        };
+    } catch (error) {
+        console.error("Error reading markdown file:", error);
         return {
             notFound: true
         }
     }
-
-
-    const md: string = await res.text()
-    const mdHtml: string = await markDownToHtml(md)
-    console.log(mdHtml)
-    return {
-        props: {
-            id,
-            markdown: mdHtml
-        },
-    };
-
 }) satisfies GetStaticProps<ContentPageProps>
 

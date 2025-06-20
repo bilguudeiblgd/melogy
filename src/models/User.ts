@@ -68,4 +68,4 @@ const userSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 // had to follow naming conventions of next-auth db adapter
-export default mongoose.models.User || mongoose.model('User', userSchema);
+export default mongoose.models.users || mongoose.model('users', userSchema);

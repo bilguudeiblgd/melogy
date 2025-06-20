@@ -17,6 +17,9 @@ export default function SignIn() {
         setIsInApp(isInApp);
     }, []);
 
+    console.log("callbackUrl", router.query.callbackUrl);
+    
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
@@ -27,26 +30,26 @@ export default function SignIn() {
         const password = formData.get("password") as string;
 
         try {
-            const result = await signIn("credentials", {
+            console.log("callbackUrl", router.query.callbackUrl);
+            const callbackUrl = router.query.callbackUrl as string;
+            
+            const result = signIn("credentials", {
                 userHandle,
                 password,
-                redirect: false,
+                callbackUrl: callbackUrl || undefined
             });
 
-            if (result?.error) {
-                setError("Invalid user handle or password");
-            } else {
-                router.push("/");
-            }
         } catch (error) {
+            console.log("error", error);
             setError("An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleGoogleSignIn = () => {
-        signIn("google", { callbackUrl: "/" });
+    const handleGoogleSignIn = async () => {
+        const callbackUrl = router.query.callbackUrl as string;
+        signIn("google", { callbackUrl: callbackUrl || undefined });
     };
 
     return (
@@ -136,8 +139,14 @@ export default function SignIn() {
 
                 <div className="text-center mt-4">
                     <p className="text-md text-primary/70">
-                        Don't have an account?{" "}
-                        <Link href="/auth/signup" className="font-medium text-primary hover:text-primary/90">
+                        Don{"'"}t have an account?{" "}
+                        <Link 
+                            href={{
+                                pathname: "/auth/signup",
+                                query: { callbackUrl: router.query.callbackUrl }
+                            }} 
+                            className="font-medium text-primary hover:text-primary/90"
+                        >
                             <span className="text-accent font-bold">
                                 Sign up
                             </span>

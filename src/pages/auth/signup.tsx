@@ -56,7 +56,7 @@ export default function SignUp() {
             if (result?.error) {
                 setError("Error signing in after registration");
             } else {
-                router.push("/");
+                router.push(router.query.callbackUrl as string || "/");
             }
         } catch (error) {
             setError(error instanceof Error ? error.message : "An error occurred");
@@ -66,7 +66,7 @@ export default function SignUp() {
     };
 
     const handleGoogleSignIn = () => {
-        signIn("google", { callbackUrl: "/" });
+        signIn("google", { callbackUrl: router.query.callbackUrl as string || "/" });
     };
 
     return (
@@ -177,7 +177,13 @@ export default function SignUp() {
                 <div className="text-center mt-4">
                     <p className="text-md text-primary/70">
                         Already have an account?{" "}
-                        <Link href="/auth/signin" className="font-medium text-primary hover:text-primary/90">
+                        <Link 
+                            href={{
+                                pathname: "/auth/signin",
+                                query: { callbackUrl: router.query.callbackUrl }
+                            }} 
+                            className="font-medium text-primary hover:text-primary/90"
+                        >
                             <span className="text-accent font-bold">
                                 Sign in
                             </span>

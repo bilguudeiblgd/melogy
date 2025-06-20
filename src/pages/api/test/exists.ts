@@ -13,15 +13,17 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>,
 ) {
-    // Connect to the database
-    await mongooseConnect();
+   
 
     // Only allow POST requests
     if (req.method !== 'POST') {
         return res.status(405).json({data: null, message: "Method Not Allowed"});
     }
-
+     
     try {
+        // Connect to the database
+         await mongooseConnect();
+        console.log("req.body", req.body);
         const {testReceiver, testGiver} = JSON.parse(req.body);
         console.log("test rec and giv:", testReceiver, testGiver);
         // Check if the necessary fields are present
@@ -43,7 +45,6 @@ export default async function handler(
         }
 
         const test = await Test.findOne<TestTypeDb>({testReceiver: receiverUserObject, testGiver: giverUserObject})
-        console.log("test: ", test)
 
         if (!test) {
             return res.status(200).json({data: null, message: "Test doesn't exist"});
