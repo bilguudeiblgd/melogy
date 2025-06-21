@@ -35,6 +35,7 @@ export default function App({
                 <main className={`${RUBIK.variable} ${BLACK_HAN_SANS.variable} `}>
                     <Component {...pageProps} />
                     <GoogleTagManager gtmId={`${process.env.NEXT_PUBLIC_GOOGLE_ID}`}/>
+                    <GoogleTagManager gtmId={`${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}`}/>
                 </main>
             </SessionProvider>
         </GlobalContext.Provider>
