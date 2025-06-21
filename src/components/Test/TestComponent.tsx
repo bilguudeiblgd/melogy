@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Phase0Component from "@/components/Test/Phase0Component";
 import Phase1Component from "@/components/Test/Phase1Component";
+import Phase2Component from "@/components/Test/Phase2Component";
 import {PHASE, TestInfoInterface, TestTypeDb, TestRequestPayload} from "@/components/Test/Properties";
 import {processTestInfo} from "@/util/TestUtils";
 import PhaseDoneComponent from "@/components/Test/PhaseDoneComponent";
@@ -13,7 +14,8 @@ const defaultInitTestInfo: TestInfoInterface = {
         group0: [],
         group1: []
     },
-    phase1: []
+    phase1: [],
+    phase2: []
 }
 
 type Props = {
@@ -29,8 +31,12 @@ const TestComponent: React.FC<Props> = ({testReceiver}) => {
 
     const [testObject, setTestObject] = useState<TestRequestPayload | null>(null);
 
-    const handleContinueButton = (testInfo: TestInfoInterface) => {
+    const handlePhase0Continue = (testInfo: TestInfoInterface) => {
         setStage(PHASE.PHASE1);
+    }
+
+    const handlePhase1Continue = (testInfo: TestInfoInterface) => {
+        setStage(PHASE.PHASE2);
     }
 
     const handleEndButton = async (testInfo: TestInfoInterface) => {
@@ -48,9 +54,11 @@ const TestComponent: React.FC<Props> = ({testReceiver}) => {
     return (
         <div className="min-h-screen flex flex-col items-center mt-10">
             {stage === PHASE.PHASE0 && <Phase0Component
-                handleContinueButton={handleContinueButton} testInfo={testInfo} testReceiver={testReceiver}
+                handleContinueButton={handlePhase0Continue} testInfo={testInfo} testReceiver={testReceiver}
             />}
             {stage === PHASE.PHASE1 && <Phase1Component
+                handleContinueButton={handlePhase1Continue} testInfo={testInfo} testReceiver={testReceiver} />}
+            {stage === PHASE.PHASE2 && <Phase2Component
                 handleContinueButton={handleEndButton} testInfo={testInfo} testReceiver={testReceiver} />}
             {stage === PHASE.PHASE_DONE && testObject && (
                 <div className="flex flex-col items-center justify-center min-h-[60vh]">

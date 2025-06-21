@@ -63,6 +63,10 @@ export const processTestInfo = (testInfo: TestInfoInterface): TypeScoreType[] =>
             info[type] += 0.25
         });
     }
+    for (const typeStr of testInfo.phase2) {
+        info[typeStr] += 1.0
+    }
+
 
     let infoSorted: TypeScoreType[] = []
     for(const key in info) {

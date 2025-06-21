@@ -51,7 +51,7 @@ const Phase1Component: React.FC<Props> = ({ handleContinueButton, testInfo, test
     
     return (
         <>
-            <TextEdgy className={"mb-4 text-white"}>Which one is {testReceiver} most likely to do?</TextEdgy>
+            <TextEdgy className={"mb-4 text-center text-white"}>Which one is {testReceiver} most likely to do?</TextEdgy>
             {loading ? <Loading/> :
             <div className={"flex flex-col items-center"}>
                 {groupIndex <= 12 ? twoQuestions.map((question: Phase1QuestionType, index: number) =>

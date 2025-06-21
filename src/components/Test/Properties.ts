@@ -63,7 +63,7 @@ export const type2description: Record<TYPES, string> = {
 
 
 export enum PHASE {
-    PHASE0, PHASE1, PHASE_DONE
+    PHASE0, PHASE1, PHASE2, PHASE_DONE
 }
 
 export const Phase0QualitiesPart0 = [
@@ -96,7 +96,8 @@ export interface TestInfoInterface {
         group0: string[],
         group1: string[],
     }
-    phase1: string[]
+    phase1: string[],
+    phase2: string[]
 }
 
 
