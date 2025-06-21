@@ -24,6 +24,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
+    "react-tinder-card": "^1.6.4",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1"
   },
