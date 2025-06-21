@@ -22,11 +22,12 @@ const Page: React.FC = () => {
     const {data: session, status} = useSession();
     const GLOBALS = useContext(GlobalContext)
 
-    const currentURL = `/${router.query.user}/dome`
     const testReceiverUrl = router.query.user as string | undefined
     const testReceiver = testReceiverUrl
 
     useEffect(() => {
+        const currentURL = `/${router.query.user}/dome`
+
         if (status === "authenticated") {
             if (!session.user.userHandle) {
                 router.replace(`/auth/get-handle?callbackUrl=${encodeURIComponent(currentURL)}`);

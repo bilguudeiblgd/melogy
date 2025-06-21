@@ -43,7 +43,7 @@ const Phase2Component: React.FC<Props> = ({ handleContinueButton, testInfo, test
     return (
         <div className="flex flex-col items-center">
             <TextEdgy className="text-xl font-bold mb-4 text-center text-white">Which of these resonate with {testReceiver}?</TextEdgy>
-            <TextEdgy className="mb-8 text-md text-center text-accent">Swipe right if it does, left if it doesn't.</TextEdgy>
+            <TextEdgy className="mb-8 text-md text-center text-accent">Swipe right if it does, left if it doesn{"'"}t.</TextEdgy>
             <div className='relative w-[70vw] max-w-[240px] h-[360px] mx-auto'>
                 {cardData.map((character, index) => (
                     <TinderCard
