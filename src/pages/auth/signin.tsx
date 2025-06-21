@@ -30,15 +30,18 @@ export default function SignIn() {
         const password = formData.get("password") as string;
 
         try {
-            console.log("callbackUrl", router.query.callbackUrl);
-            const callbackUrl = router.query.callbackUrl as string;
-            
-            const result = signIn("credentials", {
+            const result = await signIn("credentials", {
                 userHandle,
                 password,
-                callbackUrl: callbackUrl || undefined
+                redirect: false,
             });
 
+            if (result && result.error) {
+                setError("Invalid username or password.");
+            } else if (result && result.ok) {
+                const callbackUrl = router.query.callbackUrl as string;
+                router.push(callbackUrl || "/");
+            }
         } catch (error) {
             console.log("error", error);
             setError("An error occurred. Please try again.");
