@@ -3,6 +3,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
 import TextEdgy from "@/components/TextEdgy";
+import Text from "@/components/Text";
 import Link from "next/link";
 import InAppSpy from 'inapp-spy';
 
@@ -18,7 +19,7 @@ export default function SignIn() {
     }, []);
 
     console.log("callbackUrl", router.query.callbackUrl);
-    
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -57,14 +58,14 @@ export default function SignIn() {
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="w-full max-w-md space-y-8 bg-accent/30 backdrop-blur-sm p-8 rounded-xl border-2 border-dashed border-accent/30">
+            <div className="w-full max-w-md space-y-6 bg-accent/30 backdrop-blur-sm p-8 rounded-xl border-2 border-dashed border-accent/30">
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-primary">
+                    <h2 className="mt-0 text-center text-3xl font-bold tracking-tight text-primary">
                         Sign in to your account
                     </h2>
                 </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    <div className="space-y-4 rounded-md shadow-sm">
+                <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+                    <div className="space-y-3 rounded-md shadow-sm">
                         <div>
                             <label htmlFor="userHandle" className="sr-only">
                                 User Handle
@@ -112,14 +113,16 @@ export default function SignIn() {
 
                 {!isInApp && (
                     <>
-                        <div className="relative my-6">
+                        <div className="relative my-2">
                             <div className="absolute inset-0 flex items-center">
                                 <div className="w-full border-t border-primary/30"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
                                 <span className="px-2 text-primary/70">Or continue with</span>
                             </div>
+
                         </div>
+
 
                         <button
                             onClick={handleGoogleSignIn}
@@ -130,6 +133,11 @@ export default function SignIn() {
                                 <span>Sign in with Google</span>
                             </TextEdgy>
                         </button>
+                        <div className="text-center text-primary/60">
+                            <Text className="text-sm">
+                                <span>If you are in from Instagram or Messenger, please use the actual browser to sign in.</span>
+                            </Text>
+                        </div>
                     </>
                 )}
 
@@ -143,11 +151,11 @@ export default function SignIn() {
                 <div className="text-center mt-4">
                     <p className="text-md text-primary/70">
                         Don{"'"}t have an account?{" "}
-                        <Link 
+                        <Link
                             href={{
                                 pathname: "/auth/signup",
                                 query: { callbackUrl: router.query.callbackUrl }
-                            }} 
+                            }}
                             className="font-medium text-primary hover:text-primary/90"
                         >
                             <span className="text-accent font-bold">

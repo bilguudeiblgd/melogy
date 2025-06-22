@@ -3,6 +3,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
 import TextEdgy from "@/components/TextEdgy";
+import Text from "@/components/Text";
 import Link from "next/link";
 import InAppSpy from 'inapp-spy';
 
@@ -71,9 +72,9 @@ export default function SignUp() {
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="w-full max-w-md space-y-8 bg-accent/30 backdrop-blur-sm p-8 rounded-xl border-2 border-dashed border-accent/30">
+            <div className="w-full max-w-md space-y-4 bg-accent/30 backdrop-blur-sm p-8 rounded-xl border-2 border-dashed border-accent/30">
                 <div>
-                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-primary">
+                    <h2 className="mt-0 text-center text-3xl font-bold tracking-tight text-primary">
                         Create your account
                     </h2>
                     <p className="mt-2 text-center text-sm text-primary/70">
@@ -164,6 +165,12 @@ export default function SignUp() {
                                 <span>Sign up with Google</span>
                             </TextEdgy>
                         </button>
+
+                        <div className="text-center text-primary/60">
+                            <Text className="text-sm">
+                                <span>If you are in from Instagram or Messenger, please use the actual browser to sign in.</span>
+                            </Text>
+                        </div>
                     </>
                 )}
 
