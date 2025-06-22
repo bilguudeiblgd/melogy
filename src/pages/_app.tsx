@@ -36,7 +36,7 @@ export default function App({
                 <main className={`${RUBIK.variable} ${BLACK_HAN_SANS.variable} `}>
                     <Script
                         async
-                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1431674278951978"
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6840183695058057"
                         crossOrigin="anonymous"
                         strategy="afterInteractive"
                     />
