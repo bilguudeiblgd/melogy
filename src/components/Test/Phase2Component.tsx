@@ -53,6 +53,8 @@ const Phase2Component: React.FC<Props> = ({ handleContinueButton, testInfo, test
                         onSwipe={(dir) => swiped(dir, character.types, index)}
                         onCardLeftScreen={() => outOfFrame(character.name, index)}
                         preventSwipe={['up', 'down']}
+                        swipeRequirementType='position'
+                        swipeThreshold={150}
                     >
                         <div
                             style={{ backgroundImage: 'url(' + character.url + ')' }}
