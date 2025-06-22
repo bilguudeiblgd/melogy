@@ -144,6 +144,16 @@ export default function Page() {
                         <div className={"mt-2 w-full"}>
                             <DisplayTopKResult topK={NUMBER_OF_RESULT_SHOWN} typeResult={typeResult} />
                         </div>
+                        <div className="flex justify-center my-8">
+                            <a
+                                href="https://forms.gle/SXyTgPXRwQcALYGo7"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-outline btn-accent"
+                            >
+                                <TextEdgy>Give Feedback</TextEdgy>
+                            </a>
+                        </div>
                     </div>
                     :
                     <Loading />
