@@ -19,8 +19,9 @@ const userSchema = new mongoose.Schema({
     },
     userHandle: {
         type: String,
-        required: true,
+        required: false,
         unique: true,
+        sparse: true,
         validate: {
             validator: function(v: string) {
                 return /^[a-zA-Z0-9]{8,}$/.test(v);
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
+        required: false,
         unique: true,
     },
     password: {
