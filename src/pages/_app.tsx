@@ -4,6 +4,7 @@ import {SessionProvider} from "next-auth/react"
 import React, {createContext} from "react";
 import {Black_Han_Sans, Rubik} from 'next/font/google'
 import {GoogleTagManager} from "@next/third-parties/google";
+import Script from "next/script";
 
 const BLACK_HAN_SANS = Black_Han_Sans({
     subsets: ['latin'],
@@ -33,6 +34,12 @@ export default function App({
         <GlobalContext.Provider value={{baseURL: BASE_URL}}>
             <SessionProvider session={session}>
                 <main className={`${RUBIK.variable} ${BLACK_HAN_SANS.variable} `}>
+                    <Script
+                        async
+                        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1431674278951978"
+                        crossOrigin="anonymous"
+                        strategy="afterInteractive"
+                    />
                     <Component {...pageProps} />
                     <GoogleTagManager gtmId={`${process.env.NEXT_PUBLIC_GOOGLE_ID}`}/>
                     <GoogleTagManager gtmId={`${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}`}/>
