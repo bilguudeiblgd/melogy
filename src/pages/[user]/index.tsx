@@ -107,16 +107,6 @@ export default function Page() {
                         }
                     </div>
                 </div>
-                <div className="flex justify-center my-8">
-                    <a
-                        href="https://forms.gle/SXyTgPXRwQcALYGo7"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn btn-outline btn-accent"
-                    >
-                        <TextEdgy>Give Feedback</TextEdgy>
-                    </a>
-                </div>
             </Skeleton>
         )
     }
