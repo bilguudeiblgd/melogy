@@ -1,17 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import TinderCard from 'react-tinder-card';
 import {TestInfoInterface, TYPES} from "@/components/Test/Properties";
 import TextEdgy from "@/components/TextEdgy";
 import {MdOutlineSwipe} from "react-icons/md";
 
 const cardData = [
-    { name: 'Impulse', url: '/card_images/Cards_0001_Impulse.png', types: [TYPES.MAVERICK, TYPES.RANDOM] },
-    { name: 'Drive', url: '/card_images/Cards_0002_Drive.png', types: [TYPES.HUSTLE, TYPES.PROTECTOR] },
-    { name: 'Entertainment', url: '/card_images/Cards_0003_Entertainment.png', types: [TYPES.JESTER, TYPES.CHATTERBOX] },
-    { name: 'Duty', url: '/card_images/Cards_0004_Duty.png', types: [TYPES.CAPTAIN, TYPES.EMPATH] },
-    { name: 'Chill', url: '/card_images/Cards_0005_Chill.png', types: [TYPES.MOOD, TYPES.WISDOM] },
-    { name: 'Wit', url: '/card_images/Cards_0006_Wit.png', types: [TYPES.BRAINIAC, TYPES.CRITIC] },
-    { name: 'Attraction', url: '/card_images/Cards_0007_Attraction.png', types: [TYPES.STYL, TYPES.ROMANTIC] }
+    { name: 'Impulse', url: '/card_images/Cards_0001_Impulse-min.png', types: [TYPES.MAVERICK, TYPES.RANDOM] },
+    { name: 'Drive', url: '/card_images/Cards_0002_Drive-min.png', types: [TYPES.HUSTLE, TYPES.PROTECTOR] },
+    { name: 'Entertainment', url: '/card_images/Cards_0003_Entertainment-min.png', types: [TYPES.JESTER, TYPES.CHATTERBOX] },
+    { name: 'Duty', url: '/card_images/Cards_0004_Duty-min.png', types: [TYPES.CAPTAIN, TYPES.EMPATH] },
+    { name: 'Chill', url: '/card_images/Cards_0005_Chill-min.png', types: [TYPES.MOOD, TYPES.WISDOM] },
+    { name: 'Wit', url: '/card_images/Cards_0006_Wit-min.png', types: [TYPES.BRAINIAC, TYPES.CRITIC] },
+    { name: 'Attraction', url: '/card_images/Cards_0007_Attraction-min.png', types: [TYPES.STYL, TYPES.ROMANTIC] }
 ];
 
 type Props = {

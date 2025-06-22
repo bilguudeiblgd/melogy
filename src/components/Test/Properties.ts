@@ -18,6 +18,41 @@ export enum TYPES {
     WISDOM = "WISDOM"
 }
 
+export function getFourLetterType(type: TYPES): string {
+    switch (type) {
+        case TYPES.RANDOM:
+            return "RNDM";
+        case TYPES.MAVERICK:
+            return "MVRK";
+        case TYPES.HUSTLE:
+            return "HSTL";
+        case TYPES.PROTECTOR:
+            return "PRTC";
+        case TYPES.JESTER:
+            return "JSTR";
+        case TYPES.CHATTERBOX:
+            return "CHTR";
+        case TYPES.CAPTAIN:
+            return "CPTN";
+        case TYPES.EMPATH:
+            return "MPTH";
+        case TYPES.MOOD:
+            return "MOOD";
+        case TYPES.WISDOM:
+            return "WSDM";
+        case TYPES.BRAINIAC:
+            return "BRNS";
+        case TYPES.CRITIC:
+            return "CRTC";
+        case TYPES.STYL:
+            return "STYL";
+        case TYPES.ROMANTIC:
+            return "RMNC";
+        default:
+            return "XXXX";
+    }
+}
+
 // export const DUO_DYNAMIC_TYPES: Record<string, string> = {
 //     [`${TYPES.RANDOM},${TYPES.GUARDIAN}`]: "Hustle and Guardian",
 

@@ -5,7 +5,10 @@ import TextEdgy from "@/components/TextEdgy";
 import { useSession } from "next-auth/react";
 import AccessDenied from "@/components/AccessDenied";
 import { useEffect, useState } from "react";
-import { getDuoDescription, TestTypeDb, TYPES, TypeScoreType } from "@/components/Test/Properties";
+import { FaExternalLinkAlt } from "react-icons/fa";
+import { getDuoDescription, getFourLetterType, TestTypeDb, TYPES, TypeScoreType } from "@/components/Test/Properties";
+import Link from "next/link";
+import { lowerCase } from "lodash";
 
 const CARD_COLORS = [
     "#ECC43F", // yellow
@@ -40,7 +43,7 @@ export default function Page() {
                 const response = await fetch(`/api/test?giver=${giver}&receiver=${receiver}`);
                 const data = await response.json();
                 setTestData(data.data);
-                
+
                 // Get giver's top type from their user data
                 if (data.data?.testGiver) {
                     // First get the user data using the ObjectId
@@ -48,14 +51,18 @@ export default function Page() {
                     const giverData = await giverResponse.json();
                     if (giverData.data?.results) {
                         const sortedResults = [...giverData.data.results].sort((a, b) => b.score - a.score);
-                        setGiverTopType(sortedResults[0].personality_type as TYPES);
+                        if (sortedResults[0].score > 0) {
+                            setGiverTopType(sortedResults[0].personality_type as TYPES);
+                        }
                     }
                 }
 
                 // Get receiver's top type from test data
                 if (data.data?.info) {
                     const sortedInfo = [...data.data.info].sort((a, b) => b.score - a.score);
-                    setReceiverTopType(sortedInfo[0].personality_type as TYPES);
+                    if (sortedInfo[0].score > 0) {
+                        setReceiverTopType(sortedInfo[0].personality_type as TYPES);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching test:', error);
@@ -76,33 +83,38 @@ export default function Page() {
     const renderTopTypes = (info: TypeScoreType[]) => {
         const topThree = info.slice(0, 3);
         return (
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4">
                 {topThree.map((type, index) => (
-                    <div 
-                        key={type.personality_type} 
-                        className="p-4 rounded-3xl shadow-lg"
-                        style={{ backgroundColor: CARD_COLORS[index] }}
-                    >
-                        <TextEdgy className="text-2xl font-bold">
-                            {index + 1}. {type.personality_type}
-                        </TextEdgy>
-                        <div className="mt-2">
-                            <div className="w-full bg-white/30 rounded-full h-2.5">
-                                <div
-                                    className="h-2.5 rounded-full"
-                                    style={{ 
-                                        width: `${(type.score / topThree[0].score) * 100}%`,
-                                        backgroundColor: TYPE_COLORS[index]
-                                    }}
-                                ></div>
+                    <Link key={type.personality_type} target="_blank" rel="noopener noreferrer" href={`/types/${lowerCase(type.personality_type)}`} className="">
+                        <div
+                            className="p-4 rounded-3xl shadow-lg transition-transform hover:scale-105 cursor-pointer"
+                            style={{ backgroundColor: CARD_COLORS[index] }}
+                        >
+                            <div className="flex flex-row justify-between">
+                                <TextEdgy className="text-2xl font-bold">
+                                    {index + 1}. {getFourLetterType(type.personality_type as TYPES)}
+                                </TextEdgy>
+                                <FaExternalLinkAlt className="text-xl" style={{ color: TYPE_COLORS[index] }} />
                             </div>
-                            <TextEdgy 
-                                className="text-sm mt-1 font-semibold"
-                            >
-                                Score: {type.score.toFixed(2)}
-                            </TextEdgy>
+
+                            <div className="mt-2">
+                                <div className="w-full bg-white/30 rounded-full h-2.5">
+                                    <div
+                                        className="h-2.5 rounded-full"
+                                        style={{
+                                            width: `${(type.score / topThree[0].score) * 100}%`,
+                                            backgroundColor: TYPE_COLORS[index]
+                                        }}
+                                    ></div>
+                                </div>
+                                <TextEdgy
+                                    className="text-sm mt-1 font-semibold"
+                                >
+                                    Score: {type.score.toFixed(2)}
+                                </TextEdgy>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         );
@@ -110,7 +122,7 @@ export default function Page() {
 
     return (
         <Skeleton showNavbar={true} noContainer={false} maxWidth={"lg"}>
-            <div className="py-8">
+            <div className="py-4">
                 {/* <TextEdgy className="text-2xl text-center text-secondary font-bold mb-6">
                     Your type: <span className="text-accent">{giverTopType}</span>
                 </TextEdgy> */}
@@ -118,27 +130,58 @@ export default function Page() {
                 {loading ? (
                     <div>Loading...</div>
                 ) : testData ? (
-                    <div className="space-y-4">
-                        <TextEdgy className="text-lg text-accent text-center">
-                            <span className="text-secondary">Your match with {currentUserHandle}:</span> {processDuoDescription(giverTopType, receiverTopType)}
-                        </TextEdgy>
-                    {
-                        currentUserHandle === giver ? (
-                            <div className="">
-                            <TextEdgy className="mt-10 mb-4 text-lg text-secondary text-center">
-                                What you think {receiver}{"'"}s type is:
+                    <div className="space-y-10">
+                        {
+                            currentUserHandle === giver ? (
+                                <div className="">
+                                    <TextEdgy className="mt-2 mb-4 text-lg text-secondary text-center">
+                                        What you think <span className="text-accent">{receiver}</span>{"'"}s type is:
+                                    </TextEdgy>
+                                    {renderTopTypes(testData.info)}
+                                </div>
+                            ) : (
+                                <div className="">
+                                    <TextEdgy className="mt-2 mb-4 text-lg text-secondary text-center">
+                                        What {giver} thinks your type is:
+                                    </TextEdgy>
+                                    {renderTopTypes(testData.info)}
+                                </div>
+                            )
+                        }
+                        <div className="mt-20 card bg-accent/20 border-accent border-2 shadow-lg p-4">
+                            <TextEdgy className="text-lg text-accent text-center">
+                                Duo Description
                             </TextEdgy>
-                            {renderTopTypes(testData.info)}
-                        </div>
-                        ) : (
-                            <div className="">
-                            <TextEdgy className="mt-10 mb-4 text-lg text-secondary text-center">
-                                What {giver} thinks your type is:
+                            <div className="divider"></div>
+                            {
+                                currentUserHandle === giver ? (
+                                    <>
+                                        <TextEdgy className="text-lg text-accent text-center">
+                                            Your type: <span className="text-secondary">{giverTopType ? giverTopType : "<NOT IDENTIFIED>"}</span>
+                                        </TextEdgy>
+                                        <TextEdgy className="text-lg text-accent text-center">
+                                            {receiver}{"'"}s type: <span className="text-secondary">{receiverTopType ? receiverTopType : "NOT IDENTIFIED"}</span>
+                                        </TextEdgy>
+                                    </>
+                                ) : (
+                                    <>
+                                        <TextEdgy className="text-lg text-accent text-center">
+                                            Your type: <span className="text-secondary">{receiverTopType ? receiverTopType : "NOT IDENTIFIED"}</span>
+                                        </TextEdgy>
+                                        <TextEdgy className="text-lg text-accent text-center">
+                                            {receiver}{"'"}s type: <span className="text-secondary">{giverTopType ? giverTopType : "NOT IDENTIFIED"}</span>
+                                        </TextEdgy>
+                                    </>
+
+                                )
+                            }
+                            <div className="divider"></div>
+                            <TextEdgy className="text-lg text-accent text-center">
+                                <span className="text-secondary">match:</span> {processDuoDescription(giverTopType, receiverTopType)}
                             </TextEdgy>
-                            {renderTopTypes(testData.info)}
+
                         </div>
-                        )
-                    }
+
                     </div>
                 ) : (
                     <TextEdgy className="text-lg text-gray-600">

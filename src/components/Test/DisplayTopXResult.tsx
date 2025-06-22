@@ -1,7 +1,8 @@
 import React from 'react';
-import { stringToTypeEnum, type2description, TYPES, TypeScoreType } from "@/components/Test/Properties";
+import { getFourLetterType, stringToTypeEnum, type2description, TYPES, TypeScoreType } from "@/components/Test/Properties";
 import TextEdgy from "@/components/TextEdgy";
 import Link from "next/link";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 interface Props {
     topK: number;
@@ -64,7 +65,12 @@ const ResultCard: React.FC<CardProps> = ({ index, type }) => {
     const typeURL = `/types/${type.toLowerCase()}`;
     const resolvedType = stringToTypeEnum(type)
 
-    const description = resolvedType ? type2description[resolvedType] : ""
+    if (!resolvedType) {
+        return null;
+    }
+
+    const description = type2description[resolvedType];
+    const fourLetterType = getFourLetterType(resolvedType);
     return (
         <Link
             target="_blank"
@@ -72,7 +78,7 @@ const ResultCard: React.FC<CardProps> = ({ index, type }) => {
             style={{
                 backgroundColor: CARD_COLORS[index],
             }}
-            className="flex flex-row rounded-3xl my-4 px-6 py-4 items-center w-full max-w-[400px] mx-auto shadow-lg"
+            className="flex flex-row rounded-3xl my-4 px-6 py-4 items-center w-full max-w-[400px] mx-auto shadow-lg transition-transform hover:scale-105 cursor-pointer"
         >
             {/* Number */}
             <div className="flex flex-col items-center mr-6">
@@ -88,17 +94,20 @@ const ResultCard: React.FC<CardProps> = ({ index, type }) => {
                 </span>
             </div>
             {/* Type and Description */}
-            <div className="flex flex-col justify-center">
-                <span
-                    style={{
-                        color: TYPE_COLORS[index],
-                        fontWeight: 900,
-                        fontSize: "1.8rem",
-                        lineHeight: 1,
-                    }}
-                >
-                    {type}
-                </span>
+            <div className="flex flex-col justify-center flex-grow">
+                <div className="flex justify-between items-center">
+                    <span
+                        style={{
+                            color: TYPE_COLORS[index],
+                            fontWeight: 900,
+                            fontSize: "1.8rem",
+                            lineHeight: 1,
+                        }}
+                    >
+                        {fourLetterType}
+                    </span>
+                    <FaExternalLinkAlt className="text-xl" style={{ color: TYPE_COLORS[index] }} />
+                </div>
                 <span
                     style={{
                         color: DESC_COLORS[index],

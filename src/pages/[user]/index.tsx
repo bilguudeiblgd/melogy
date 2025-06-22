@@ -92,7 +92,7 @@ export default function Page() {
                         <TextEdgy className={"text-primary mb-4"}>TASKS LEFT:</TextEdgy>
                         {testsForMeSize < REQUIRED_TEST_FOR_ME &&
                             <div className={"flex justify-start mb-2 items-center"}>
-                                <input type="checkbox checkbox-accent" disabled={true} checked={testsForMeSize >= 1}
+                                <input type="checkbox" disabled={true} checked={testsForMeSize >= 1}
                                     className="checkbox disabled:bg-accent checkbox-accent" />
                                 <span className="ml-2 text-accent font-primary font-bold text-left">Ask {REQUIRED_TEST_FOR_ME} people to tests you.</span>
                             </div>
@@ -106,6 +106,16 @@ export default function Page() {
                             </div>
                         }
                     </div>
+                </div>
+                <div className="flex justify-center my-8">
+                    <a
+                        href="https://forms.gle/SXyTgPXRwQcALYGo7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline btn-accent"
+                    >
+                        <TextEdgy>Give Feedback</TextEdgy>
+                    </a>
                 </div>
             </Skeleton>
         )
