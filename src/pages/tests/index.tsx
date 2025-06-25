@@ -157,19 +157,19 @@ export default function Page() {
                                 currentUserHandle === giver ? (
                                     <>
                                         <TextEdgy className="text-lg text-accent text-center">
-                                            Your type: <span className="text-secondary">{giverTopType ? giverTopType : "<NOT IDENTIFIED>"}</span>
+                                            Your type: <span className="text-secondary">{giverTopType ? getFourLetterType(giverTopType) : "<NOT IDENTIFIED>"}</span>
                                         </TextEdgy>
                                         <TextEdgy className="text-lg text-accent text-center">
-                                            {receiver}{"'"}s type: <span className="text-secondary">{receiverTopType ? receiverTopType : "NOT IDENTIFIED"}</span>
+                                            {receiver}{"'"}s type: <span className="text-secondary">{receiverTopType ? getFourLetterType(receiverTopType) : "NOT IDENTIFIED"}</span>
                                         </TextEdgy>
                                     </>
                                 ) : (
                                     <>
                                         <TextEdgy className="text-lg text-accent text-center">
-                                            Your type: <span className="text-secondary">{receiverTopType ? receiverTopType : "NOT IDENTIFIED"}</span>
+                                            Your type: <span className="text-secondary">{receiverTopType ? getFourLetterType(receiverTopType) : "NOT IDENTIFIED"}</span>
                                         </TextEdgy>
                                         <TextEdgy className="text-lg text-accent text-center">
-                                            {receiver}{"'"}s type: <span className="text-secondary">{giverTopType ? giverTopType : "NOT IDENTIFIED"}</span>
+                                            {receiver}{"'"}s type: <span className="text-secondary">{giverTopType ? getFourLetterType(giverTopType) : "NOT IDENTIFIED"}</span>
                                         </TextEdgy>
                                     </>
 
